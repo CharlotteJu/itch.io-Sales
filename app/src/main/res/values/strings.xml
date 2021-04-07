@@ -1,0 +1,60 @@
+<resources>
+    <string name="app_name" translatable="false">Gif Itch</string>
+    <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
+    <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
+
+    <string-array name="spinner_filter">
+        <item>ALL</item>
+        <item>7 LAST DAYS</item>
+        <item>30 LAST DAYS</item>
+    </string-array>
+
+    <string name="no_sales_period">There is no sales in this period.</string>
+    <string name="csv_integrate">CSV integrate !</string>
+    <string name="period">PERIOD :</string>
+    <string name="all">ALL</string>
+    <string name="_3_bests">3 BESTS</string>
+    <string name="hour">HOUR</string>
+    <string name="week">WEEK</string>
+    <string name="date">DATE</string>
+    <string name="package_radio">PACKAGE</string>
+    <string name="sales">SALES</string>
+    <string name="price">PRICE</string>
+    <string name="refresh_csv">Refresh CSV</string>
+    <string name="download_from_itch">Download from Itch</string>
+    <string name="gross_total">Total gross</string>
+    <string name="charges">Charges</string>
+    <string name="net_total">Net total</string>
+    <string name="month">MONTH</string>
+    <string name="nb_sales">NB SALES</string>
+    <string name="total_net">TOTAL NET €</string>
+    <string name="open_on_internet">Open on Internet</string>
+    <string name="gross">GROSS :</string>
+    <string name="net">NET :</string>
+    <string name="country">COUNTRY</string>
+
+    <string-array name="list_month">
+        <item>JANUARY</item>
+        <item>FEBRUARY</item>
+        <item>MARCH</item>
+        <item>APRIL</item>
+        <item>MAY</item>
+        <item>JUNE</item>
+        <item>JULY</item>
+        <item>AUGUST</item>
+        <item>SEPTEMBER</item>
+        <item>OCTOBER</item>
+        <item>NOVEMBER</item>
+        <item>DECEMBER</item>
+    </string-array>
+
+    <string-array name="list_days">
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+        <item>Sunday</item>
+    </string-array>
+</resources>

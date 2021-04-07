@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="spinner_filter">
+        <item>TOUT</item>
+        <item>7 DERNIERS JOURS</item>
+        <item>30 DERNIERS JOURS</item>
+    </string-array>
+
+    <string name="no_sales_period">Il n\'y a pas de ventes pour cette période.</string>
+    <string name="csv_integrate">CSV intégre !</string>
+    <string name="period">PERIODE :</string>
+    <string name="all">TOUS</string>
+    <string name="_3_bests">3 MEILLEURS</string>
+    <string name="hour">HEURE</string>
+    <string name="week">SEMAINE</string>
+    <string name="date">DATE</string>
+    <string name="package_radio">PACKAGE</string>
+    <string name="sales">VENTES</string>
+    <string name="price">PRIX</string>
+    <string name="refresh_csv">Rafraichir CSV</string>
+    <string name="download_from_itch">Télécharger depuis Itch</string>
+    <string name="gross_total">Brut total</string>
+    <string name="charges">Charges</string>
+    <string name="net_total">Net total</string>
+    <string name="month">MOIS</string>
+    <string name="nb_sales">NB VENTES</string>
+    <string name="total_net">TOTAL NET €</string>
+    <string name="open_on_internet">Ouvrir sur Internet</string>
+    <string name="gross">BRUT :</string>
+    <string name="net">NET :</string>
+    <string name="country">PAYS</string>
+
+    <string-array name="list_month">
+        <item>JANVIER</item>
+        <item>FEVRIER</item>
+        <item>MARS</item>
+        <item>AVRIL</item>
+        <item>MAI</item>
+        <item>JUIN</item>
+        <item>JUILLET</item>
+        <item>AOUT</item>
+        <item>SEPTEMBRE</item>
+        <item>OCTOBRE</item>
+        <item>NOVEMBRE</item>
+        <item>DECEMBRE</item>
+    </string-array>
+
+    <string-array name="list_days">
+        <item>Lundi</item>
+        <item>Mardi</item>
+        <item>Mercredi</item>
+        <item>Jeudi</item>
+        <item>Vendredi</item>
+        <item>Samedi</item>
+        <item>Dimanche</item>
+    </string-array>
+</resources>

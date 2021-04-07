@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_home"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_home_24"
+        android:title="ACCUEIL" />
+    <item
+        android:id="@+id/action_date"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_timeline_24"
+        android:title="GRAPHS" />
+    <item
+        android:id="@+id/action_date_explain"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_assessment_24"
+        android:title="DATE DETAILLEE" />
+    <item
+        android:id="@+id/action_map"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_map_24"
+        android:title="CARTE" />
+    <item
+        android:id="@+id/action_list"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_list_24"
+        android:title="LISTE"/>
+    <item
+        android:id="@+id/action_suivi"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_photo_24"
+        android:title="SUIVI GLOBAL" />
+</menu>
