@@ -78,7 +78,7 @@ class DateDetailFragment : Fragment() {
 
     private fun configureSpinner() {
         val spinnerFilter = resources.getStringArray(R.array.spinner_filter)
-        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, spinnerFilter)
+        val adapter = ArrayAdapter(requireContext(), R.layout.item_spinner, spinnerFilter)
         mView.spinner.adapter = adapter
 
         mView.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {

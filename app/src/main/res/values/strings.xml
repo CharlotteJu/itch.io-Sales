@@ -29,9 +29,12 @@
     <string name="nb_sales">NB SALES</string>
     <string name="total_net">TOTAL NET €</string>
     <string name="open_on_internet">Open on Internet</string>
-    <string name="gross">GROSS :</string>
-    <string name="net">NET :</string>
+    <string name="gross_point">GROSS :</string>
+    <string name="net_point">NET :</string>
     <string name="country">COUNTRY</string>
+    <string name="gross">GROSS</string>
+    <string name="net">NET</string>
+    <string name="tips">TIPS</string>
 
     <string-array name="list_month">
         <item>JANUARY</item>

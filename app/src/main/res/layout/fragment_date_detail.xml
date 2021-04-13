@@ -16,7 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/period"
-            android:textColor="@android:color/black"
+            android:textColor="@color/colorPrimaryDark"
             android:textSize="18sp"
             app:layout_constraintTop_toTopOf="@id/spinner"
             app:layout_constraintBottom_toBottomOf="@id/spinner"
@@ -27,7 +27,13 @@
             android:id="@+id/spinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:textDirection="rtl"
+            android:gravity="center"
+            android:backgroundTint="@color/colorPrimaryDark"
             android:layout_marginTop="16dp"
+            android:outlineSpotShadowColor="@color/colorPrimaryDark"
+            android:outlineAmbientShadowColor="@color/colorPrimaryDark"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toEndOf="@id/text_filter"
             app:layout_constraintEnd_toEndOf="parent"/>
@@ -38,18 +44,26 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginTop="16dp"
-            app:layout_constraintTop_toBottomOf="@id/spinner"
+            android:outlineAmbientShadowColor="@color/colorPrimaryDark"
+            android:outlineSpotShadowColor="@color/colorPrimaryDark"
+        app:layout_constraintTop_toBottomOf="@id/spinner"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
         <RadioButton
             android:id="@+id/btn_all"
+            android:textColor="@color/colorPrimaryDark"
+            android:shadowColor="@color/colorPrimaryDark"
+            android:buttonTint="@color/colorPrimaryDark"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/all"/>
 
         <RadioButton
             android:id="@+id/btn_3_best"
+            android:textColor="@color/colorPrimaryDark"
+            android:shadowColor="@color/colorPrimaryDark"
+            android:buttonTint="@color/colorPrimaryDark"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/_3_bests"/>

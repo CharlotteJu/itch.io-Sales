@@ -1,5 +1,6 @@
 package com.charlotte.judon.gifstats.views.fragments
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -71,7 +72,7 @@ class GraphsFragment : Fragment() {
     private fun configureSpinner()
     {
         val spinnerFilter = resources.getStringArray(R.array.spinner_filter)
-        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, spinnerFilter)
+        val adapter = ArrayAdapter(requireContext(), R.layout.item_spinner, spinnerFilter)
         mView.spinner.adapter = adapter
         mView.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -150,10 +151,23 @@ class GraphsFragment : Fragment() {
     {
         APIlib.getInstance().setActiveAnyChartView(mView.anyChartView)
         chartVertical = AnyChart.vertical()
+
         chartVertical.legend().title().enabled(true)
         chartVertical.animation(true)
         val packageList = Utils.anyChartPackageNB(salesListFiltered)
-        chartVertical.data(packageList)
+        val column = chartVertical.bar(packageList)
+        column.fill("function() {" +
+                "            return '#F80039';" +
+                "        }")
+        column.stroke("function() {" +
+                "            return '#F80039';" +
+                "        }")
+       // val test = chartVertical.data(packageList)
+       // val series = chartVertical.column(test)
+        //series.color(Color.parseColor("#F80039"))
+        //chartVertical.palette("#F80039")
+
+
 
         mView.anyChartView.setChart(chartVertical)
 

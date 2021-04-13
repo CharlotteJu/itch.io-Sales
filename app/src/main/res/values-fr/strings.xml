@@ -26,9 +26,12 @@
     <string name="nb_sales">NB VENTES</string>
     <string name="total_net">TOTAL NET €</string>
     <string name="open_on_internet">Ouvrir sur Internet</string>
-    <string name="gross">BRUT :</string>
-    <string name="net">NET :</string>
+    <string name="gross_point">BRUT :</string>
+    <string name="net_point">NET :</string>
     <string name="country">PAYS</string>
+    <string name="gross">BRUT</string>
+    <string name="net">NET</string>
+    <string name="tips">PLUS</string>
 
     <string-array name="list_month">
         <item>JANVIER</item>

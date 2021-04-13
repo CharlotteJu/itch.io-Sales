@@ -1,11 +1,13 @@
 package com.charlotte.judon.gifstats.utils
 
 import android.content.Context
+import android.graphics.Color
 import android.util.Log
 import android.view.View
 import com.anychart.chart.common.dataentry.DataEntry
 import com.anychart.chart.common.dataentry.ValueDataEntry
 import com.charlotte.judon.gifstats.R
+import com.charlotte.judon.gifstats.model.ChronopletReturn
 import com.charlotte.judon.gifstats.model.DateDetail
 import com.charlotte.judon.gifstats.model.MonthSale
 import com.charlotte.judon.gifstats.model.Sale
@@ -254,6 +256,8 @@ class Utils {
             }
 
             val barDataSet = BarDataSet(listEntry, " ")
+            barDataSet.color = Color.parseColor("#F80039")
+            barDataSet.highLightColor = Color.parseColor("#4B2E5A")
             barDataSet.setDrawValues(false)
 
             val data = BarData(barDataSet)
@@ -333,11 +337,9 @@ class Utils {
                     listString.add("${i}H")
                 }
             }*/
-
-            val debug = 0
-            Log.d("DEBUG", listEntry.toString())
-
             val barDataSet = BarDataSet(listEntry, " ")
+            barDataSet.color = Color.parseColor("#F80039")
+            barDataSet.highLightColor = Color.parseColor("#4B2E5A")
             barDataSet.setDrawValues(false)
 
             val data = BarData(barDataSet)
@@ -437,6 +439,8 @@ class Utils {
             )
 
             val barDataSet = BarDataSet(listBarEntry, " ")
+            barDataSet.color = Color.parseColor("#F80039")
+            barDataSet.highLightColor = Color.parseColor("#4B2E5A")
             val formatterX = IndexAxisValueFormatter(listDay)
 
             barDataSet.setDrawValues(false)
@@ -507,7 +511,6 @@ class Utils {
             var country = listSorted[0].countryCode
 
             for (sale in listSorted) {
-                if (sale.countryCode != "FR") {
                     if (sale.countryCode != country) {
                         listEntry.add(ValueDataEntry(country, nbPerPackage))
                         nbPerPackage = 1
@@ -515,29 +518,171 @@ class Utils {
                     } else {
                         nbPerPackage++
                     }
+                if (listSorted.indexOf(sale) == listSorted.size - 1) {
+                    listEntry.add(ValueDataEntry(country, nbPerPackage))
+                }
+            }
+            return listEntry
+        }
+
+
+        fun getAnyChartBubbleFromFranceAndRussia(list: List<Sale>): MutableList<DataEntry> {
+            val listSorted = Utils.sortByCountry(list)
+            val listEntry = mutableListOf<DataEntry>()
+            var nbFrance = 0
+            var nbRussia = 0
+            for (sale in listSorted) {
+                if (sale.countryCode == "RU") {
+                    nbRussia ++
+                }
+                if (sale.countryCode == "FR") {
+                    nbFrance ++
+                }
+            }
+
+            listEntry.add(DataEntryFranceRussia("FR", "FR", nbFrance, 2.213749, 46.227638))
+            listEntry.add(DataEntryFranceRussia("RU", "RU", nbRussia, 105.318756, 61.524010))
+
+            return listEntry
+        }
+
+        fun graphAnyChartMapChrono(list: List<Sale>): List<DataEntry> {
+            val listSorted = Utils.sortByCountry(list)
+            val listEntry = mutableListOf<DataEntry>()
+            var nbPerPackage = 0
+            var country = listSorted[0].countryCode
+
+            for (sale in listSorted) {
+                    if (sale.countryCode != country) {
+                        listEntry.add(CustomDataEntry(country, country, nbPerPackage))
+                        nbPerPackage = 1
+                        country = sale.countryCode
+                    } else {
+                        nbPerPackage++
+                    }
+
+                if (listSorted.indexOf(sale) == listSorted.size - 1) {
+                    listEntry.add(CustomDataEntry(country, country, nbPerPackage))
+                }
+            }
+            return listEntry
+
+        }
+
+        fun graphAnyChartMapChronopleth(list: List<Sale>): ChronopletReturn {
+            val listSorted = sortByCountry(list)
+            val listCountries = getAllCountryCode()
+            val listEntry = mutableListOf<DataEntry>()
+            var nbPerPackage = 1
+            var country = listSorted[0].countryCode
+            var maxNb = 0
+            var maxNB2 = 0
+
+
+
+            for (sale in listSorted) {
+                if (sale.countryCode != country) {
+                    listEntry.add(ValueDataEntry(country, nbPerPackage))
+                    nbPerPackage = 1
+                    country = sale.countryCode
+                } else {
+                    nbPerPackage++
                 }
                 if (listSorted.indexOf(sale) == listSorted.size - 1) {
                     listEntry.add(ValueDataEntry(country, nbPerPackage))
                 }
             }
 
-            return listEntry
 
-        }
-
-        fun graphAnyChartMapFRANCE(list: List<Sale>): MutableList<DataEntry> {
-            val listSorted = Utils.sortByCountry(list)
-            val listEntry = mutableListOf<DataEntry>()
-            var nbPerPackage = 0
             for (sale in listSorted) {
-                if (sale.countryCode == "FR") {
+                if (sale.countryCode != country) {
+                    if(listCountries.contains(country)) listCountries.remove(country)
+                        if (nbPerPackage > maxNb)  {
+                            maxNB2 = maxNb
+                            maxNb = nbPerPackage
+                        }
+                        listEntry.add(CustomDataEntryChrono(country, nbPerPackage))
+                        nbPerPackage = 1
+                        country = sale.countryCode
+
+                } else {
                     nbPerPackage++
                 }
+                if (listSorted.indexOf(sale) == listSorted.size - 1) {
+                    if(listCountries.contains(country)) listCountries.remove(country) 
+                    if (nbPerPackage > maxNb)  {
+                        maxNB2 = maxNb
+                        maxNb = nbPerPackage
+                    }
+                    listEntry.add(CustomDataEntryChrono(country, nbPerPackage))
+                }
             }
-            listEntry.add(ValueDataEntry("FR", nbPerPackage))
 
-            return listEntry
+            for (countryCode in listCountries) {
+                listEntry.add(CustomDataEntryChrono(countryCode, 0))
+            }
+
+            return ChronopletReturn(listEntry, maxNb, maxNB2)
         }
 
+        private fun getAllCountryCode() : MutableList<String> {
+            return mutableListOf(
+                "AF","AO","AL","AE","AR","AM",
+                "TF","AU","AT","AZ","BI","BE",
+                "BJ","BF","BD","BG","BA","BY",
+                "BZ","BO","BR","BN","BT","BW",
+                "CF","CA","CH","CL","CN","CI",
+                "CM","Cyprus_U.N._Buffer_Zone",
+                "CD","CG","CO","CR","CU",
+                "N._Cyprus","CY","CZ","DE","DJ",
+                "DK","DO","DZ","EC","EG","ER",
+                "ES","EE","ET","FI","FJ","FR",
+                "GA","GB","GE","GH","GN","GW",
+                "GQ","GR","GL","GT","GY","HN",
+                "HR","HT","HU","ID","IN","IE",
+                "IR","IQ","IS","IL","IT","JO",
+                "JP","KZ","KE","KG","KH","KR",
+                "Kosovo","KW","LA","LB","LR",
+                "LY","LK","LS","LT","LV","MA",
+                "MD","MG","MX","MK","ML","MM",
+                "ME","MN","MZ","MR","MW","MY",
+                "NA","NC","NE","NG","NI","NL",
+                "NO","NP","NZ","OM","PK","PA",
+                "PE","PH","PG","PL","PR","KP",
+                "PT","PY","PS","QA","RO","RW",
+                "EH","SA","SD","SS","SN","SL",
+                "SV","Somaliland","SO","RS",
+                "SR","SK","SI","SE","SZ","SY",
+                "TD","TG","TH","TJ","TM","TL",
+                "TN","TR","TW","TZ","UG","UA",
+                "UY","US","UZ","VE","VN","YE",
+                "ZA","ZM","ZW","RU"
+            )
+        }
+    }
+}
+
+class CustomDataEntry(val id : String, val name : String, val value : Number) : DataEntry() {
+    init {
+        setValue("id", id);
+        setValue("name", name);
+        setValue("value", value);
+    }
+}
+
+class CustomDataEntryChrono(val id : String, val value : Number) : DataEntry() {
+    init {
+        setValue("id", id);
+        setValue("value", value);
+    }
+}
+
+class DataEntryFranceRussia(val id : String, val name : String, val value : Number, val longitude : Double, val latitude : Double) : DataEntry() {
+    init {
+        setValue("id", id)
+        setValue("name", name)
+        setValue("value", value)
+        setValue("lat", latitude)
+        setValue("long", longitude)
     }
 }

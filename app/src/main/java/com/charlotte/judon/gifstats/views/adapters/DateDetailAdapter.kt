@@ -1,5 +1,6 @@
 package com.charlotte.judon.gifstats.views.adapters
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -48,6 +49,8 @@ class DateDetailAdapter(private var listDateDetail : List<DateDetail>) : Recycle
                 itemView.no_sales.visibility = View.INVISIBLE
 
                 val barDataSet = BarDataSet(dateDetail.listEntry, "")
+                barDataSet.color = Color.parseColor("#F80039")
+                barDataSet.highLightColor = Color.parseColor("#4B2E5A")
                 barDataSet.setDrawValues(false)
                // val formatterX = IndexAxisValueFormatter(dateDetail.listString)
                 itemView.graphTemplate.data = BarData(barDataSet)
