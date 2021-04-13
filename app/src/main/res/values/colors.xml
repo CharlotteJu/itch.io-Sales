@@ -8,5 +8,13 @@
     <color name="colorWhite">#FFFFFF</color>
 
 
-    <color name="colorBlue">#4688CF</color>
+    <color name="colorBlue1">#E8959E</color>
+    <color name="colorBlue2">#f99fb9</color>
+    <color name="colorBlue3">#c2185b</color>
+    <color name="colorBlue4">#c2185b</color>
+    <color name="colorBlue5">#212121</color>
+    <color name="colorBlue6">#B9B9B9</color>
+    <color name="colorBlue7">#D2D2D2</color>
+    <color name="colorBlue8">#E1E1E1</color>
+
 </resources>

@@ -1,6 +1,7 @@
 package com.charlotte.judon.gifstats.views.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,13 +16,11 @@ import com.anychart.core.ui.ColorRange
 import com.anychart.data.Set
 import com.anychart.enums.*
 import com.anychart.graphics.vector.SolidFill
-import com.anychart.scales.LinearColor
 import com.anychart.scales.OrdinalColor
 import com.charlotte.judon.gifstats.R
 import com.charlotte.judon.gifstats.model.Sale
 import com.charlotte.judon.gifstats.utils.Utils
 import kotlinx.android.synthetic.main.fragment_map.view.*
-import java.io.InputStream
 
 
 class MapFragment : Fragment() {
@@ -31,6 +30,8 @@ class MapFragment : Fragment() {
     private lateinit var setWorld : Set
     private lateinit var setFrance : Set
     private lateinit var serieChronoplet : Choropleth
+    private lateinit var ordinalColor: OrdinalColor
+    //private lateinit var map : Map
 
     private lateinit var chartVertical : Cartesian
 
@@ -63,8 +64,9 @@ class MapFragment : Fragment() {
         setFrance = Set.instantiate()
 
         configureSpinner()
+
         //initGraphCountry()
-        testChronopleth()
+        initChronopleth()
 
 
         return mView
@@ -88,30 +90,42 @@ class MapFragment : Fragment() {
             ) {
 
                 when (position) {
-                    0 -> {
-                        salesListFiltered = salesList
-                        setWorld.data(Utils.graphAnyChartMap(salesListFiltered))
-                        setFrance.data(Utils.getAnyChartBubbleFromFranceAndRussia(salesListFiltered))
-                        serieChronoplet.data(Utils.graphAnyChartMapChronopleth(salesListFiltered).list)
-                        //TODO : Changer la règle de couleurs
-                    }
-                    1 -> {
-                        val dateStart = Utils.getDateStartToFilter(7)
-                        salesListFiltered = Utils.filterList(salesList, dateStart)
-                        setWorld.data(Utils.graphAnyChartMap(salesListFiltered))
-                        setFrance.data(Utils.getAnyChartBubbleFromFranceAndRussia(salesListFiltered))
-                        serieChronoplet.data(Utils.graphAnyChartMapChronopleth(salesListFiltered).list)
-                    }
-                    2 -> {
-                        val dateStart = Utils.getDateStartToFilter(30)
-                        salesListFiltered = Utils.filterList(salesList, dateStart)
-                        setWorld.data(Utils.graphAnyChartMap(salesListFiltered))
-                        setFrance.data(Utils.getAnyChartBubbleFromFranceAndRussia(salesListFiltered))
-                        serieChronoplet.data(Utils.graphAnyChartMapChronopleth(salesListFiltered).list)
-                    }
+                    0 -> getFunSpinner(null)
+                    1 -> getFunSpinner(7)
+                    2 -> getFunSpinner(30)
                 }
 
             }
+        }
+    }
+
+    private fun getFunSpinner(daysAgo : Int?) {
+        if (daysAgo == null) {
+            salesListFiltered = salesList
+            setWorld.data(Utils.graphAnyChartMap(salesListFiltered))
+            setFrance.data(Utils.getAnyChartBubbleFromFranceAndRussia(salesListFiltered))
+            val chronopletReturn =  Utils.graphAnyChartMapChronopleth(salesListFiltered)
+            val listWorldChrono = chronopletReturn.list
+            serieChronoplet.data(listWorldChrono)
+            val nbMax = chronopletReturn.max
+            val nbMax2 = chronopletReturn.max2
+            val rangesScript = getRanges(nbMax, nbMax2)
+            ordinalColor.ranges(rangesScript)
+
+
+        } else {
+            val dateStart = Utils.getDateStartToFilter(daysAgo)
+            salesListFiltered = Utils.filterList(salesList, dateStart)
+            setWorld.data(Utils.graphAnyChartMap(salesListFiltered))
+            setFrance.data(Utils.getAnyChartBubbleFromFranceAndRussia(salesListFiltered))
+            val chronopletReturn =  Utils.graphAnyChartMapChronopleth(salesListFiltered)
+            val listWorldChrono = chronopletReturn.list
+            serieChronoplet.data(listWorldChrono)
+            val nbMax = chronopletReturn.max
+            val nbMax2 = chronopletReturn.max2
+            val rangesScript = getRanges(nbMax, nbMax2)
+            ordinalColor.ranges(rangesScript)
+
         }
     }
 
@@ -183,7 +197,8 @@ class MapFragment : Fragment() {
     }
 
 
-    private fun testChronopleth() {
+    private fun initChronopleth() {
+
         APIlib.getInstance().setActiveAnyChartView(mView.anyChartViewCountry)
 
         val map = AnyChart.map()
@@ -214,28 +229,26 @@ class MapFragment : Fragment() {
 
         map.interactivity().selectionMode(SelectionMode.NONE)
         map.padding(0, 0, 0, 0)
-
         val chronopletReturn =  Utils.graphAnyChartMapChronopleth(salesListFiltered)
         val listWorldChrono = chronopletReturn.list
         val nbMax = chronopletReturn.max
         val nbMax2 = chronopletReturn.max2
         serieChronoplet  = map.choropleth(listWorldChrono)
-       // val series: Choropleth = map.choropleth(listWorldChrono)
-        val linearColor = LinearColor.instantiate()
-        val ordinalColor = OrdinalColor.instantiate()
+        Log.d("DEBUG_APP", "MAX : ${chronopletReturn.max} //// MAX2 : ${chronopletReturn.max2}")
 
+        //val linearColor = LinearColor.instantiate()
+        //val series: Choropleth = map.choropleth(listWorldChrono)
         //linearColor.colors(arrayOf("#C2E6EA", "#09C5DC", "#219FDA", "#1A71CF","#0263CC","#0D42C8" ,"#013ACA", "#0104CA", "#02048F"))
+        //series.colorScale(linearColor)
 
-        ordinalColor.colors(arrayOf("#FFFFFF", "#86DDDD", "#59C9DD", "#4688CF", "#4A84DA", "#1740D5"))
+        ordinalColor = OrdinalColor.instantiate()
+        //ordinalColor.colors(arrayOf("#FFFFFF", "#86DDDD", "#59C9DD", "#4688CF", "#1740D5", "#02448A"))
+        ordinalColor.colors(arrayOf("#FFFFFF", "#E8959E", "#E65B6A", "#F80039", "#C3012E", "#7A011D"))
         val rangesScript = getRanges(nbMax, nbMax2)
-        if (rangesScript != null) {
-            ordinalColor.ranges(rangesScript)
-        }
-        //ordinalColor.ranges(arrayOf("{less: 1}", "{from: 1, to: 10}", "{from: 10, to: 20}", "{from: 20, to: 30}", "{greater: 30}"))
+        ordinalColor.ranges(rangesScript)
+
         map.colorRange("{orientation: 'top'}")
         serieChronoplet.colorScale(ordinalColor)
-
-        //series.colorScale(linearColor)
 
         serieChronoplet.hovered()
             .fill("#f48fb1")
@@ -254,17 +267,18 @@ class MapFragment : Fragment() {
         mView.anyChartViewCountry.addScript(urlWorld)
         mView.anyChartViewCountry.addScript(urlProJS)
         mView.anyChartViewCountry.setChart(map)
-
     }
 
-    private fun getRanges(nbMax : Int, nbMax2 : Int) : Array<String>? {
+    private fun getRanges(nbMax : Int, nbMax2 : Int) : Array<String> {
         var nb1 = 0
         var nb2 = 0
         var nb3 = 0
         var nb4 = 0
 
+        Log.d("DEBUG_APP", "MAX : $nbMax //// MAX2 : $nbMax2 ")
+
         if (nbMax<10) {
-            return null
+            return arrayOf("{less: 1}", "{greater: 1}")
         }
 
         val diffMax = nbMax - nbMax2
@@ -274,75 +288,17 @@ class MapFragment : Fragment() {
             nb2 = (nbMax2/4) *2
             nb3 = (nbMax2/4) *3
             nb4 = nbMax2
+            Log.d("DEBUG_APP", "BEAUCOUP DE DIFFERENCE : 1 : $nb1 //// 2 : $nb2 //// 3 : $nb3 //// 4 : $nb4 ")
         }
         else {
             nb1 = nbMax/5
             nb2 = (nbMax/5) *2
             nb3 = (nbMax/5) *3
             nb4 = (nbMax/4) *3
+            Log.d("DEBUG_APP", "PETITE DIFFERENCE : 1 : $nb1 //// 2 : $nb2 //// 3 : $nb3 //// 4 : $nb4 ")
         }
 
         return arrayOf("{less: 1}", "{from: 1, to: $nb1}", "{from: $nb1, to: $nb2}", "{from: $nb2, to: $nb3}", "{from: $nb3, to: $nb4}", "{greater: $nb4}")
-
-        /*if (nbMax < 10) {
-            nb1 = 2
-            nb2 = 4
-            nb3 = 6
-            nb4 = 8
-        } else if (nbMax < 50) {
-            nb1 = 10
-            nb2 = 20
-            nb3 = 30
-            nb4 = 40
-        } else if (nbMax < 100) {
-            nb1 = 20
-            nb2 = 40
-            nb3 = 60
-            nb4 = 80
-        } else if (nbMax < 300) {
-            nb1 = 60
-            nb2 = 120
-            nb3 = 180
-            nb4 = 240
-        } else if (nbMax < 500) {
-            nb1 = 100
-            nb2 = 200
-            nb3 = 300
-            nb4 = 400
-        } else if (nbMax < 800) {
-            nb1 = 160
-            nb2 = 320
-            nb3 = 480
-            nb4 = 640
-        } else if (nbMax < 1000) {
-            nb1 = 200
-            nb2 = 400
-            nb3 = 600
-            nb4 = 800
-        } else if (nbMax < 2000) {
-            nb1 = 400
-            nb2 = 800
-            nb3 = 1200
-            nb4 = 1600
-        } else if (nbMax < 5000) {
-            nb1 = 1000
-            nb2 = 2000
-            nb3 = 3000
-            nb4 = 4000
-        } else if (nbMax < 10000) {
-            nb1 = 200
-            nb2 = 400
-            nb3 = 600
-            nb4 = 800
-        } else {
-            return null
-        }*/
-
-
-
-
-
-
     }
 
 }

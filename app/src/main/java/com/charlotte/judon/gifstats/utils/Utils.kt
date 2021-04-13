@@ -546,29 +546,6 @@ class Utils {
             return listEntry
         }
 
-        fun graphAnyChartMapChrono(list: List<Sale>): List<DataEntry> {
-            val listSorted = Utils.sortByCountry(list)
-            val listEntry = mutableListOf<DataEntry>()
-            var nbPerPackage = 0
-            var country = listSorted[0].countryCode
-
-            for (sale in listSorted) {
-                    if (sale.countryCode != country) {
-                        listEntry.add(CustomDataEntry(country, country, nbPerPackage))
-                        nbPerPackage = 1
-                        country = sale.countryCode
-                    } else {
-                        nbPerPackage++
-                    }
-
-                if (listSorted.indexOf(sale) == listSorted.size - 1) {
-                    listEntry.add(CustomDataEntry(country, country, nbPerPackage))
-                }
-            }
-            return listEntry
-
-        }
-
         fun graphAnyChartMapChronopleth(list: List<Sale>): ChronopletReturn {
             val listSorted = sortByCountry(list)
             val listCountries = getAllCountryCode()
@@ -577,21 +554,6 @@ class Utils {
             var country = listSorted[0].countryCode
             var maxNb = 0
             var maxNB2 = 0
-
-
-
-            for (sale in listSorted) {
-                if (sale.countryCode != country) {
-                    listEntry.add(ValueDataEntry(country, nbPerPackage))
-                    nbPerPackage = 1
-                    country = sale.countryCode
-                } else {
-                    nbPerPackage++
-                }
-                if (listSorted.indexOf(sale) == listSorted.size - 1) {
-                    listEntry.add(ValueDataEntry(country, nbPerPackage))
-                }
-            }
 
 
             for (sale in listSorted) {
@@ -662,13 +624,6 @@ class Utils {
     }
 }
 
-class CustomDataEntry(val id : String, val name : String, val value : Number) : DataEntry() {
-    init {
-        setValue("id", id);
-        setValue("name", name);
-        setValue("value", value);
-    }
-}
 
 class CustomDataEntryChrono(val id : String, val value : Number) : DataEntry() {
     init {
