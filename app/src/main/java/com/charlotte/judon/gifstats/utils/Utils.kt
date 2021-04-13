@@ -609,7 +609,7 @@ class Utils {
                     nbPerPackage++
                 }
                 if (listSorted.indexOf(sale) == listSorted.size - 1) {
-                    if(listCountries.contains(country)) listCountries.remove(country) 
+                    if(listCountries.contains(country)) listCountries.remove(country)
                     if (nbPerPackage > maxNb)  {
                         maxNB2 = maxNb
                         maxNb = nbPerPackage

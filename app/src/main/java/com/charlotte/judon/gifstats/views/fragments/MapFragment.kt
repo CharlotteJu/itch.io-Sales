@@ -30,6 +30,7 @@ class MapFragment : Fragment() {
     private lateinit var salesListFiltered : List<Sale>
     private lateinit var setWorld : Set
     private lateinit var setFrance : Set
+    private lateinit var serieChronoplet : Choropleth
 
     private lateinit var chartVertical : Cartesian
 
@@ -91,19 +92,22 @@ class MapFragment : Fragment() {
                         salesListFiltered = salesList
                         setWorld.data(Utils.graphAnyChartMap(salesListFiltered))
                         setFrance.data(Utils.getAnyChartBubbleFromFranceAndRussia(salesListFiltered))
+                        serieChronoplet.data(Utils.graphAnyChartMapChronopleth(salesListFiltered).list)
+                        //TODO : Changer la règle de couleurs
                     }
                     1 -> {
                         val dateStart = Utils.getDateStartToFilter(7)
                         salesListFiltered = Utils.filterList(salesList, dateStart)
                         setWorld.data(Utils.graphAnyChartMap(salesListFiltered))
                         setFrance.data(Utils.getAnyChartBubbleFromFranceAndRussia(salesListFiltered))
+                        serieChronoplet.data(Utils.graphAnyChartMapChronopleth(salesListFiltered).list)
                     }
                     2 -> {
                         val dateStart = Utils.getDateStartToFilter(30)
                         salesListFiltered = Utils.filterList(salesList, dateStart)
                         setWorld.data(Utils.graphAnyChartMap(salesListFiltered))
                         setFrance.data(Utils.getAnyChartBubbleFromFranceAndRussia(salesListFiltered))
-
+                        serieChronoplet.data(Utils.graphAnyChartMapChronopleth(salesListFiltered).list)
                     }
                 }
 
@@ -168,7 +172,6 @@ class MapFragment : Fragment() {
         bubbleMap.interactivity().selectionMode(SelectionMode.NONE)
 
         mView.anyChartViewCountry.setZoomEnabled(true)
-        //val url2 = readFileText("android_asset/proj4.js")
 
         val urlWorld = "https://cdn.anychart.com/releases/8.9.0/geodata/custom/world_source/world_source.js"
         val urlProJS = "https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.15/proj4.js"
@@ -190,9 +193,7 @@ class MapFragment : Fragment() {
             .fill(SolidFill("#E1E1E1", 1))
             .stroke("#D2D2D2")
 
-      //  map.geoData("anychart.maps.united_states_of_america")
         map.geoData("anychart.maps.world_source")
-        val test = map.geoData()
 
         val colorRange: ColorRange = map.colorRange()
         colorRange.enabled(true)
@@ -218,7 +219,8 @@ class MapFragment : Fragment() {
         val listWorldChrono = chronopletReturn.list
         val nbMax = chronopletReturn.max
         val nbMax2 = chronopletReturn.max2
-        val series: Choropleth = map.choropleth(listWorldChrono)
+        serieChronoplet  = map.choropleth(listWorldChrono)
+       // val series: Choropleth = map.choropleth(listWorldChrono)
         val linearColor = LinearColor.instantiate()
         val ordinalColor = OrdinalColor.instantiate()
 
@@ -231,20 +233,20 @@ class MapFragment : Fragment() {
         }
         //ordinalColor.ranges(arrayOf("{less: 1}", "{from: 1, to: 10}", "{from: 10, to: 20}", "{from: 20, to: 30}", "{greater: 30}"))
         map.colorRange("{orientation: 'top'}")
-        series.colorScale(ordinalColor)
+        serieChronoplet.colorScale(ordinalColor)
 
         //series.colorScale(linearColor)
 
-        series.hovered()
+        serieChronoplet.hovered()
             .fill("#f48fb1")
             .stroke("#f99fb9")
-        series.selected()
+        serieChronoplet.selected()
             .fill("#c2185b")
             .stroke("#c2185b")
-        series.labels().enabled(true)
-        series.labels().fontSize(10)
-        series.labels().fontColor("#212121")
-        series.labels().format(" ");
+        serieChronoplet.labels().enabled(true)
+        serieChronoplet.labels().fontSize(10)
+        serieChronoplet.labels().fontColor("#212121")
+        serieChronoplet.labels().format(" ");
 
         mView.anyChartViewCountry.setZoomEnabled(true)
         val urlWorld = "https://cdn.anychart.com/releases/8.9.0/geodata/custom/world_source/world_source.js"
