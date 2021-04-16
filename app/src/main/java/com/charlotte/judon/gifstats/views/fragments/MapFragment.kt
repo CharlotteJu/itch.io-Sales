@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.anychart.APIlib
 import com.anychart.AnyChart
 import com.anychart.charts.Cartesian
@@ -20,8 +21,10 @@ import com.anychart.graphics.vector.SolidFill
 import com.anychart.scales.OrdinalColor
 import com.charlotte.judon.gifstats.R
 import com.charlotte.judon.gifstats.model.ChronopletReturn
+import com.charlotte.judon.gifstats.model.Country
 import com.charlotte.judon.gifstats.model.Sale
 import com.charlotte.judon.gifstats.utils.Utils
+import com.charlotte.judon.gifstats.views.adapters.CountryAdapter
 import kotlinx.android.synthetic.main.fragment_map.view.*
 
 
@@ -31,6 +34,7 @@ class MapFragment : Fragment() {
     private lateinit var salesListFiltered : List<Sale>
     private lateinit var serieChronoplet : Choropleth
     private lateinit var ordinalColor: OrdinalColor
+    private lateinit var adapter : CountryAdapter
 
     companion object {
 
@@ -49,11 +53,7 @@ class MapFragment : Fragment() {
         super.onCreate(savedInstanceState)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?): View
-    {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         mView = inflater.inflate(R.layout.fragment_map, container, false)
 
         configureSpinner()
@@ -107,15 +107,26 @@ class MapFragment : Fragment() {
         if(nbMax == 0) {
             mView.no_sales_map.visibility = View.VISIBLE
             mView.anyChartViewCountry.visibility = View.GONE
+            mView.rcv_country.visibility = View.GONE
         } else {
             mView.no_sales_map.visibility = View.GONE
             mView.anyChartViewCountry.visibility = View.VISIBLE
-            val listWorldChrono = chronopletReturn.list
+            mView.rcv_country.visibility = View.VISIBLE
+            val listWorldChrono = chronopletReturn.listEntry
             serieChronoplet.data(listWorldChrono)
             val nbMax2 = chronopletReturn.max2
             val rangesScript = getRanges(nbMax, nbMax2)
             ordinalColor.ranges(rangesScript)
+            adapter.notifyDataChanged(chronopletReturn.listCountry)
         }
+    }
+
+    private fun configureRcv(listCountry : List<Country>){
+
+        //TODO : Revoir design RCV
+        adapter = CountryAdapter(listCountry)
+        mView.rcv_country.adapter = adapter
+        mView.rcv_country.layoutManager = LinearLayoutManager(requireContext())
     }
 
 
@@ -153,9 +164,10 @@ class MapFragment : Fragment() {
         map.interactivity().selectionMode(SelectionMode.NONE)
         map.padding(0, 0, 0, 0)
         val chronopletReturn =  Utils.graphAnyChartMapChronopleth(salesListFiltered)
-        val listWorldChrono = chronopletReturn.list
+        val listWorldChrono = chronopletReturn.listEntry
         val nbMax = chronopletReturn.max
         val nbMax2 = chronopletReturn.max2
+        configureRcv(chronopletReturn.listCountry)
         serieChronoplet  = map.choropleth(listWorldChrono)
 
         //val linearColor = LinearColor.instantiate()

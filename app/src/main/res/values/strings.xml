@@ -18,7 +18,7 @@
     <string name="week">WEEK</string>
     <string name="date">DATE</string>
     <string name="package_radio">PACKAGE</string>
-    <string name="sales">SALES</string>
+    <string name="sales_title">SALES</string>
     <string name="price">PRICE</string>
     <string name="refresh_csv">Refresh CSV</string>
     <string name="download_from_itch">Download from Itch</string>
@@ -36,6 +36,10 @@
     <string name="net">NET</string>
     <string name="tips">TIP</string>
     <string name="currency">CURRENCY :</string>
+    <string name="h">h :</string>
+    <string name="sales">sales</string>
+    <string name="sale">sale</string>
+    <string name="Sales">Sales </string>
 
     <string-array name="list_month">
         <item>JANUARY</item>

@@ -213,7 +213,7 @@ class Utils {
             var nbPerDay = 1f
 
             if(listSorted.isEmpty()) {
-                MpBarReturn(null)
+                return MpBarReturn(null)
             }
 
             var day = listSorted[0].dateDate
@@ -479,6 +479,7 @@ class Utils {
             val listSorted = sortByCountry(list)
             val listCountries = getAllCountryCode()
             val listEntry = mutableListOf<DataEntry>()
+            val listCountry = mutableListOf<Country>()
             var nbPerPackage = 1
             var maxNb = 0
             var maxNB2 = 0
@@ -493,6 +494,7 @@ class Utils {
                             maxNB2 = maxNb
                             maxNb = nbPerPackage
                         }
+                        listCountry.add(Country(country, nbPerPackage))
                         listEntry.add(CustomDataEntryChrono(country, nbPerPackage))
                         nbPerPackage = 1
                         country = sale.countryCode
@@ -506,15 +508,20 @@ class Utils {
                         maxNB2 = maxNb
                         maxNb = nbPerPackage
                     }
+                    listCountry.add(Country(country, nbPerPackage))
                     listEntry.add(CustomDataEntryChrono(country, nbPerPackage))
                 }
             }
 
             for (countryCode in listCountries) {
+                listCountry.add(Country(countryCode, 0))
                 listEntry.add(CustomDataEntryChrono(countryCode, 0))
             }
 
-            return ChronopletReturn(listEntry, maxNb, maxNB2)
+            listCountry.sortBy { country ->  country.nb}
+            listCountry.reverse()
+
+            return ChronopletReturn(listEntry, maxNb, maxNB2, listCountry)
         }
 
         private fun getAllCountryCode() : MutableList<String> {

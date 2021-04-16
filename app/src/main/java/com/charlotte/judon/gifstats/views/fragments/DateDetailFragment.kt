@@ -1,22 +1,29 @@
 package com.charlotte.judon.gifstats.views.fragments
 
+import android.graphics.RectF
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.charlotte.judon.gifstats.R
 import com.charlotte.judon.gifstats.model.DateDetail
 import com.charlotte.judon.gifstats.model.Sale
 import com.charlotte.judon.gifstats.utils.Utils
 import com.charlotte.judon.gifstats.views.adapters.DateDetailAdapter
+import com.github.mikephil.charting.components.YAxis.AxisDependency
+import com.github.mikephil.charting.data.BarEntry
+import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.highlight.Highlight
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener
+import com.github.mikephil.charting.utils.MPPointF
 import kotlinx.android.synthetic.main.fragment_date_detail.view.*
 import kotlinx.android.synthetic.main.fragment_date_detail.view.radio_group_choice
 import kotlinx.android.synthetic.main.fragment_date_detail.view.spinner
+import kotlinx.android.synthetic.main.fragment_graphs.view.*
 
 
 class DateDetailFragment : Fragment() {
@@ -43,7 +50,10 @@ class DateDetailFragment : Fragment() {
 
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?): View {
         mView = inflater.inflate(R.layout.fragment_date_detail, container, false)
         getDateDetailList()
         configureRcv()
@@ -67,10 +77,7 @@ class DateDetailFragment : Fragment() {
     }
 
     private fun configureRcv(){
-        adapterAll =
-            DateDetailAdapter(
-                dateDetailList
-            )
+        adapterAll = DateDetailAdapter(dateDetailList, requireContext())
         mView.graph_rcv_all.adapter = adapterAll
         mView.graph_rcv_all.layoutManager = LinearLayoutManager(requireContext())
     }
@@ -83,17 +90,25 @@ class DateDetailFragment : Fragment() {
         mView.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
 
                 when (position) {
-                    0 -> { salesListFiltered = salesList
+                    0 -> {
+                        salesListFiltered = salesList
                         updateList()
                     }
-                    1 -> { val dateStart = Utils.getDateStartToFilter(7)
+                    1 -> {
+                        val dateStart = Utils.getDateStartToFilter(7)
                         salesListFiltered = Utils.filterList(salesList, dateStart)
                         updateList()
                     }
-                    2 -> { val dateStart = Utils.getDateStartToFilter(30)
+                    2 -> {
+                        val dateStart = Utils.getDateStartToFilter(30)
                         salesListFiltered = Utils.filterList(salesList, dateStart)
                         updateList()
                     }
@@ -147,6 +162,5 @@ class DateDetailFragment : Fragment() {
         listOf3Best.add(listTemp[1])
         listOf3Best.add(listTemp[2])
     }
-
 
 }

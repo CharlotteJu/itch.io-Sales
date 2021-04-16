@@ -21,18 +21,24 @@ import com.github.mikephil.charting.components.MarkerView
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
+import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
+import com.github.mikephil.charting.highlight.Highlight
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import kotlinx.android.synthetic.main.fragment_graphs.view.*
+import kotlinx.android.synthetic.main.item_date_detail.view.*
 
 
-class GraphsFragment : Fragment() {
+class GraphsFragment : Fragment(), OnChartValueSelectedListener {
     private lateinit var salesList : List<Sale>
     private lateinit var mView: View
     private lateinit var salesListFiltered : List<Sale>
     private var btnChecked = 0
     private lateinit var chartVertical : Cartesian
     private lateinit var set : Set
+    private var xFormatter: IndexAxisValueFormatter? = null
     private var btnPackageChecked = 0
+
 
     companion object {
 
@@ -51,7 +57,7 @@ class GraphsFragment : Fragment() {
         super.onCreate(savedInstanceState)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View
     {
         mView = inflater.inflate(R.layout.fragment_graphs, container, false)
 
@@ -136,6 +142,7 @@ class GraphsFragment : Fragment() {
 
     private fun getBarGraphByHour()
     {
+        onNothingSelected()
         mView.MpBarView.visibility = View.VISIBLE
         mView.anyChartView.visibility = View.GONE
         mView.radio_group_package.visibility = View.GONE
@@ -149,16 +156,17 @@ class GraphsFragment : Fragment() {
             mView.no_sales_graph.visibility = View.GONE
 
             val data = BarData(mpBarReturn.barDataSet)
-            val formatterX = null
+            xFormatter = null
 
             mView.MpBarView.data = data
-            mView.MpBarView.xAxis.valueFormatter = formatterX
+            mView.MpBarView.xAxis.valueFormatter = xFormatter
 
         }
     }
 
     private fun getBarGraphByDayOfWeek()
     {
+        onNothingSelected()
         mView.MpBarView.visibility = View.VISIBLE
         mView.anyChartView.visibility = View.GONE
         mView.radio_group_package.visibility = View.GONE
@@ -172,10 +180,10 @@ class GraphsFragment : Fragment() {
             mView.no_sales_graph.visibility = View.GONE
 
             val data = BarData(mpBarReturn.barDataSet)
-            val formatterX = IndexAxisValueFormatter(mpBarReturn.listString)
+            xFormatter = IndexAxisValueFormatter(mpBarReturn.listString)
 
             mView.MpBarView.data = data
-            mView.MpBarView.xAxis.valueFormatter = formatterX
+            mView.MpBarView.xAxis.valueFormatter = xFormatter
 
         }
     }
@@ -184,7 +192,7 @@ class GraphsFragment : Fragment() {
 
     private fun getBarGraphByDate()
     {
-        //mView.MpBarView.visibility = View.VISIBLE
+        onNothingSelected()
         mView.anyChartView.visibility = View.GONE
         mView.radio_group_package.visibility = View.GONE
         mView.MpBarView.invalidate()
@@ -193,9 +201,11 @@ class GraphsFragment : Fragment() {
         if(mpBarReturn.barDataSet == null) {
             mView.MpBarView.visibility = View.GONE
             mView.no_sales_graph.visibility = View.VISIBLE
+            mView.marker_text_all_graph.visibility = View.GONE
         } else {
             mView.MpBarView.visibility = View.VISIBLE
             mView.no_sales_graph.visibility = View.GONE
+            mView.marker_text_all_graph.visibility = View.VISIBLE
 
             val barDataSet = mpBarReturn.barDataSet
             barDataSet.color = Color.parseColor("#F80039")
@@ -203,26 +213,29 @@ class GraphsFragment : Fragment() {
             barDataSet.setDrawValues(false)
 
             val data = BarData(barDataSet)
-            val formatterX = IndexAxisValueFormatter(mpBarReturn.listString)
+            xFormatter = IndexAxisValueFormatter(mpBarReturn.listString)
 
             mView.MpBarView.data = data
-            mView.MpBarView.xAxis.valueFormatter = formatterX
+            mView.MpBarView.xAxis.valueFormatter = xFormatter
 
         }
     }
 
     private fun getBarGraphByPackage()
     {
+        onNothingSelected()
         mView.MpBarView.visibility = View.GONE
         mView.MpBarView.invalidate()
         if(salesListFiltered.isEmpty()) {
             mView.no_sales_graph.visibility = View.VISIBLE
             mView.anyChartView.visibility = View.GONE
             mView.radio_group_package.visibility = View.GONE
+            mView.marker_text_all_graph.visibility = View.GONE
         } else {
             mView.no_sales_graph.visibility = View.GONE
             mView.anyChartView.visibility = View.VISIBLE
             mView.radio_group_package.visibility = View.VISIBLE
+            mView.marker_text_all_graph.visibility = View.GONE
         }
 
         APIlib.getInstance().setActiveAnyChartView(mView.anyChartView)
@@ -235,7 +248,8 @@ class GraphsFragment : Fragment() {
         mView.MpBarView.xAxis.position = XAxis.XAxisPosition.BOTTOM
         mView.MpBarView.axisLeft.axisMinimum = 0f
         mView.MpBarView.axisRight.axisMinimum = 0f
-
+        mView.MpBarView.setOnChartValueSelectedListener(this)
+        mView.MpBarView.xAxis.valueFormatter = xFormatter
         //mView.MpBarView.marker = MarkerView(requireContext(), R.layout.test_marker)
     }
 
@@ -248,6 +262,7 @@ class GraphsFragment : Fragment() {
         chartVertical.animation(true)
         val packageList = Utils.anyChartPackageNB(salesListFiltered)
         val column = chartVertical.bar(packageList)
+        column.name(resources.getString(R.string.Sales))
         column.fill("function() {" +
                 "            return '#F80039';" +
                 "        }")
@@ -265,6 +280,25 @@ class GraphsFragment : Fragment() {
             }
         }
         mView.btn_nb.isChecked = true
+    }
+
+    override fun onValueSelected(e: Entry?, h: Highlight?) {
+        if (e != null) {
+            val saleString = if (e.y > 1) {
+                resources.getString(R.string.sales)
+            } else {
+                resources.getString(R.string.sale)
+            }
+            if(xFormatter == null) {
+                mView.marker_text_all_graph.text = "${e.x.toInt()} h : ${e.y.toInt()} $saleString"
+            } else {
+                mView.marker_text_all_graph.text = "${xFormatter!!.getFormattedValue(e.x)} : ${e.y.toInt()}  $saleString"
+            }
+        }
+    }
+
+    override fun onNothingSelected() {
+        mView.marker_text_all_graph.text = ""
     }
 
 }

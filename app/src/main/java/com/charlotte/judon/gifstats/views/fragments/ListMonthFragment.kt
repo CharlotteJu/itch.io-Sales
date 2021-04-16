@@ -73,7 +73,7 @@ class ListMonthFragment : Fragment(),
     }
 
     override fun onClickMonthItem(saleList: List<Sale>) {
-        fragmentManager?.apply {
+        parentFragmentManager.apply {
             val listFragment = ListFragment.newInstance(saleList)
             val ft = this.beginTransaction()
             ft.replace(R.id.container, listFragment).addToBackStack(BACKSTACK).commit()

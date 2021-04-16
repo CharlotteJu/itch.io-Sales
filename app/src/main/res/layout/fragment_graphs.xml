@@ -129,7 +129,7 @@
             android:shadowColor="@color/colorPrimaryDark"
             android:textColor="@color/colorPrimaryDark"
             android:buttonTint="@color/colorPrimaryDark"
-            android:text="@string/sales"/>
+            android:text="@string/sales_title"/>
 
         <RadioButton
             android:id="@+id/btn_price"
@@ -141,6 +141,18 @@
             android:buttonTint="@color/colorPrimaryDark"
             android:text="@string/price"/>
     </RadioGroup>
+
+    <TextView
+        android:id="@+id/marker_text_all_graph"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="16h = 12 sales"
+        android:textColor="@color/colorPrimaryDark"
+        android:layout_marginTop="8dp"
+        android:textStyle="italic"
+        app:layout_constraintTop_toBottomOf="@id/radio_group_choice"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <ProgressBar
         android:id="@+id/progressBar"

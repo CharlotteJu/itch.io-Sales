@@ -55,20 +55,20 @@ class SaleMonthAdapter (private var listSales : List<MonthSale>, private var onC
 
         private fun getStringMonth(month : String) : String {
             val listMonth = context.resources.getStringArray(R.array.list_month)
-            when (month) {
-                "Jan" -> return listMonth[0]
-                "Feb" -> return listMonth[1]
-                "Mar" -> return listMonth[2]
-                "Apr" -> return listMonth[3]
-                "May" -> return listMonth[4]
-                "Jun" -> return listMonth[5]
-                "Jul" -> return listMonth[6]
-                "Aug" -> return listMonth[7]
-                "Sep" -> return listMonth[8]
-                "Oct" -> return listMonth[9]
-                "Nov" -> return listMonth[10]
-                "Dec" -> return listMonth[11]
-                else -> return month
+            return when (month) {
+                "Jan" -> listMonth[0]
+                "Feb" -> listMonth[1]
+                "Mar" -> listMonth[2]
+                "Apr" -> listMonth[3]
+                "May" -> listMonth[4]
+                "Jun" -> listMonth[5]
+                "Jul" -> listMonth[6]
+                "Aug" -> listMonth[7]
+                "Sep" -> listMonth[8]
+                "Oct" -> listMonth[9]
+                "Nov" -> listMonth[10]
+                "Dec" -> listMonth[11]
+                else -> month
             }
         }
     }
