@@ -34,7 +34,8 @@
     <string name="country">COUNTRY</string>
     <string name="gross">GROSS</string>
     <string name="net">NET</string>
-    <string name="tips">TIPS</string>
+    <string name="tips">TIP</string>
+    <string name="currency">CURRENCY :</string>
 
     <string-array name="list_month">
         <item>JANUARY</item>
@@ -60,4 +61,14 @@
         <item>Saturday</item>
         <item>Sunday</item>
     </string-array>
+
+    <!-- MENU -->
+    <string name="home">HOME</string>
+    <string name="global_graphs">GLOBAL GRAPHS</string>
+    <string name="days_of_week">DAYS OF WEEK</string>
+    <string name="map_countries">COUNTRIES</string>
+    <string name="list_detail">DETAILED LIST</string>
+    <string name="suivi_global">SUIVI GLOBAL</string>
+    <string name="settings">SETTINGS</string>
+    <string name="delete_all">DELETE ALL</string>
 </resources>

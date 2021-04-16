@@ -47,11 +47,25 @@ class ViewModel(private val saleRepository: SaleRepository) : ViewModel() {
         }
     }
 
-   fun deleteSale(sale: Sale) {
+   fun deleteSale(sale: Sale, ) {
        viewModelScope.launch {
            saleRepository.deleteSale(sale)
        }
    }
+
+    fun deleteAllSales(context: Context, list: List<Sale>) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val thread = viewModelScope.async {
+                for (sale in list) {
+                    deleteSale(sale)
+                }
+            }
+            thread.await()
+            withContext(Dispatchers.Main) {
+                Toast.makeText(context, "TOUT EST SUPPRIME", Toast.LENGTH_LONG).show()
+            }
+        }
+    }
 
 
 }

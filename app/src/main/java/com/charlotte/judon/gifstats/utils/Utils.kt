@@ -2,15 +2,12 @@ package com.charlotte.judon.gifstats.utils
 
 import android.content.Context
 import android.graphics.Color
-import android.util.Log
 import android.view.View
 import com.anychart.chart.common.dataentry.DataEntry
 import com.anychart.chart.common.dataentry.ValueDataEntry
 import com.charlotte.judon.gifstats.R
-import com.charlotte.judon.gifstats.model.ChronopletReturn
-import com.charlotte.judon.gifstats.model.DateDetail
-import com.charlotte.judon.gifstats.model.MonthSale
-import com.charlotte.judon.gifstats.model.Sale
+import com.charlotte.judon.gifstats.model.*
+import com.github.mikephil.charting.components.MarkerView
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
@@ -36,18 +33,40 @@ class Utils {
             val dateString = dateStringFromCSV.substring(0, 10)
             val hourString = dateStringFromCSV.substring(11, 19)
 
-            val completeDateString = "$dateString $hourString+0000"
+            val completeDateString = "$dateString $hourString"
+            //val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+            val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+            val date = simpleDateFormat.parse(completeDateString)
+            //val resultOfParsing = OffsetDateTime.parse(completeDateString, dateFormatter)
+            //val timeZone = ZoneId.of("Europe/Paris")
+            //val franceTime = resultOfParsing.atZoneSameInstant(timeZone)
+            //return Date.from(franceTime.toInstant())
+            return date
+        }
+
+        fun convertStringToDateWithArgs(dateStringFromCSV: String, hourString: String, format : String) : List<String> {
+
+            val list = arrayListOf<String>()
+            val completeDateString = "$dateStringFromCSV $hourString+0000"
             val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss[.SSS]Z")
             val resultOfParsing = OffsetDateTime.parse(completeDateString, dateFormatter)
-            val timeZone = ZoneId.of("Europe/Paris")
-            val franceTime = resultOfParsing.atZoneSameInstant(timeZone)
-            return Date.from(franceTime.toInstant())
+            val timeZone2 = ZoneId.systemDefault()
+            val localeTime = resultOfParsing.atZoneSameInstant(timeZone2)
+            val date = Date.from(localeTime.toInstant())
+
+            val formatterDate = SimpleDateFormat(format, Locale.getDefault())
+            val dateString = formatterDate.format(date)
+            list.add(dateString)
+            val formatterTime = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
+            val timeString = formatterTime.format(date)
+            list.add(timeString)
+
+            return list
         }
 
         fun getDateStartToFilter(daysAgo: Int): Date {
             val calendar = Calendar.getInstance()
             calendar.add(Calendar.DAY_OF_YEAR, -daysAgo)
-
             return calendar.time
         }
 
@@ -56,8 +75,7 @@ class Utils {
             for (sale in list) {
                 val dateTemp = sale.dateDate
                 if (dateTemp.toInstant().truncatedTo(ChronoUnit.DAYS) >= dateStart.toInstant()
-                        .truncatedTo(ChronoUnit.DAYS)
-                ) {
+                        .truncatedTo(ChronoUnit.DAYS)) {
                     listToReturn.add(sale)
                 }
             }
@@ -65,45 +83,47 @@ class Utils {
         }
 
         fun castSaleListInSaleMonthList(salesList: List<Sale>): List<MonthSale> {
+
+            //TODO : Faire pour plusieurs années
             val listToReturn = arrayListOf<MonthSale>()
             var listForOneMonth = arrayListOf<Sale>()
 
             val dateOfToday = Date().toString().substring(4, 7)
-            var refMonth = salesList[0].dateDate.toString().substring(4, 7)
-
-            for (sale in salesList) {
-                val monthTemp = sale.dateDate.toString().substring(4, 7)
-
-                if (monthTemp == refMonth) {
-                    listForOneMonth.add(sale)
-                } else {
-                    val total = calculTotalNetSales(listForOneMonth)
-                    val bool = refMonth != dateOfToday
-                    listToReturn.add(
-                        MonthSale(
-                            refMonth,
-                            listForOneMonth.size,
-                            total,
-                            bool,
-                            listForOneMonth
+            if (salesList.isNotEmpty()) {
+                var refMonth = salesList[0].dateDate.toString().substring(4, 7)
+                for (sale in salesList) {
+                    val monthTemp = sale.dateDate.toString().substring(4, 7)
+                    if (monthTemp == refMonth) {
+                        listForOneMonth.add(sale)
+                    } else {
+                        val total = calculTotalNetSales(listForOneMonth)
+                        val bool = refMonth != dateOfToday
+                        listToReturn.add(
+                            MonthSale(
+                                refMonth,
+                                listForOneMonth.size,
+                                total,
+                                bool,
+                                listForOneMonth
+                            )
                         )
-                    )
-                    refMonth = monthTemp
-                    listForOneMonth = arrayListOf()
-                }
+                        refMonth = monthTemp
+                        listForOneMonth = arrayListOf(sale)
+                    }
 
-                if (salesList.indexOf(sale) == salesList.size - 1) {
-                    val total = calculTotalNetSales(listForOneMonth)
-                    val bool = monthTemp != dateOfToday
-                    listToReturn.add(
-                        MonthSale(
-                            monthTemp,
-                            listForOneMonth.size,
-                            total,
-                            bool,
-                            listForOneMonth
+                    if (salesList.indexOf(sale) == salesList.size - 1) {
+                        val total = calculTotalNetSales(listForOneMonth)
+                        val bool = monthTemp != dateOfToday
+                        listToReturn.add(
+                            MonthSale(
+                                monthTemp,
+                                listForOneMonth.size,
+                                total,
+                                bool,
+                                listForOneMonth
+                            )
                         )
-                    )
+                    }
                 }
             }
             return listToReturn.reversed()
@@ -155,6 +175,7 @@ class Utils {
 
         fun calculChargesSales(brut : Double, net : Double): Double {
 
+            //TODO : Marquer que c'est calculé
             val decimalFormat = DecimalFormat("####0.00")
             val separator = DecimalFormatSymbols()
             separator.decimalSeparator = '.'
@@ -181,14 +202,20 @@ class Utils {
             return list.sortedWith(compareBy { it.objectName })
         }
 
-        fun graphMPByDay(salesList: List<Sale>, view: View) {
+        ///////////////////////////////////////// MPBAR /////////////////////////////////////////
 
-            val listSorted = Utils.sortSalesByDate(salesList)
+        fun graphMPByDay(salesList: List<Sale>)  : MpBarReturn {
+
+            val listSorted = sortSalesByDate(salesList)
             val listEntry = arrayListOf<BarEntry>()
             val listString = arrayListOf<String>()
             val formatterDate = SimpleDateFormat("dd/MM", Locale.getDefault())
-
             var nbPerDay = 1f
+
+            if(listSorted.isEmpty()) {
+                MpBarReturn(null)
+            }
+
             var day = listSorted[0].dateDate
 
             for (sale in listSorted) {
@@ -209,9 +236,16 @@ class Utils {
                 } else if (dateTemp.toInstant().truncatedTo(ChronoUnit.DAYS) > dayPlus1.toInstant().truncatedTo(ChronoUnit.DAYS)) {
 
                     val difLong = dateTemp.time - day.time
-                    val difInt = TimeUnit.DAYS.convert(difLong, TimeUnit.MILLISECONDS)
+                    var difInt = TimeUnit.DAYS.convert(difLong, TimeUnit.MILLISECONDS)
+                    val simpleDataFormatter = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
+                    val hourDay = simpleDataFormatter.format(day)
+                    val hourDateTemp = simpleDataFormatter.format(dateTemp)
 
-                    for (i in 0 until difInt) {
+                   if(hourDay > hourDateTemp) {
+                        difInt ++
+                    }
+
+                    for (i in 0 until difInt -1) {
                         val calendarTemp = Calendar.getInstance()
                         calendarTemp.time = day
                         calendarTemp.add(Calendar.DAY_OF_YEAR, i.toInt()+1)
@@ -259,152 +293,45 @@ class Utils {
             barDataSet.color = Color.parseColor("#F80039")
             barDataSet.highLightColor = Color.parseColor("#4B2E5A")
             barDataSet.setDrawValues(false)
-
-            val data = BarData(barDataSet)
-            val formatterX = IndexAxisValueFormatter(listString)
-            view.MpBarView.data = data
-            view.MpBarView.description.isEnabled = false
-            view.MpBarView.xAxis.position = XAxis.XAxisPosition.BOTTOM
-            view.MpBarView.xAxis.valueFormatter = formatterX
-            view.MpBarView.axisLeft.axisMinimum = 0f
-            view.MpBarView.axisRight.axisMinimum = 0f
-
+            return (MpBarReturn(barDataSet, listString))
         }
 
-        fun graphMPBarByHour(salesList: List<Sale>, view: View) {
-
-            val listSorted = sortSalesByHour(salesList)
+        fun graphMPBarByHour(salesList: List<Sale>) : MpBarReturn {
             val listEntry = arrayListOf<BarEntry>()
-            val listString = arrayListOf<String>()
+            val listHours = arrayListOf<HourList>()
 
-            var nbPerHour = 0
-            var hour = 0
-
-            for (sale in listSorted) {
-
-                val hourString = sale.hour.substring(0, 2)
-                val hourSale = hourString.toInt()
-                if (hourSale > hour) {
-                    listEntry.add(BarEntry(hour.toFloat(), nbPerHour.toFloat()))
-                    nbPerHour = 1
-                    hour = hourSale
-                } else {
-                    nbPerHour++
-                }
-                if (listSorted.indexOf(sale) == listSorted.size - 1) {
-                    listEntry.add(BarEntry(hour.toFloat(), nbPerHour.toFloat()))
-                }
+            if(salesList.isEmpty()) {
+                return MpBarReturn(null)
             }
 
-            /*for (sale in listSorted) {
-
-                val hourString = sale.hour.substring(0, 2)
-                val hourSale = hourString.toInt()
-                if (hourSale == hour+1) {
-                    listEntry.add(BarEntry(hour.toFloat(), nbPerHour.toFloat()))
-                    //val tempString = hour.toString().split(".")
-                    listString.add("${hourString}H")
-                    nbPerHour = 1
-                    hour = hourSale
-                } else if (hourSale > hour +1){
-                    val difHour = hourSale - hour
-                    for (i in 1 until difHour) {
-                        //val tempString = hour.toString().split(".")[0].toInt()
-                        //val hourTemp = tempString + i
-                        val hourTemp = hourSale + i
-                        listEntry.add(BarEntry((hourTemp).toFloat(), 0f))
-                        listString.add("${hourTemp}H")
-                    }
-                    listEntry.add(BarEntry(hour.toFloat(), nbPerHour.toFloat()))
-                    //val tempString = hour.toString().split(".")
-                    listString.add("${hourString[0]}H")
-                    nbPerHour = 1
-                    hour = hourSale
-                }
-                else {
-                    nbPerHour++
-                }
-
-                if (listSorted.indexOf(sale) == listSorted.size - 1) {
-                    listEntry.add(BarEntry(hour.toFloat(), nbPerHour.toFloat()))
-                    listString.add("${hour}H")
-                }
+            for (i in 0 .. 23) {
+                listHours.add(HourList(i))
             }
 
-            if (listEntry.size < 24 ) {
-                for (i in 23 downTo listEntry.size) {
-                    listEntry.add(BarEntry((i).toFloat(), 0f))
-                    listString.add("${i}H")
-                }
-            }*/
+            for (sale in salesList) {
+                val date = convertStringToDateWithArgs(sale.dateString, sale.hour, "MM/dd/yyyy")
+                val hourString = date[1].substring(0, 2)
+                val hourSale = hourString.toInt()
+                listHours.get(hourSale).nb ++
+            }
+
+            for (hourItem in listHours) {
+                listEntry.add(BarEntry(hourItem.hour.toFloat(), hourItem.nb.toFloat()))
+            }
+
             val barDataSet = BarDataSet(listEntry, " ")
             barDataSet.color = Color.parseColor("#F80039")
             barDataSet.highLightColor = Color.parseColor("#4B2E5A")
             barDataSet.setDrawValues(false)
-
-            val data = BarData(barDataSet)
-            //val formatterX = IndexAxisValueFormatter(listString)
-            view.MpBarView.data = data
-            view.MpBarView.description.isEnabled = false
-            view.MpBarView.xAxis.position = XAxis.XAxisPosition.BOTTOM
-            //view.MpBarView.xAxis.valueFormatter = formatterX
-            view.MpBarView.xAxis.valueFormatter = null
-            view.MpBarView.axisLeft.axisMinimum = 0f
-            view.MpBarView.axisRight.axisMinimum = 0f
+            return MpBarReturn(barDataSet)
 
         }
 
-        private fun getListForOneDay(list: List<Sale>, day : String) : List<Sale> {
-            val listToReturn = arrayListOf<Sale>()
-            for (sale in list) {
-                if (sale.dateDate.toString().substring(0,3) == day) {
-                    listToReturn.add(sale)
-                }
+        fun graphMPBarByDayOfWeek(list: List<Sale>) : MpBarReturn {
 
+            if (list.isEmpty()) {
+                return MpBarReturn(null)
             }
-            return listToReturn
-        }
-
-
-        fun graphMPBarByDayWithHours(list: List<Sale>, day : String, context : Context)  : DateDetail {
-            val listEntry = arrayListOf<BarEntry>()
-            val listSorted = sortSalesByHour(getListForOneDay(list, day))
-
-            var hour = 0
-            var nbPerHour = 0
-
-            for (sale in listSorted) {
-
-                val hourString = sale.hour.substring(0, 2)
-                val hourSale = hourString.toInt()
-                if (hourSale > hour) {
-                    listEntry.add(BarEntry(hour.toFloat(), nbPerHour.toFloat()))
-                    nbPerHour = 1
-                    hour = hourSale
-                } else {
-                    nbPerHour++
-                }
-                if (listSorted.indexOf(sale) == listSorted.size - 1) {
-                    listEntry.add(BarEntry(hour.toFloat(), nbPerHour.toFloat()))
-                }
-            }
-
-            var name = ""
-            val listDay = arrayListOf<String>("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
-            val listDayFromResources = context.resources.getStringArray(R.array.list_days)
-            when (day) {
-                listDay[0] -> name = listDayFromResources[0]
-                listDay[1] -> name = listDayFromResources[1]
-                listDay[2] -> name = listDayFromResources[2]
-                listDay[3] -> name = listDayFromResources[3]
-                listDay[4] -> name = listDayFromResources[4]
-                listDay[5] -> name = listDayFromResources[5]
-                listDay[6] -> name = listDayFromResources[6]
-            }
-            return DateDetail(name, listEntry, null, listSorted.size)
-        }
-
-        fun graphMPBarByDayOfWeek(list: List<Sale>, view: View) {
 
             var nbMonday = 0
             var nbTuesday = 0
@@ -414,10 +341,9 @@ class Utils {
             var nbSaturday = 0
             var nbSunday = 0
 
-            val listDay = arrayListOf<String>("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
+            val listDay = arrayListOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
 
             for (sale in list) {
-
                 when (sale.dateDate.toString().substring(0, 3)) {
                     listDay[0] -> nbMonday++
                     listDay[1] -> nbTuesday++
@@ -435,127 +361,131 @@ class Utils {
                 BarEntry(3f, nbThursday.toFloat()),
                 BarEntry(4f, nbFriday.toFloat()),
                 BarEntry(5f, nbSaturday.toFloat()),
-                BarEntry(6f, nbSunday.toFloat())
-            )
+                BarEntry(6f, nbSunday.toFloat()))
 
             val barDataSet = BarDataSet(listBarEntry, " ")
             barDataSet.color = Color.parseColor("#F80039")
             barDataSet.highLightColor = Color.parseColor("#4B2E5A")
-            val formatterX = IndexAxisValueFormatter(listDay)
-
             barDataSet.setDrawValues(false)
-            val data = BarData(barDataSet)
-            view.MpBarView.data = data
-            view.MpBarView.description.isEnabled = false
-            view.MpBarView.xAxis.position = XAxis.XAxisPosition.BOTTOM
-            view.MpBarView.xAxis.valueFormatter = formatterX
-            view.MpBarView.axisLeft.axisMinimum = 0f
-            view.MpBarView.axisRight.axisMinimum = 0f
-
+            return MpBarReturn(barDataSet, listDay)
         }
 
+        private fun getListForOneDay(list: List<Sale>, day : String) : List<Sale> {
+            val listToReturn = arrayListOf<Sale>()
+            for (sale in list) {
+                if (sale.dateDate.toString().substring(0,3) == day) {
+                    listToReturn.add(sale)
+                }
+            }
+            return listToReturn
+        }
+
+
+        fun graphMPBarByDayWithHours(list: List<Sale>, day : String, context : Context)  : DateDetail {
+            val listEntry = arrayListOf<BarEntry>()
+            val listSorted = sortSalesByHour(getListForOneDay(list, day))
+            val listHours = arrayListOf<HourList>()
+
+            for (i in 0 .. 23) {
+                listHours.add(HourList(i))
+            }
+
+            for (sale in listSorted) {
+                val date = convertStringToDateWithArgs(sale.dateString, sale.hour, "MM/dd/yyyy")
+                val hourString = date[1].substring(0, 2)
+                val hourSale = hourString.toInt()
+
+                listHours.get(hourSale).nb ++
+            }
+
+            for (hourItem in listHours) {
+                listEntry.add(BarEntry(hourItem.hour.toFloat(), hourItem.nb.toFloat()))
+            }
+
+            var name = ""
+            val listDay = arrayListOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
+            val listDayFromResources = context.resources.getStringArray(R.array.list_days)
+            when (day) {
+                listDay[0] -> name = listDayFromResources[0]
+                listDay[1] -> name = listDayFromResources[1]
+                listDay[2] -> name = listDayFromResources[2]
+                listDay[3] -> name = listDayFromResources[3]
+                listDay[4] -> name = listDayFromResources[4]
+                listDay[5] -> name = listDayFromResources[5]
+                listDay[6] -> name = listDayFromResources[6]
+            }
+            return DateDetail(name, listEntry, null, listSorted.size)
+        }
+
+
+
+        ///////////////////////////////////////// ANYCHART /////////////////////////////////////////
 
         fun anyChartPackagePrice(list: List<Sale>): MutableList<DataEntry> {
             val listSorted = sortSalesByPackage(list)
             val listPrice = mutableListOf<DataEntry>()
-            var namePackage = listSorted[0].objectName
-            var totalPrice = 0.0
 
-            for (sale in listSorted) {
-                if (sale.objectName != namePackage) {
-                    listPrice.add(ValueDataEntry(namePackage, totalPrice))
-                    namePackage = sale.objectName
-                    totalPrice = sale.amountDelivered
-                } else {
-                    val price = if (sale.currency == "USD") {
-                        convertDollarToEuros(sale.amountDelivered)
+            if (listSorted.isNotEmpty()) {
+                var namePackage = listSorted[0].objectName
+                var totalPrice = 0.0
+
+                for (sale in listSorted) {
+                    if (sale.objectName != namePackage) {
+                        listPrice.add(ValueDataEntry(namePackage, totalPrice))
+                        namePackage = sale.objectName
+                        totalPrice = sale.amountDelivered
                     } else {
-                        sale.amountDelivered
+                        val price = if (sale.currency == "USD") {
+                            convertDollarToEuros(sale.amountDelivered)
+                        } else {
+                            sale.amountDelivered
+                        }
+                        totalPrice += price
                     }
-                    totalPrice += price
                 }
+                listPrice.add(ValueDataEntry(namePackage, totalPrice))
             }
-            listPrice.add(ValueDataEntry(namePackage, totalPrice))
             return listPrice
         }
 
 
         fun anyChartPackageNB(list: List<Sale>): MutableList<DataEntry> {
-            val listSorted = Utils.sortSalesByPackage(list)
+            val listSorted = sortSalesByPackage(list)
             val listEntry = mutableListOf<DataEntry>()
             var nbPerPackage = 0
-            var namePackage = listSorted[0].objectName
-
-            for (sale in listSorted) {
-                if (sale.objectName != namePackage) {
-                    listEntry.add(ValueDataEntry(namePackage, nbPerPackage))
-                    nbPerPackage = 1
-                    namePackage = sale.objectName
-                } else {
-                    nbPerPackage++
-                }
-
-                if (listSorted.indexOf(sale) == listSorted.size - 1) {
-                    listEntry.add(ValueDataEntry(namePackage, nbPerPackage))
-                }
-            }
-
-            return listEntry
-
-        }
-
-        fun graphAnyChartMap(list: List<Sale>): MutableList<DataEntry> {
-            val listSorted = Utils.sortByCountry(list)
-            val listEntry = mutableListOf<DataEntry>()
-            var nbPerPackage = 0
-            var country = listSorted[0].countryCode
-
-            for (sale in listSorted) {
-                    if (sale.countryCode != country) {
-                        listEntry.add(ValueDataEntry(country, nbPerPackage))
+            if (listSorted.isEmpty()) {
+                return listEntry
+            } else {
+                var namePackage = listSorted[0].objectName
+                for (sale in listSorted) {
+                    if (sale.objectName != namePackage) {
+                        listEntry.add(ValueDataEntry(namePackage, nbPerPackage))
                         nbPerPackage = 1
-                        country = sale.countryCode
+                        namePackage = sale.objectName
                     } else {
                         nbPerPackage++
                     }
-                if (listSorted.indexOf(sale) == listSorted.size - 1) {
-                    listEntry.add(ValueDataEntry(country, nbPerPackage))
+
+                    if (listSorted.indexOf(sale) == listSorted.size - 1) {
+                        listEntry.add(ValueDataEntry(namePackage, nbPerPackage))
+                    }
                 }
+                return listEntry
             }
-            return listEntry
         }
 
-
-        fun getAnyChartBubbleFromFranceAndRussia(list: List<Sale>): MutableList<DataEntry> {
-            val listSorted = Utils.sortByCountry(list)
-            val listEntry = mutableListOf<DataEntry>()
-            var nbFrance = 0
-            var nbRussia = 0
-            for (sale in listSorted) {
-                if (sale.countryCode == "RU") {
-                    nbRussia ++
-                }
-                if (sale.countryCode == "FR") {
-                    nbFrance ++
-                }
-            }
-
-            listEntry.add(DataEntryFranceRussia("FR", "FR", nbFrance, 2.213749, 46.227638))
-            listEntry.add(DataEntryFranceRussia("RU", "RU", nbRussia, 105.318756, 61.524010))
-
-            return listEntry
-        }
 
         fun graphAnyChartMapChronopleth(list: List<Sale>): ChronopletReturn {
             val listSorted = sortByCountry(list)
             val listCountries = getAllCountryCode()
             val listEntry = mutableListOf<DataEntry>()
             var nbPerPackage = 1
-            var country = listSorted[0].countryCode
             var maxNb = 0
             var maxNB2 = 0
-
-
+            var country = ""
+            if(listSorted.isNotEmpty()) {
+                country = listSorted[0].countryCode
+            }
             for (sale in listSorted) {
                 if (sale.countryCode != country) {
                     if(listCountries.contains(country)) listCountries.remove(country)
@@ -625,12 +555,16 @@ class Utils {
 }
 
 
+
 class CustomDataEntryChrono(val id : String, val value : Number) : DataEntry() {
     init {
         setValue("id", id);
         setValue("value", value);
     }
 }
+
+
+/*
 
 class DataEntryFranceRussia(val id : String, val name : String, val value : Number, val longitude : Double, val latitude : Double) : DataEntry() {
     init {
@@ -641,3 +575,48 @@ class DataEntryFranceRussia(val id : String, val name : String, val value : Numb
         setValue("long", longitude)
     }
 }
+
+fun graphAnyChartMap(list: List<Sale>): MutableList<DataEntry> {
+            val listSorted = Utils.sortByCountry(list)
+            val listEntry = mutableListOf<DataEntry>()
+            var nbPerPackage = 0
+            var country = listSorted[0].countryCode
+
+            for (sale in listSorted) {
+                    if (sale.countryCode != country) {
+                        listEntry.add(ValueDataEntry(country, nbPerPackage))
+                        nbPerPackage = 1
+                        country = sale.countryCode
+                    } else {
+                        nbPerPackage++
+                    }
+                if (listSorted.indexOf(sale) == listSorted.size - 1) {
+                    listEntry.add(ValueDataEntry(country, nbPerPackage))
+                }
+            }
+            return listEntry
+        }
+
+
+        fun getAnyChartBubbleFromFranceAndRussia(list: List<Sale>): MutableList<DataEntry> {
+            val listSorted = Utils.sortByCountry(list)
+            val listEntry = mutableListOf<DataEntry>()
+            var nbFrance = 0
+            var nbRussia = 0
+            for (sale in listSorted) {
+                if (sale.countryCode == "RU") {
+                    nbRussia ++
+                }
+                if (sale.countryCode == "FR") {
+                    nbFrance ++
+                }
+            }
+
+            listEntry.add(DataEntryFranceRussia("FR", "FR", nbFrance, 2.213749, 46.227638))
+            listEntry.add(DataEntryFranceRussia("RU", "RU", nbRussia, 105.318756, 61.524010))
+
+            return listEntry
+        }
+
+
+ */

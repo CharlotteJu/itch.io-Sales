@@ -14,9 +14,14 @@ import com.anychart.chart.common.dataentry.DataEntry
 import com.anychart.charts.Cartesian
 import com.anychart.data.Set
 import com.charlotte.judon.gifstats.R
+import com.charlotte.judon.gifstats.model.MpBarReturn
 import com.charlotte.judon.gifstats.model.Sale
 import com.charlotte.judon.gifstats.utils.Utils
-import com.github.mikephil.charting.highlight.Highlight
+import com.github.mikephil.charting.components.MarkerView
+import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.data.BarData
+import com.github.mikephil.charting.data.BarDataSet
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import kotlinx.android.synthetic.main.fragment_graphs.view.*
 
 
@@ -54,7 +59,7 @@ class GraphsFragment : Fragment() {
         configureSpinner()
         initPackageGraph()
 
-        mView.radio_group.setOnCheckedChangeListener { _, checkedId ->
+        mView.radio_group_choice.setOnCheckedChangeListener { _, checkedId ->
             btnChecked = checkedId
             when (checkedId) {
 
@@ -135,7 +140,21 @@ class GraphsFragment : Fragment() {
         mView.anyChartView.visibility = View.GONE
         mView.radio_group_package.visibility = View.GONE
         mView.MpBarView.invalidate()
-        Utils.graphMPBarByHour(salesListFiltered, mView)
+        val mpBarReturn = Utils.graphMPBarByHour(salesListFiltered)
+        if(mpBarReturn.barDataSet == null) {
+            mView.MpBarView.visibility = View.GONE
+            mView.no_sales_graph.visibility = View.VISIBLE
+        } else {
+            mView.MpBarView.visibility = View.VISIBLE
+            mView.no_sales_graph.visibility = View.GONE
+
+            val data = BarData(mpBarReturn.barDataSet)
+            val formatterX = null
+
+            mView.MpBarView.data = data
+            mView.MpBarView.xAxis.valueFormatter = formatterX
+
+        }
     }
 
     private fun getBarGraphByDayOfWeek()
@@ -144,7 +163,80 @@ class GraphsFragment : Fragment() {
         mView.anyChartView.visibility = View.GONE
         mView.radio_group_package.visibility = View.GONE
         mView.MpBarView.invalidate()
-        Utils.graphMPBarByDayOfWeek(salesListFiltered, mView)
+        val mpBarReturn = Utils.graphMPBarByDayOfWeek(salesListFiltered)
+        if(mpBarReturn.barDataSet == null) {
+            mView.MpBarView.visibility = View.GONE
+            mView.no_sales_graph.visibility = View.VISIBLE
+        } else {
+            mView.MpBarView.visibility = View.VISIBLE
+            mView.no_sales_graph.visibility = View.GONE
+
+            val data = BarData(mpBarReturn.barDataSet)
+            val formatterX = IndexAxisValueFormatter(mpBarReturn.listString)
+
+            mView.MpBarView.data = data
+            mView.MpBarView.xAxis.valueFormatter = formatterX
+
+        }
+    }
+
+
+
+    private fun getBarGraphByDate()
+    {
+        //mView.MpBarView.visibility = View.VISIBLE
+        mView.anyChartView.visibility = View.GONE
+        mView.radio_group_package.visibility = View.GONE
+        mView.MpBarView.invalidate()
+        val mpBarReturn = Utils.graphMPByDay(salesListFiltered)
+
+        if(mpBarReturn.barDataSet == null) {
+            mView.MpBarView.visibility = View.GONE
+            mView.no_sales_graph.visibility = View.VISIBLE
+        } else {
+            mView.MpBarView.visibility = View.VISIBLE
+            mView.no_sales_graph.visibility = View.GONE
+
+            val barDataSet = mpBarReturn.barDataSet
+            barDataSet.color = Color.parseColor("#F80039")
+            barDataSet.highLightColor = Color.parseColor("#4B2E5A")
+            barDataSet.setDrawValues(false)
+
+            val data = BarData(barDataSet)
+            val formatterX = IndexAxisValueFormatter(mpBarReturn.listString)
+
+            mView.MpBarView.data = data
+            mView.MpBarView.xAxis.valueFormatter = formatterX
+
+        }
+    }
+
+    private fun getBarGraphByPackage()
+    {
+        mView.MpBarView.visibility = View.GONE
+        mView.MpBarView.invalidate()
+        if(salesListFiltered.isEmpty()) {
+            mView.no_sales_graph.visibility = View.VISIBLE
+            mView.anyChartView.visibility = View.GONE
+            mView.radio_group_package.visibility = View.GONE
+        } else {
+            mView.no_sales_graph.visibility = View.GONE
+            mView.anyChartView.visibility = View.VISIBLE
+            mView.radio_group_package.visibility = View.VISIBLE
+        }
+
+        APIlib.getInstance().setActiveAnyChartView(mView.anyChartView)
+    }
+
+    private fun configureGraphView()
+    {
+        mView.MpBarView.description.isEnabled = false
+        mView.MpBarView.legend.isEnabled = false
+        mView.MpBarView.xAxis.position = XAxis.XAxisPosition.BOTTOM
+        mView.MpBarView.axisLeft.axisMinimum = 0f
+        mView.MpBarView.axisRight.axisMinimum = 0f
+
+        //mView.MpBarView.marker = MarkerView(requireContext(), R.layout.test_marker)
     }
 
     private fun initPackageGraph()
@@ -162,12 +254,6 @@ class GraphsFragment : Fragment() {
         column.stroke("function() {" +
                 "            return '#F80039';" +
                 "        }")
-       // val test = chartVertical.data(packageList)
-       // val series = chartVertical.column(test)
-        //series.color(Color.parseColor("#F80039"))
-        //chartVertical.palette("#F80039")
-
-
 
         mView.anyChartView.setChart(chartVertical)
 
@@ -179,30 +265,6 @@ class GraphsFragment : Fragment() {
             }
         }
         mView.btn_nb.isChecked = true
-    }
-
-    private fun getBarGraphByPackage()
-    {
-        mView.MpBarView.visibility = View.GONE
-        mView.MpBarView.invalidate()
-        mView.anyChartView.visibility = View.VISIBLE
-        mView.radio_group_package.visibility = View.VISIBLE
-        APIlib.getInstance().setActiveAnyChartView(mView.anyChartView)
-    }
-
-    private fun getBarGraphByDate()
-    {
-        mView.MpBarView.visibility = View.VISIBLE
-        mView.anyChartView.visibility = View.GONE
-        mView.radio_group_package.visibility = View.GONE
-        mView.MpBarView.invalidate()
-        Utils.graphMPByDay(salesListFiltered, mView)
-    }
-
-    private fun configureGraphView()
-    {
-        mView.MpBarView.description.isEnabled = false
-        mView.MpBarView.legend.isEnabled = false
     }
 
 }

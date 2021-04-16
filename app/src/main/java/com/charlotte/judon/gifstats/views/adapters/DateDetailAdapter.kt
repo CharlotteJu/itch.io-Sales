@@ -10,7 +10,6 @@ import com.charlotte.judon.gifstats.model.DateDetail
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
-import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import kotlinx.android.synthetic.main.fragment_graphs.view.*
 import kotlinx.android.synthetic.main.item_date_detail.view.*
 
@@ -46,7 +45,7 @@ class DateDetailAdapter(private var listDateDetail : List<DateDetail>) : Recycle
 
             if(dateDetail.totalSale > 0 ){
                 itemView.graphTemplate.visibility = View.VISIBLE
-                itemView.no_sales.visibility = View.INVISIBLE
+                itemView.no_sales_item_sale.visibility = View.INVISIBLE
 
                 val barDataSet = BarDataSet(dateDetail.listEntry, "")
                 barDataSet.color = Color.parseColor("#F80039")
@@ -67,7 +66,7 @@ class DateDetailAdapter(private var listDateDetail : List<DateDetail>) : Recycle
             }
             else {
                 itemView.graphTemplate.visibility = View.GONE
-                itemView.no_sales.visibility = View.VISIBLE
+                itemView.no_sales_item_sale.visibility = View.VISIBLE
             }
 
 

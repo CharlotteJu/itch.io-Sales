@@ -42,7 +42,6 @@ class HomeFragment : Fragment() {
         mView.telechargement_btn.setOnClickListener {
             downloadCsvFromItch()
         }
-
         return mView
     }
 

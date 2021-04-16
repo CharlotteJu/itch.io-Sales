@@ -39,7 +39,7 @@
             app:layout_constraintEnd_toEndOf="parent"/>
 
         <RadioGroup
-            android:id="@+id/radio_group"
+            android:id="@+id/radio_group_choice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -77,19 +77,21 @@
             tools:listitem="@layout/item_date_detail"
             android:layout_marginTop="16dp"
             android:paddingBottom="?attr/actionBarSize"
-            app:layout_constraintTop_toBottomOf="@id/radio_group"
+            app:layout_constraintTop_toBottomOf="@id/radio_group_choice"
             android:layout_marginBottom="16dp" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/graph_rcv_3_best"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            tools:listitem="@layout/item_date_detail"
-            android:layout_marginTop="16dp"
-            android:paddingBottom="?attr/actionBarSize"
-            app:layout_constraintTop_toBottomOf="@id/radio_group"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="16dp" />
+        <TextView
+            android:id="@+id/no_sales_date_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no_sales_period"
+            android:textStyle="italic"
+            android:visibility="invisible"
+            android:layout_marginTop="32dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/radio_group_choice"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

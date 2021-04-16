@@ -31,7 +31,8 @@
     <string name="country">PAYS</string>
     <string name="gross">BRUT</string>
     <string name="net">NET</string>
-    <string name="tips">PLUS</string>
+    <string name="tips">TIP</string>
+    <string name="currency">CURRENCY :</string>
 
     <string-array name="list_month">
         <item>JANVIER</item>
@@ -57,4 +58,16 @@
         <item>Samedi</item>
         <item>Dimanche</item>
     </string-array>
+
+    <!-- MENU -->
+    <string name="home">ACCUEIL</string>
+    <string name="global_graphs">GRAPHS GLOBAUX</string>
+    <string name="days_of_week">JOURS DE LA SEMAINE</string>
+    <string name="map_countries">PAYS</string>
+    <string name="list_detail">LISTE DETAILLEE</string>
+    <string name="suivi_global">SUIVI GLOBAL</string>
+    <string name="settings">PARAMETRES</string>
+    <string name="delete_all">DELETE ALL</string>
+
+
 </resources>

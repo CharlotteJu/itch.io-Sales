@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import com.anychart.APIlib
 import com.anychart.AnyChart
 import com.anychart.charts.Cartesian
+import com.anychart.charts.Map
 import com.anychart.core.map.series.Choropleth
 import com.anychart.core.ui.ColorRange
 import com.anychart.data.Set
@@ -18,6 +19,7 @@ import com.anychart.enums.*
 import com.anychart.graphics.vector.SolidFill
 import com.anychart.scales.OrdinalColor
 import com.charlotte.judon.gifstats.R
+import com.charlotte.judon.gifstats.model.ChronopletReturn
 import com.charlotte.judon.gifstats.model.Sale
 import com.charlotte.judon.gifstats.utils.Utils
 import kotlinx.android.synthetic.main.fragment_map.view.*
@@ -27,13 +29,8 @@ class MapFragment : Fragment() {
     private lateinit var salesList : List<Sale>
     private lateinit var mView: View
     private lateinit var salesListFiltered : List<Sale>
-    private lateinit var setWorld : Set
-    private lateinit var setFrance : Set
     private lateinit var serieChronoplet : Choropleth
     private lateinit var ordinalColor: OrdinalColor
-    //private lateinit var map : Map
-
-    private lateinit var chartVertical : Cartesian
 
     companion object {
 
@@ -55,19 +52,12 @@ class MapFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View?
+        savedInstanceState: Bundle?): View
     {
         mView = inflater.inflate(R.layout.fragment_map, container, false)
 
-        setWorld = Set.instantiate()
-        setFrance = Set.instantiate()
-
         configureSpinner()
-
-        //initGraphCountry()
         initChronopleth()
-
 
         return mView
     }
@@ -102,32 +92,138 @@ class MapFragment : Fragment() {
     private fun getFunSpinner(daysAgo : Int?) {
         if (daysAgo == null) {
             salesListFiltered = salesList
-            setWorld.data(Utils.graphAnyChartMap(salesListFiltered))
-            setFrance.data(Utils.getAnyChartBubbleFromFranceAndRussia(salesListFiltered))
             val chronopletReturn =  Utils.graphAnyChartMapChronopleth(salesListFiltered)
-            val listWorldChrono = chronopletReturn.list
-            serieChronoplet.data(listWorldChrono)
-            val nbMax = chronopletReturn.max
-            val nbMax2 = chronopletReturn.max2
-            val rangesScript = getRanges(nbMax, nbMax2)
-            ordinalColor.ranges(rangesScript)
-
-
+            changeViews(chronopletReturn)
         } else {
             val dateStart = Utils.getDateStartToFilter(daysAgo)
             salesListFiltered = Utils.filterList(salesList, dateStart)
-            setWorld.data(Utils.graphAnyChartMap(salesListFiltered))
-            setFrance.data(Utils.getAnyChartBubbleFromFranceAndRussia(salesListFiltered))
             val chronopletReturn =  Utils.graphAnyChartMapChronopleth(salesListFiltered)
+            changeViews(chronopletReturn)
+        }
+    }
+
+    private fun changeViews(chronopletReturn: ChronopletReturn){
+        val nbMax = chronopletReturn.max
+        if(nbMax == 0) {
+            mView.no_sales_map.visibility = View.VISIBLE
+            mView.anyChartViewCountry.visibility = View.GONE
+        } else {
+            mView.no_sales_map.visibility = View.GONE
+            mView.anyChartViewCountry.visibility = View.VISIBLE
             val listWorldChrono = chronopletReturn.list
             serieChronoplet.data(listWorldChrono)
-            val nbMax = chronopletReturn.max
             val nbMax2 = chronopletReturn.max2
             val rangesScript = getRanges(nbMax, nbMax2)
             ordinalColor.ranges(rangesScript)
-
         }
     }
+
+
+
+    private fun initChronopleth() {
+
+        APIlib.getInstance().setActiveAnyChartView(mView.anyChartViewCountry)
+
+        val map = AnyChart.map()
+
+        map.unboundRegions()
+            .enabled(true)
+            .fill(SolidFill("#E1E1E1", 1))
+            .stroke("#D2D2D2")
+
+        map.geoData("anychart.maps.world_source")
+
+        val colorRange: ColorRange = map.colorRange()
+        colorRange.enabled(true)
+            .colorLineSize(10)
+            .stroke("#B9B9B9")
+            .labels("{ 'padding': 3 }")
+            .labels("{ 'size': 7 }")
+        colorRange.ticks()
+            .enabled(true)
+            .stroke("#B9B9B9")
+            .position(SidePosition.OUTSIDE)
+            .length(10)
+        colorRange.minorTicks()
+            .enabled(true)
+            .stroke("#B9B9B9")
+            .position("outside")
+            .length(5)
+
+        map.interactivity().selectionMode(SelectionMode.NONE)
+        map.padding(0, 0, 0, 0)
+        val chronopletReturn =  Utils.graphAnyChartMapChronopleth(salesListFiltered)
+        val listWorldChrono = chronopletReturn.list
+        val nbMax = chronopletReturn.max
+        val nbMax2 = chronopletReturn.max2
+        serieChronoplet  = map.choropleth(listWorldChrono)
+
+        //val linearColor = LinearColor.instantiate()
+        //linearColor.colors(arrayOf("#C2E6EA", "#09C5DC", "#219FDA", "#1A71CF","#0263CC","#0D42C8" ,"#013ACA", "#0104CA", "#02048F"))
+        //series.colorScale(linearColor)
+
+        ordinalColor = OrdinalColor.instantiate()
+        ordinalColor.colors(arrayOf("#FFFFFF", "#86DDDD", "#59C9DD", "#4688CF", "#1740D5", "#02448A"))
+        val rangesScript = getRanges(nbMax, nbMax2)
+        ordinalColor.ranges(rangesScript)
+
+        map.colorRange("{orientation: 'top'}")
+        serieChronoplet.colorScale(ordinalColor)
+
+        serieChronoplet.hovered()
+            .fill("#f48fb1")
+            .stroke("#f99fb9")
+        serieChronoplet.selected()
+            .fill("#c2185b")
+            .stroke("#c2185b")
+        serieChronoplet.labels().enabled(true)
+        serieChronoplet.labels().fontSize(10)
+        serieChronoplet.labels().fontColor("#212121")
+        serieChronoplet.labels().format(" ");
+
+        mView.anyChartViewCountry.setZoomEnabled(true)
+        val urlWorld = "https://cdn.anychart.com/releases/8.9.0/geodata/custom/world_source/world_source.js"
+        val urlProJS = "https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.15/proj4.js"
+        mView.anyChartViewCountry.addScript(urlWorld)
+        mView.anyChartViewCountry.addScript(urlProJS)
+        mView.anyChartViewCountry.setChart(map)
+    }
+
+    private fun getRanges(nbMax : Int, nbMax2 : Int) : Array<String> {
+        var nb1 = 0
+        var nb2 = 0
+        var nb3 = 0
+        var nb4 = 0
+
+        Log.d("DEBUG_APP", "MAX : $nbMax //// MAX2 : $nbMax2 ")
+
+        if (nbMax<10) {
+            return arrayOf("{less: 1}", "{greater: 1}")
+        }
+
+        val diffMax = nbMax - nbMax2
+
+        if (diffMax > nbMax/10) {
+            nb1 = nbMax2/4
+            nb2 = (nbMax2/4) *2
+            nb3 = (nbMax2/4) *3
+            nb4 = nbMax2
+            Log.d("DEBUG_APP", "BEAUCOUP DE DIFFERENCE : 1 : $nb1 //// 2 : $nb2 //// 3 : $nb3 //// 4 : $nb4 ")
+        }
+        else {
+            nb1 = nbMax/5
+            nb2 = (nbMax/5) *2
+            nb3 = (nbMax/5) *3
+            nb4 = (nbMax/4) *3
+            Log.d("DEBUG_APP", "PETITE DIFFERENCE : 1 : $nb1 //// 2 : $nb2 //// 3 : $nb3 //// 4 : $nb4 ")
+        }
+
+        return arrayOf("{less: 1}", "{from: 1, to: $nb1}", "{from: $nb1, to: $nb2}", "{from: $nb2, to: $nb3}", "{from: $nb3, to: $nb4}", "{greater: $nb4}")
+    }
+
+}
+
+/*
 
     private fun initGraphCountry() {
         APIlib.getInstance().setActiveAnyChartView(mView.anyChartViewCountry)
@@ -196,110 +292,5 @@ class MapFragment : Fragment() {
         mView.anyChartViewCountry.setChart(bubbleMap)
     }
 
-
-    private fun initChronopleth() {
-
-        APIlib.getInstance().setActiveAnyChartView(mView.anyChartViewCountry)
-
-        val map = AnyChart.map()
-
-        map.unboundRegions()
-            .enabled(true)
-            .fill(SolidFill("#E1E1E1", 1))
-            .stroke("#D2D2D2")
-
-        map.geoData("anychart.maps.world_source")
-
-        val colorRange: ColorRange = map.colorRange()
-        colorRange.enabled(true)
-            .colorLineSize(10)
-            .stroke("#B9B9B9")
-            .labels("{ 'padding': 3 }")
-            .labels("{ 'size': 7 }")
-        colorRange.ticks()
-            .enabled(true)
-            .stroke("#B9B9B9")
-            .position(SidePosition.OUTSIDE)
-            .length(10)
-        colorRange.minorTicks()
-            .enabled(true)
-            .stroke("#B9B9B9")
-            .position("outside")
-            .length(5)
-
-        map.interactivity().selectionMode(SelectionMode.NONE)
-        map.padding(0, 0, 0, 0)
-        val chronopletReturn =  Utils.graphAnyChartMapChronopleth(salesListFiltered)
-        val listWorldChrono = chronopletReturn.list
-        val nbMax = chronopletReturn.max
-        val nbMax2 = chronopletReturn.max2
-        serieChronoplet  = map.choropleth(listWorldChrono)
-        Log.d("DEBUG_APP", "MAX : ${chronopletReturn.max} //// MAX2 : ${chronopletReturn.max2}")
-
-        //val linearColor = LinearColor.instantiate()
-        //val series: Choropleth = map.choropleth(listWorldChrono)
-        //linearColor.colors(arrayOf("#C2E6EA", "#09C5DC", "#219FDA", "#1A71CF","#0263CC","#0D42C8" ,"#013ACA", "#0104CA", "#02048F"))
-        //series.colorScale(linearColor)
-
-        ordinalColor = OrdinalColor.instantiate()
-        //ordinalColor.colors(arrayOf("#FFFFFF", "#86DDDD", "#59C9DD", "#4688CF", "#1740D5", "#02448A"))
-        ordinalColor.colors(arrayOf("#FFFFFF", "#E8959E", "#E65B6A", "#F80039", "#C3012E", "#7A011D"))
-        val rangesScript = getRanges(nbMax, nbMax2)
-        ordinalColor.ranges(rangesScript)
-
-        map.colorRange("{orientation: 'top'}")
-        serieChronoplet.colorScale(ordinalColor)
-
-        serieChronoplet.hovered()
-            .fill("#f48fb1")
-            .stroke("#f99fb9")
-        serieChronoplet.selected()
-            .fill("#c2185b")
-            .stroke("#c2185b")
-        serieChronoplet.labels().enabled(true)
-        serieChronoplet.labels().fontSize(10)
-        serieChronoplet.labels().fontColor("#212121")
-        serieChronoplet.labels().format(" ");
-
-        mView.anyChartViewCountry.setZoomEnabled(true)
-        val urlWorld = "https://cdn.anychart.com/releases/8.9.0/geodata/custom/world_source/world_source.js"
-        val urlProJS = "https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.15/proj4.js"
-        mView.anyChartViewCountry.addScript(urlWorld)
-        mView.anyChartViewCountry.addScript(urlProJS)
-        mView.anyChartViewCountry.setChart(map)
-    }
-
-    private fun getRanges(nbMax : Int, nbMax2 : Int) : Array<String> {
-        var nb1 = 0
-        var nb2 = 0
-        var nb3 = 0
-        var nb4 = 0
-
-        Log.d("DEBUG_APP", "MAX : $nbMax //// MAX2 : $nbMax2 ")
-
-        if (nbMax<10) {
-            return arrayOf("{less: 1}", "{greater: 1}")
-        }
-
-        val diffMax = nbMax - nbMax2
-
-        if (diffMax > nbMax/10) {
-            nb1 = nbMax2/4
-            nb2 = (nbMax2/4) *2
-            nb3 = (nbMax2/4) *3
-            nb4 = nbMax2
-            Log.d("DEBUG_APP", "BEAUCOUP DE DIFFERENCE : 1 : $nb1 //// 2 : $nb2 //// 3 : $nb3 //// 4 : $nb4 ")
-        }
-        else {
-            nb1 = nbMax/5
-            nb2 = (nbMax/5) *2
-            nb3 = (nbMax/5) *3
-            nb4 = (nbMax/4) *3
-            Log.d("DEBUG_APP", "PETITE DIFFERENCE : 1 : $nb1 //// 2 : $nb2 //// 3 : $nb3 //// 4 : $nb4 ")
-        }
-
-        return arrayOf("{less: 1}", "{from: 1, to: $nb1}", "{from: $nb1, to: $nb2}", "{from: $nb2, to: $nb3}", "{from: $nb3, to: $nb4}", "{greater: $nb4}")
-    }
-
-}
+ */
 

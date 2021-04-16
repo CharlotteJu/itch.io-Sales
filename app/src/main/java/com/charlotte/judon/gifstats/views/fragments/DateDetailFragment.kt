@@ -14,9 +14,8 @@ import com.charlotte.judon.gifstats.model.DateDetail
 import com.charlotte.judon.gifstats.model.Sale
 import com.charlotte.judon.gifstats.utils.Utils
 import com.charlotte.judon.gifstats.views.adapters.DateDetailAdapter
-import kotlinx.android.synthetic.main.fragment_date_detail.*
 import kotlinx.android.synthetic.main.fragment_date_detail.view.*
-import kotlinx.android.synthetic.main.fragment_date_detail.view.radio_group
+import kotlinx.android.synthetic.main.fragment_date_detail.view.radio_group_choice
 import kotlinx.android.synthetic.main.fragment_date_detail.view.spinner
 
 
@@ -26,9 +25,9 @@ class DateDetailFragment : Fragment() {
     private lateinit var salesListFiltered : List<Sale>
     private lateinit var mView: View
     private lateinit var adapterAll: DateDetailAdapter
-    private lateinit var adapter3Best : DateDetailAdapter
-    private val dateDetailList = mutableListOf<DateDetail>()
-    private val listOf3Best = mutableListOf<DateDetail>()
+    private var dateDetailList = mutableListOf<DateDetail>()
+    private var listOf3Best = mutableListOf<DateDetail>()
+    private var is3Best = false
 
     companion object {
         @JvmStatic
@@ -50,13 +49,19 @@ class DateDetailFragment : Fragment() {
         configureRcv()
         configureSpinner()
 
-        mView.radio_group.setOnCheckedChangeListener { _, checkedId ->
+        mView.radio_group_choice.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
-                R.id.btn_all -> getAll()
-                R.id.btn_3_best -> get3Best()
+                R.id.btn_all -> {
+                    is3Best = false
+                    updateList()
+                }
+                R.id.btn_3_best -> {
+                    is3Best = true
+                    updateList()
+                }
             }
         }
-        mView.btn_3_best.isChecked = true
+        mView.btn_all.isChecked = true
 
         return mView
     }
@@ -66,14 +71,8 @@ class DateDetailFragment : Fragment() {
             DateDetailAdapter(
                 dateDetailList
             )
-        adapter3Best =
-            DateDetailAdapter(
-                listOf3Best
-            )
         mView.graph_rcv_all.adapter = adapterAll
-        mView.graph_rcv_3_best.adapter = adapter3Best
         mView.graph_rcv_all.layoutManager = LinearLayoutManager(requireContext())
-        mView.graph_rcv_3_best.layoutManager = LinearLayoutManager(requireContext())
     }
 
     private fun configureSpinner() {
@@ -105,15 +104,14 @@ class DateDetailFragment : Fragment() {
 
     private fun updateList() {
         getDateDetailList()
-        adapterAll.notifyDataChanged(dateDetailList)
-        adapter3Best.notifyDataChanged(listOf3Best)
+        if(is3Best) {
+            adapterAll.notifyDataChanged(listOf3Best)
+        } else {
+            adapterAll.notifyDataChanged(dateDetailList)
+        }
         updateViews()
     }
 
-    private fun get3Best() {
-        mView.graph_rcv_all.visibility = View.INVISIBLE
-        mView.graph_rcv_3_best.visibility = View.VISIBLE
-    }
 
     private fun updateViews()  {
         var nbSales = 0
@@ -122,19 +120,12 @@ class DateDetailFragment : Fragment() {
             nbSales += day.totalSale
         }
         if (nbSales == 0) {
-            val textToast = resources.getText(R.string.no_sales_period)
-            Toast.makeText(this.requireContext(), textToast, Toast.LENGTH_LONG).show()
+            mView.no_sales_date_detail.visibility = View.VISIBLE
             mView.graph_rcv_all.visibility = View.INVISIBLE
-            mView.graph_rcv_3_best.visibility = View.INVISIBLE
         } else {
-            if (btn_3_best.isChecked) get3Best()
-            else getAll()
+            mView.graph_rcv_all.visibility = View.VISIBLE
+            mView.no_sales_date_detail.visibility = View.INVISIBLE
         }
-    }
-
-    private fun getAll() {
-        mView.graph_rcv_all.visibility = View.VISIBLE
-        mView.graph_rcv_3_best.visibility = View.INVISIBLE
     }
 
     private fun getDateDetailList() {

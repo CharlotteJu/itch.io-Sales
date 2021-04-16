@@ -5,30 +5,32 @@
         android:id="@+id/action_home"
         android:enabled="true"
         android:icon="@drawable/ic_baseline_home_24"
-        android:title="ACCUEIL" />
+        android:title="@string/home" />
     <item
         android:id="@+id/action_date"
         android:enabled="true"
         android:icon="@drawable/ic_baseline_timeline_24"
-        android:title="GRAPHS" />
+        android:title="@string/global_graphs" />
     <item
         android:id="@+id/action_date_explain"
         android:enabled="true"
         android:icon="@drawable/ic_baseline_assessment_24"
-        android:title="DATE DETAILLEE" />
+        android:title="@string/days_of_week" />
     <item
         android:id="@+id/action_map"
         android:enabled="true"
         android:icon="@drawable/ic_baseline_map_24"
-        android:title="CARTE" />
+        android:title="@string/map_countries" />
     <item
         android:id="@+id/action_list"
         android:enabled="true"
         android:icon="@drawable/ic_baseline_list_24"
-        android:title="LISTE"/>
+        android:title="@string/list_detail"/>
+
     <item
-        android:id="@+id/action_suivi"
+        android:id="@+id/action_settings"
         android:enabled="true"
-        android:icon="@drawable/ic_baseline_photo_24"
-        android:title="SUIVI GLOBAL" />
+        android:icon="@drawable/ic_baseline_settings_24"
+        android:title="@string/settings"/>
+
 </menu>
