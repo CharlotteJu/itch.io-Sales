@@ -70,9 +70,6 @@ class DateDetailAdapter(private var listDateDetail : List<DateDetail>, private v
                 itemView.graphTemplate.xAxis.mAxisMinimum = 0f
                 itemView.graphTemplate.xAxis.mAxisMaximum = 23f
                 itemView.graphTemplate.setOnChartValueSelectedListener(this)
-                //val mv = CustomMarker(context)
-                //mv.chartView = itemView.graphTemplate
-                //itemView.graphTemplate.marker = mv
             }
             else {
                 itemView.graphTemplate.visibility = View.GONE

@@ -38,14 +38,14 @@ class SaleMonthAdapter (private var listSales : List<MonthSale>, private var onC
 
         fun configureDesign(monthSale: MonthSale) {
 
-            itemView.month_txt.text = getStringMonth(monthSale.month)
+            itemView.month_txt.text = getStringMonth(monthSale.month) + " " + monthSale.year
             itemView.nb_vente_txt.text = monthSale.nbVente.toString()
             itemView.total_txt.text = monthSale.totalPrice.toString()
 
-            if (monthSale.isFinish) {
-                itemView.logo_time_ic.setImageResource(R.drawable.ic_baseline_time_green_24)
-            } else {
+            if (monthSale.isInProgress) {
                 itemView.logo_time_ic.setImageResource(R.drawable.ic_baseline_time_red_24)
+            } else {
+                itemView.logo_time_ic.setImageResource(R.drawable.ic_baseline_time_green_24)
             }
 
             itemView.setOnClickListener {

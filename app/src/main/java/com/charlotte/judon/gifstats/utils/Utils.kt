@@ -2,18 +2,13 @@ package com.charlotte.judon.gifstats.utils
 
 import android.content.Context
 import android.graphics.Color
-import android.view.View
+import android.util.Log
 import com.anychart.chart.common.dataentry.DataEntry
 import com.anychart.chart.common.dataentry.ValueDataEntry
 import com.charlotte.judon.gifstats.R
 import com.charlotte.judon.gifstats.model.*
-import com.github.mikephil.charting.components.MarkerView
-import com.github.mikephil.charting.components.XAxis
-import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
-import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
-import kotlinx.android.synthetic.main.fragment_graphs.view.*
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.text.SimpleDateFormat
@@ -28,23 +23,17 @@ class Utils {
 
     companion object {
 
+        @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
         fun convertStringToDate(dateStringFromCSV: String): Date {
 
             val dateString = dateStringFromCSV.substring(0, 10)
             val hourString = dateStringFromCSV.substring(11, 19)
-
             val completeDateString = "$dateString $hourString"
-            //val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
             val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-            val date = simpleDateFormat.parse(completeDateString)
-            //val resultOfParsing = OffsetDateTime.parse(completeDateString, dateFormatter)
-            //val timeZone = ZoneId.of("Europe/Paris")
-            //val franceTime = resultOfParsing.atZoneSameInstant(timeZone)
-            //return Date.from(franceTime.toInstant())
-            return date
+            return simpleDateFormat.parse(completeDateString)
         }
 
-        fun convertStringToDateWithArgs(dateStringFromCSV: String, hourString: String, format : String) : List<String> {
+        fun convertStringToDateWithLocale(dateStringFromCSV: String, hourString: String, format : String) : List<String> {
 
             val list = arrayListOf<String>()
             val completeDateString = "$dateStringFromCSV $hourString+0000"
@@ -83,24 +72,29 @@ class Utils {
         }
 
         fun castSaleListInSaleMonthList(salesList: List<Sale>): List<MonthSale> {
-
-            //TODO : Faire pour plusieurs années
             val listToReturn = arrayListOf<MonthSale>()
             var listForOneMonth = arrayListOf<Sale>()
 
-            val dateOfToday = Date().toString().substring(4, 7)
+            val dateOfToday = Date().toString()
+            val monthOfToday = dateOfToday.substring(4, 7)
+            val yearOfToday = dateOfToday.substring(dateOfToday.length -4)
             if (salesList.isNotEmpty()) {
-                var refMonth = salesList[0].dateDate.toString().substring(4, 7)
+                val refDay = salesList[0].dateDate.toString()
+                var refMonth = refDay.substring(4, 7)
+                var refYear = refDay.substring(refDay.length-4)
                 for (sale in salesList) {
-                    val monthTemp = sale.dateDate.toString().substring(4, 7)
-                    if (monthTemp == refMonth) {
+                    val dayTemp = sale.dateDate.toString()
+                    val monthTemp = dayTemp.substring(4, 7)
+                    val yearTemp = dayTemp.substring(dayTemp.length-4)
+                    if (monthTemp == refMonth && yearTemp == refYear) {
                         listForOneMonth.add(sale)
                     } else {
                         val total = calculTotalNetSales(listForOneMonth)
-                        val bool = refMonth != dateOfToday
+                        val bool = (refMonth == monthOfToday && refYear == yearOfToday)
                         listToReturn.add(
                             MonthSale(
                                 refMonth,
+                                refYear,
                                 listForOneMonth.size,
                                 total,
                                 bool,
@@ -108,15 +102,17 @@ class Utils {
                             )
                         )
                         refMonth = monthTemp
+                        refYear = yearTemp
                         listForOneMonth = arrayListOf(sale)
                     }
 
                     if (salesList.indexOf(sale) == salesList.size - 1) {
                         val total = calculTotalNetSales(listForOneMonth)
-                        val bool = monthTemp != dateOfToday
+                        val bool = (monthTemp == monthOfToday && yearTemp == yearOfToday)
                         listToReturn.add(
                             MonthSale(
                                 monthTemp,
+                                yearTemp,
                                 listForOneMonth.size,
                                 total,
                                 bool,
@@ -129,12 +125,13 @@ class Utils {
             return listToReturn.reversed()
         }
 
+
         fun convertDollarToEuros(price: Double): Double {
             val decimalFormat = DecimalFormat("####0.00")
             val separator = DecimalFormatSymbols()
             separator.decimalSeparator = '.'
             decimalFormat.decimalFormatSymbols = separator
-            return decimalFormat.format(price * 0.82).toDouble()
+            return decimalFormat.format(price * 0.83).toDouble()
         }
 
         fun calculTotalNetSales(list: List<Sale>): Double {
@@ -166,7 +163,7 @@ class Utils {
                 total += if (sale.currency == "USD") {
                     convertDollarToEuros(sale.amount)
                 } else {
-                    sale.amountDelivered
+                    sale.amount
                 }
 
             }
@@ -309,7 +306,7 @@ class Utils {
             }
 
             for (sale in salesList) {
-                val date = convertStringToDateWithArgs(sale.dateString, sale.hour, "MM/dd/yyyy")
+                val date = convertStringToDateWithLocale(sale.dateString, sale.hour, "MM/dd/yyyy")
                 val hourString = date[1].substring(0, 2)
                 val hourSale = hourString.toInt()
                 listHours.get(hourSale).nb ++
@@ -391,7 +388,7 @@ class Utils {
             }
 
             for (sale in listSorted) {
-                val date = convertStringToDateWithArgs(sale.dateString, sale.hour, "MM/dd/yyyy")
+                val date = convertStringToDateWithLocale(sale.dateString, sale.hour, "MM/dd/yyyy")
                 val hourString = date[1].substring(0, 2)
                 val hourSale = hourString.toInt()
 
@@ -557,6 +554,36 @@ class Utils {
                 "UY","US","UZ","VE","VN","YE",
                 "ZA","ZM","ZW","RU"
             )
+        }
+
+        fun getRanges(nbMax : Int, nbMax2 : Int) : Array<String> {
+            var nb1 = 0
+            var nb2 = 0
+            var nb3 = 0
+            var nb4 = 0
+
+            if (nbMax<10) {
+                return arrayOf("{less: 1}", "{greater: 1}")
+            }
+
+            val diffMax = nbMax - nbMax2
+
+            if (diffMax > nbMax/10) {
+                nb1 = nbMax2/4
+                nb2 = (nbMax2/4) *2
+                nb3 = (nbMax2/4) *3
+                nb4 = nbMax2
+                Log.d("DEBUG_APP", "BEAUCOUP DE DIFFERENCE : 1 : $nb1 //// 2 : $nb2 //// 3 : $nb3 //// 4 : $nb4 ")
+            }
+            else {
+                nb1 = nbMax/5
+                nb2 = (nbMax/5) *2
+                nb3 = (nbMax/5) *3
+                nb4 = (nbMax/4) *3
+                Log.d("DEBUG_APP", "PETITE DIFFERENCE : 1 : $nb1 //// 2 : $nb2 //// 3 : $nb3 //// 4 : $nb4 ")
+            }
+
+            return arrayOf("{less: 1}", "{from: 1, to: $nb1}", "{from: $nb1, to: $nb2}", "{from: $nb2, to: $nb3}", "{from: $nb3, to: $nb4}", "{greater: $nb4}")
         }
     }
 }

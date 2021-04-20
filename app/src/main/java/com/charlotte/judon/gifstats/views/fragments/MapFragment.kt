@@ -115,7 +115,7 @@ class MapFragment : Fragment() {
             val listWorldChrono = chronopletReturn.listEntry
             serieChronoplet.data(listWorldChrono)
             val nbMax2 = chronopletReturn.max2
-            val rangesScript = getRanges(nbMax, nbMax2)
+            val rangesScript = Utils.getRanges(nbMax, nbMax2)
             ordinalColor.ranges(rangesScript)
             adapter.notifyDataChanged(chronopletReturn.listCountry)
         }
@@ -176,7 +176,7 @@ class MapFragment : Fragment() {
 
         ordinalColor = OrdinalColor.instantiate()
         ordinalColor.colors(arrayOf("#FFFFFF", "#86DDDD", "#59C9DD", "#4688CF", "#1740D5", "#02448A"))
-        val rangesScript = getRanges(nbMax, nbMax2)
+        val rangesScript = Utils.getRanges(nbMax, nbMax2)
         ordinalColor.ranges(rangesScript)
 
         map.colorRange("{orientation: 'top'}")
@@ -199,38 +199,6 @@ class MapFragment : Fragment() {
         mView.anyChartViewCountry.addScript(urlWorld)
         mView.anyChartViewCountry.addScript(urlProJS)
         mView.anyChartViewCountry.setChart(map)
-    }
-
-    private fun getRanges(nbMax : Int, nbMax2 : Int) : Array<String> {
-        var nb1 = 0
-        var nb2 = 0
-        var nb3 = 0
-        var nb4 = 0
-
-        Log.d("DEBUG_APP", "MAX : $nbMax //// MAX2 : $nbMax2 ")
-
-        if (nbMax<10) {
-            return arrayOf("{less: 1}", "{greater: 1}")
-        }
-
-        val diffMax = nbMax - nbMax2
-
-        if (diffMax > nbMax/10) {
-            nb1 = nbMax2/4
-            nb2 = (nbMax2/4) *2
-            nb3 = (nbMax2/4) *3
-            nb4 = nbMax2
-            Log.d("DEBUG_APP", "BEAUCOUP DE DIFFERENCE : 1 : $nb1 //// 2 : $nb2 //// 3 : $nb3 //// 4 : $nb4 ")
-        }
-        else {
-            nb1 = nbMax/5
-            nb2 = (nbMax/5) *2
-            nb3 = (nbMax/5) *3
-            nb4 = (nbMax/4) *3
-            Log.d("DEBUG_APP", "PETITE DIFFERENCE : 1 : $nb1 //// 2 : $nb2 //// 3 : $nb3 //// 4 : $nb4 ")
-        }
-
-        return arrayOf("{less: 1}", "{from: 1, to: $nb1}", "{from: $nb1, to: $nb2}", "{from: $nb2, to: $nb3}", "{from: $nb3, to: $nb4}", "{greater: $nb4}")
     }
 
 }

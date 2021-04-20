@@ -188,8 +188,6 @@ class GraphsFragment : Fragment(), OnChartValueSelectedListener {
         }
     }
 
-
-
     private fun getBarGraphByDate()
     {
         onNothingSelected()
@@ -250,7 +248,6 @@ class GraphsFragment : Fragment(), OnChartValueSelectedListener {
         mView.MpBarView.axisRight.axisMinimum = 0f
         mView.MpBarView.setOnChartValueSelectedListener(this)
         mView.MpBarView.xAxis.valueFormatter = xFormatter
-        //mView.MpBarView.marker = MarkerView(requireContext(), R.layout.test_marker)
     }
 
     private fun initPackageGraph()

@@ -112,14 +112,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
                 val date = Utils.convertStringToDate(tokens[4])
 
-
                 val dateString = tokens[4].substring(0, 10)
                 val timeString = tokens[4].substring(11, 19)
-
-                //val formatterDate = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-                //val dateString = formatterDate.format(date)
-                //val formatterTime = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
-                //val timeString = formatterTime.format(date)
 
                 val sale = Sale(
                         tokens[0].toLong(),
@@ -207,7 +201,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.action_date -> displayFragment(GraphsFragment.newInstance(roomListSales))
             R.id.action_date_explain -> displayFragment(DateDetailFragment.newInstance(roomListSales))
             R.id.action_map -> displayFragment(MapFragment.newInstance(roomListSales))
-           // R.id.action_suivi -> displayFragment(SuiviGlobalFragment.newInstance())
             R.id.action_list -> displayFragment(ListMonthFragment.newInstance(roomListSales))
             R.id.action_settings -> displayFragment(SettingsFragment.newInstance(viewModel, roomListSales))
         }
