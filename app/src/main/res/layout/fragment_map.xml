@@ -43,13 +43,10 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcv_country"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="0dp"
         tools:listitem="@layout/item_country"
         android:layout_marginTop="16dp"
-        android:paddingBottom="32dp"
         app:layout_constraintTop_toBottomOf="@id/anyChartViewCountry"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
     <TextView

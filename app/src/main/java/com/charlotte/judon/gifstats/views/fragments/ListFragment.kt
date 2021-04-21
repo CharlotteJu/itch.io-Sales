@@ -40,10 +40,7 @@ class ListFragment : Fragment() {
 
     private fun configureRcv()
     {
-        adapter = SaleAdapter(
-            salesList,
-            requireContext()
-        )
+        adapter = SaleAdapter(salesList, requireContext())
         mView.rcv.adapter = adapter
         mView.rcv.layoutManager = LinearLayoutManager(requireContext())
 

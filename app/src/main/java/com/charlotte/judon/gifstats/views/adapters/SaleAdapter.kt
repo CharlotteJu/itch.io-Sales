@@ -49,7 +49,7 @@ class SaleAdapter (private var listSales : List<Sale>, private val context: Cont
 
             itemView.date.text = sale.dateString
 
-            val dateString = Utils.convertStringToDateWithLocale(sale.dateString, sale.hour,"MM/dd/yyyy")
+            val dateString = Utils.convertStringToDateWithLocale(sale.dateString, sale.hour,"MM/dd")
             itemView.date.text = dateString[0]
             itemView.hour.text = dateString[1]
             itemView.country_code.text = sale.countryCode

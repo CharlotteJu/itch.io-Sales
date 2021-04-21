@@ -23,7 +23,7 @@
     <string name="refresh_csv">Refresh CSV</string>
     <string name="download_from_itch">Download from Itch</string>
     <string name="gross_total">Total gross</string>
-    <string name="charges">Charges</string>
+    <string name="charges">Charges calculated</string>
     <string name="net_total">Net total</string>
     <string name="month">MONTH</string>
     <string name="nb_sales">NB SALES</string>

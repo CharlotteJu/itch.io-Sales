@@ -1,6 +1,7 @@
 package com.charlotte.judon.gifstats.utils
 
 import com.charlotte.judon.gifstats.model.Sale
+import okhttp3.internal.Util
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.time.temporal.ChronoUnit
@@ -155,6 +156,85 @@ class UtilsTest  {
         val resultExpected = 16.08
         val result = Utils.calculChargesSales(2178.18, 1827.88)
         assertEquals(resultExpected, result, 0.0)
+    }
+
+    @Test
+    fun calculateDiffBetweenTwoDate_SAME_isCorrect() {
+        val resultExpected = CompareDates.SAME
+        val date = Utils.convertStringToDate("2020-11-19 00:13:48 UTC")
+        val result = Utils.calculateDiffBetweenTwoDates(date, date)
+        assertEquals(resultExpected, result)
+    }
+
+    @Test
+    fun calculateDiffBetweenTwoDate_PLUS_ONE_isCorrect() {
+        val resultExpected = CompareDates.PLUS_ONE
+        val date1 = Utils.convertStringToDate("2020-11-19 00:13:48 UTC")
+        val date2 = Utils.convertStringToDate("2020-11-20 00:13:48 UTC")
+        val result = Utils.calculateDiffBetweenTwoDates(date1, date2)
+        assertEquals(resultExpected, result)
+    }
+
+    @Test
+    fun calculateDiffBetweenTwoDate_PLUS_OTHER_YEAR_isCorrect() {
+        val resultExpected = CompareDates.PLUS_OTHER
+        val date1 = Utils.convertStringToDate("2019-11-19 00:13:48 UTC")
+        val date2 = Utils.convertStringToDate("2020-11-19 00:13:48 UTC")
+        val result = Utils.calculateDiffBetweenTwoDates(date1, date2)
+        assertEquals(resultExpected, result)
+    }
+
+    @Test
+    fun calculateDiffBetweenTwoDate_PLUS_OTHER_DAYS_isCorrect() {
+        val resultExpected = CompareDates.PLUS_OTHER
+        val date1 = Utils.convertStringToDate("2020-11-19 00:13:48 UTC")
+        val date2 = Utils.convertStringToDate("2020-11-23 00:13:48 UTC")
+        val result = Utils.calculateDiffBetweenTwoDates(date1, date2)
+        assertEquals(resultExpected, result)
+    }
+
+    @Test
+    fun calculateDiffBetweenTwoDate_PLUS_OTHER_MONTH_isCorrect() {
+        val resultExpected = CompareDates.PLUS_OTHER
+        val date1 = Utils.convertStringToDate("2020-11-19 00:13:48 UTC")
+        val date2 = Utils.convertStringToDate("2020-12-19 00:13:48 UTC")
+        val result = Utils.calculateDiffBetweenTwoDates(date1, date2)
+        assertEquals(resultExpected, result)
+    }
+
+    @Test
+    fun calculateNumberOfDaysOfDifference_0L_isCorrect() {
+        val resultExpected = 0L
+        val date = Utils.convertStringToDate("2020-11-19 00:13:48 UTC")
+        val result = Utils.calculateNumberOfDaysOfDifference(date, date)
+        assertEquals(resultExpected, result)
+    }
+
+    @Test
+    fun calculateNumberOfDaysOfDifference_1L_isCorrect() {
+        val resultExpected = 1L
+        val date1 = Utils.convertStringToDate("2020-11-19 00:13:48 UTC")
+        val date2 = Utils.convertStringToDate("2020-11-20 00:13:48 UTC")
+        val result = Utils.calculateNumberOfDaysOfDifference(date1, date2)
+        assertEquals(resultExpected, result)
+    }
+
+    @Test
+    fun calculateNumberOfDaysOfDifference_2L_isCorrect() {
+        val resultExpected = 2L
+        val date1 = Utils.convertStringToDate("2020-11-19 11:13:48 UTC")
+        val date2 = Utils.convertStringToDate("2020-11-21 00:13:48 UTC")
+        val result = Utils.calculateNumberOfDaysOfDifference(date1, date2)
+        assertEquals(resultExpected, result)
+    }
+
+    @Test
+    fun calculateNumberOfDaysOfDifference_3L_isCorrect() {
+        val resultExpected = 3L
+        val date1 = Utils.convertStringToDate("2020-11-19 23:59:48 UTC")
+        val date2 = Utils.convertStringToDate("2020-11-22 00:13:48 UTC")
+        val result = Utils.calculateNumberOfDaysOfDifference(date1, date2)
+        assertEquals(resultExpected, result)
     }
 
     @Test

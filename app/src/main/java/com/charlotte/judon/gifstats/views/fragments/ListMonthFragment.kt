@@ -42,34 +42,50 @@ class ListMonthFragment : Fragment(),
     {
         mView = inflater.inflate(R.layout.fragment_list_month, container, false)
         configurePrices()
-        configureRcv()
         return mView
     }
 
     private fun configureRcv()
     {
-        adapter = SaleMonthAdapter(
-            saleMonthList,
-            this,
-            requireContext()
-        )
-        mView.rcv.adapter = adapter
-        mView.rcv.layoutManager = LinearLayoutManager(requireContext())
+        adapter = SaleMonthAdapter(saleMonthList, this, requireContext())
+        mView.rcv_month.adapter = adapter
+        mView.rcv_month.layoutManager = LinearLayoutManager(requireContext())
 
     }
 
 
     private fun configurePrices() {
-        val totalBrut = Utils.calculTotalBrutSales(salesList)
-        mView.total_brut_txt.text = "$totalBrut €"
-
-        val totalNet = Utils.calculTotalNetSales(salesList)
-        mView.total_net_txt.text = "$totalNet €"
-
-        val charges = Utils.calculChargesSales(totalBrut, totalNet)
-        mView.charges_txt.text = "$charges %"
-
         saleMonthList = Utils.castSaleListInSaleMonthList(salesList)
+
+        if(saleMonthList.isNotEmpty()) {
+            changeViews(true)
+            val totalBrut = Utils.calculTotalBrutSales(salesList)
+            mView.total_brut_txt.text = "$totalBrut €"
+
+            val totalNet = Utils.calculTotalNetSales(salesList)
+            mView.total_net_txt.text = "$totalNet €"
+
+            val charges = Utils.calculChargesSales(totalBrut, totalNet)
+            mView.charges_txt.text = "$charges %"
+
+            configureRcv()
+        } else {
+            changeViews(false)
+        }
+    }
+
+    private fun changeViews(bool : Boolean){
+        if (bool) {
+            mView.container_total.visibility = View.VISIBLE
+            mView.container_title.visibility = View.VISIBLE
+            mView.rcv_month.visibility = View.VISIBLE
+            mView.no_sales_month.visibility = View.INVISIBLE
+        } else {
+            mView.container_total.visibility = View.INVISIBLE
+            mView.container_title.visibility = View.INVISIBLE
+            mView.rcv_month.visibility = View.INVISIBLE
+            mView.no_sales_month.visibility = View.VISIBLE
+        }
     }
 
     override fun onClickMonthItem(saleList: List<Sale>) {

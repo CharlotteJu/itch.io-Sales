@@ -46,7 +46,7 @@ class Utils {
             val formatterDate = SimpleDateFormat(format, Locale.getDefault())
             val dateString = formatterDate.format(date)
             list.add(dateString)
-            val formatterTime = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
+            val formatterTime = SimpleDateFormat("HH:mm", Locale.getDefault())
             val timeString = formatterTime.format(date)
             list.add(timeString)
 
@@ -171,8 +171,6 @@ class Utils {
         }
 
         fun calculChargesSales(brut : Double, net : Double): Double {
-
-            //TODO : Marquer que c'est calculé
             val decimalFormat = DecimalFormat("####0.00")
             val separator = DecimalFormatSymbols()
             separator.decimalSeparator = '.'
@@ -201,69 +199,103 @@ class Utils {
 
         ///////////////////////////////////////// MPBAR /////////////////////////////////////////
 
+        fun calculateDiffBetweenTwoDates(dateOfReference : Date, dateSale : Date) : CompareDates {
+            val calendarToCompare = Calendar.getInstance()
+            calendarToCompare.time = dateOfReference
+            val dayOfReference = calendarToCompare.get(Calendar.DAY_OF_YEAR)
+            val yearOfReference = calendarToCompare.get(Calendar.YEAR)
+            calendarToCompare.add(Calendar.DAY_OF_YEAR, 1)
+            val datePlus1 = calendarToCompare.time
+            val dayPlus1 = calendarToCompare.get(Calendar.DAY_OF_YEAR)
+            val yearPlus1 = calendarToCompare.get(Calendar.YEAR)
+
+            calendarToCompare.time = dateSale
+            val dayTemp = calendarToCompare.get(Calendar.DAY_OF_YEAR)
+            val yearTemp = calendarToCompare.get(Calendar.YEAR)
+
+            return if (dayTemp == dayOfReference && yearTemp == yearOfReference) {
+                CompareDates.SAME
+            } else if (dayTemp == dayPlus1 && yearTemp == yearPlus1) {
+                CompareDates.PLUS_ONE
+            } else if (dayTemp > dayPlus1 || yearTemp >= yearPlus1) {
+                CompareDates.PLUS_OTHER
+            } else {
+                CompareDates.ERROR
+            }
+        }
+
+        fun calculateNumberOfDaysOfDifference(dateOfReference : Date, dateSale : Date) : Long {
+            val difLong = dateSale.time - dateOfReference.time
+            var difInt = TimeUnit.DAYS.convert(difLong, TimeUnit.MILLISECONDS)
+            val simpleDataFormatter = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
+            val hourDay = simpleDataFormatter.format(dateOfReference)
+            val hourDateTemp = simpleDataFormatter.format(dateSale)
+
+            if(hourDay > hourDateTemp) {
+                difInt ++
+            }
+
+            return difInt
+        }
+
         fun graphMPByDay(salesList: List<Sale>)  : MpBarReturn {
 
             val listSorted = sortSalesByDate(salesList)
             val listEntry = arrayListOf<BarEntry>()
             val listString = arrayListOf<String>()
             val formatterDate = SimpleDateFormat("dd/MM", Locale.getDefault())
-            var nbPerDay = 1f
+            var nbPerDay = 0f
 
             if(listSorted.isEmpty()) {
                 return MpBarReturn(null)
             }
 
-            var day = listSorted[0].dateDate
+            var dateOfReference = listSorted[0].dateDate
 
             for (sale in listSorted) {
                 val dateTemp = sale.dateDate
-                val calendarToCompare = Calendar.getInstance()
-                calendarToCompare.time = day
-                calendarToCompare.add(Calendar.DAY_OF_YEAR, 1)
-                val dayPlus1 = calendarToCompare.time
                 var isLastAdding = false
 
-                if (dateTemp.toInstant().truncatedTo(ChronoUnit.DAYS) == dayPlus1.toInstant().truncatedTo(ChronoUnit.DAYS)) {
-                    val dateString = formatterDate.format(dateTemp)
-                    listEntry.add(BarEntry(listString.size.toFloat(), nbPerDay))
-                    listString.add(dateString)
-                    day = dateTemp
-                    nbPerDay = 1f
-                    isLastAdding = true
-                } else if (dateTemp.toInstant().truncatedTo(ChronoUnit.DAYS) > dayPlus1.toInstant().truncatedTo(ChronoUnit.DAYS)) {
+                val diffDates = calculateDiffBetweenTwoDates(dateOfReference, dateTemp)
 
-                    val difLong = dateTemp.time - day.time
-                    var difInt = TimeUnit.DAYS.convert(difLong, TimeUnit.MILLISECONDS)
-                    val simpleDataFormatter = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
-                    val hourDay = simpleDataFormatter.format(day)
-                    val hourDateTemp = simpleDataFormatter.format(dateTemp)
-
-                   if(hourDay > hourDateTemp) {
-                        difInt ++
+                when (diffDates){
+                    CompareDates.SAME -> {
+                        nbPerDay++
                     }
-
-                    for (i in 0 until difInt -1) {
-                        val calendarTemp = Calendar.getInstance()
-                        calendarTemp.time = day
-                        calendarTemp.add(Calendar.DAY_OF_YEAR, i.toInt()+1)
-                        val dateString = formatterDate.format(calendarTemp.time)
-                        listEntry.add(BarEntry(listString.size.toFloat(), 0f))
+                    CompareDates.PLUS_ONE -> {
+                        val dateString = formatterDate.format(dateOfReference)
+                        listEntry.add(BarEntry(listString.size.toFloat(), nbPerDay))
                         listString.add(dateString)
+                        dateOfReference = dateTemp
+                        nbPerDay = 1f
+                        isLastAdding = true
                     }
-                    val dateString = formatterDate.format(dateTemp)
-                    listEntry.add(BarEntry(listString.size.toFloat(), nbPerDay))
-                    listString.add(dateString)
-                    day = dateTemp
-                    nbPerDay = 1f
-                    isLastAdding = true
-                }
-                else {
-                    nbPerDay++
+                    CompareDates.PLUS_OTHER -> {
+                        val dateString = formatterDate.format(dateOfReference)
+                        listEntry.add(BarEntry(listString.size.toFloat(), nbPerDay))
+                        listString.add(dateString)
+
+                        val difInt = calculateNumberOfDaysOfDifference(dateOfReference, dateTemp)
+                        for (i in 0 until difInt -1) {
+                            val calendarTemp = Calendar.getInstance()
+                            calendarTemp.time = dateOfReference
+                            calendarTemp.add(Calendar.DAY_OF_YEAR, i.toInt()+1)
+                            val dateStringTemp = formatterDate.format(calendarTemp.time)
+                            listEntry.add(BarEntry(listString.size.toFloat(), 0f))
+                            listString.add(dateStringTemp)
+                        }
+
+                        dateOfReference = dateTemp
+                        nbPerDay = 1f
+                        isLastAdding = true
+                    }
+                    CompareDates.ERROR -> {
+                    //TODO
+                    }
                 }
 
                 if (listSorted.indexOf(sale) == listSorted.size - 1 && !isLastAdding) {
-                    val dateString = formatterDate.format(day)
-
+                    val dateString = formatterDate.format(dateOfReference)
                     listEntry.add(BarEntry(listString.size.toFloat(), nbPerDay))
                     listString.add(dateString)
                 }
@@ -272,13 +304,13 @@ class Utils {
             val calendarNow = Calendar.getInstance()
             val timeNow = calendarNow.time
 
-            if(day.time != timeNow.time) {
-                val difLong = timeNow.time - day.time
+            if(dateOfReference.time != timeNow.time) {
+                val difLong = timeNow.time - dateOfReference.time
                 val difInt = TimeUnit.DAYS.convert(difLong, TimeUnit.MILLISECONDS)
 
                 for (i in 0 until difInt) {
                     val calendarTemp = Calendar.getInstance()
-                    calendarTemp.time = day
+                    calendarTemp.time = dateOfReference
                     calendarTemp.add(Calendar.DAY_OF_YEAR, i.toInt() +1)
                     val dateString = formatterDate.format(calendarTemp.time)
                     listEntry.add(BarEntry(listString.size.toFloat(), 0f))
@@ -596,6 +628,15 @@ class CustomDataEntryChrono(val id : String, val value : Number) : DataEntry() {
         setValue("value", value);
     }
 }
+
+enum class CompareDates() {
+    SAME,
+    PLUS_ONE,
+    PLUS_OTHER,
+    ERROR
+}
+
+
 
 
 /*

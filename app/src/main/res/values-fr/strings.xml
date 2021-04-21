@@ -20,7 +20,7 @@
     <string name="refresh_csv">Rafraichir CSV</string>
     <string name="download_from_itch">Télécharger depuis Itch</string>
     <string name="gross_total">Brut total</string>
-    <string name="charges">Charges</string>
+    <string name="charges">Charges calculées</string>
     <string name="net_total">Net total</string>
     <string name="month">MOIS</string>
     <string name="nb_sales">NB VENTES</string>
