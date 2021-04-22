@@ -3,10 +3,15 @@ package com.charlotte.judon.gifstats.views.activities
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.icu.util.Currency
 import android.net.Uri
 import android.os.Bundle
+import android.view.Gravity
 import android.view.MenuItem
+import android.view.View
 import android.view.WindowManager
+import android.webkit.MimeTypeMap
+import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -16,13 +21,20 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.charlotte.judon.gifstats.R
+import com.charlotte.judon.gifstats.model.CustomCurrency
 import com.charlotte.judon.gifstats.model.Sale
-import com.charlotte.judon.gifstats.utils.Utils
+import com.charlotte.judon.gifstats.utils.*
 import com.charlotte.judon.gifstats.viewModel.Injection
 import com.charlotte.judon.gifstats.viewModel.ViewModel
 import com.charlotte.judon.gifstats.viewModel.ViewModelFactory
 import com.charlotte.judon.gifstats.views.fragments.*
+import com.github.kittinunf.fuel.Fuel
+import com.github.kittinunf.fuel.json.responseJson
+import com.github.kittinunf.result.success
 import com.google.android.material.navigation.NavigationView
+import com.google.gson.Gson
+import io.reactivex.Scheduler
+import io.reactivex.observers.DisposableObserver
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
@@ -30,9 +42,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-const val READ_EXTERNAL_STORAGE_PERMISSION_CODE = 101
-const val PICK_FILE_CODE = 102
-const val BACKSTACK = "BACKSTACK"
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -44,6 +53,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var mToolbar: Toolbar
     private lateinit var mDrawerLayout: DrawerLayout
     private lateinit var mNavigationView: NavigationView
+    private var listCurrencies : List<CustomCurrency> = mutableListOf()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,6 +75,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             roomListSales = it as ArrayList<Sale>
             displayFragment(HomeFragment.newInstance(roomListSales))
         })
+        Fuel.get("https://www.floatrates.com/daily/usd.json").responseJson { request, response, result ->
+            result.success {
+                val test = it.obj()
+                listCurrencies =  UtilsCurrency.castJsonInListCurrencies(test)
+                editSharedPreferencesForCurrencies()
+            }
+        }
         configureToolbar()
         configureNavigationView()
 
@@ -108,7 +125,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             line = fileReader.readLine()
 
             while (line != null){
-                val tokens = line.split(",")
+                var tokens = line.split(",")
+
+                if(tokens.size == 1) {
+                    tokens = line.split(";")
+                }
 
                 val date = Utils.convertStringToDate(tokens[4])
 
@@ -147,6 +168,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         catch (e: Exception) {
             println("Reading CSV Error!")
             e.printStackTrace()
+            val stringCsv = applicationContext.resources.getString(R.string.csv_problem)
+            Toast.makeText(applicationContext, stringCsv, Toast.LENGTH_LONG).show()
         } finally {
             try {
                 fileReader!!.close()
@@ -157,8 +180,20 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
-    private fun checkReadPermission()
-    {
+    private fun editSharedPreferencesForCurrencies(){
+        val sharedPreferences = getSharedPreferences(SHARED_PREFERENCES_CURRENCY, MODE_PRIVATE)
+        val edit = sharedPreferences.edit()
+        edit.putString(CURRENCY_USD, UtilsCurrency.castCurrencyInString(listCurrencies[0]))
+        edit.putString(CURRENCY_CAD, UtilsCurrency.castCurrencyInString(listCurrencies[1]))
+        edit.putString(CURRENCY_GBP, UtilsCurrency.castCurrencyInString(listCurrencies[2]))
+        edit.putString(CURRENCY_EUR, UtilsCurrency.castCurrencyInString(listCurrencies[3]))
+        edit.putString(CURRENCY_JPY, UtilsCurrency.castCurrencyInString(listCurrencies[4]))
+        edit.putString(CURRENCY_AUD, UtilsCurrency.castCurrencyInString(listCurrencies[5]))
+        edit.apply()
+
+    }
+
+    private fun checkReadPermission() {
         if (this.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
         {
             val permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)

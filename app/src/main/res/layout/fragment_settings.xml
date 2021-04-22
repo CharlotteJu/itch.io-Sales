@@ -22,7 +22,7 @@
         app:layout_constraintEnd_toEndOf="parent"/>
 
     <RadioGroup
-        android:id="@+id/radio_group_choice"
+        android:id="@+id/radio_group_currency"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -32,55 +32,59 @@
         app:layout_constraintEnd_toEndOf="parent">
 
         <RadioButton
-            android:id="@+id/btn_dollars"
+            android:id="@+id/btn_usd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:shadowColor="@color/colorPrimaryDark"
             android:textColor="@color/colorPrimaryDark"
             android:buttonTint="@color/colorPrimaryDark"
-            android:text="$"/>
+            android:text="$ - USD"/>
 
         <RadioButton
-            android:id="@+id/btn_euros"
+            android:id="@+id/btn_cad"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:shadowColor="@color/colorPrimaryDark"
             android:textColor="@color/colorPrimaryDark"
             android:buttonTint="@color/colorPrimaryDark"
-            android:text="€"/>
+            android:text="$ - CAD"/>
 
         <RadioButton
-            android:id="@+id/btn_other"
+            android:id="@+id/btn_gbp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:shadowColor="@color/colorPrimaryDark"
             android:textColor="@color/colorPrimaryDark"
             android:buttonTint="@color/colorPrimaryDark"
-            android:text="OTHER"/>
+            android:text="£ - GBP"/>
+
+        <RadioButton
+            android:id="@+id/btn_eur"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:shadowColor="@color/colorPrimaryDark"
+            android:textColor="@color/colorPrimaryDark"
+            android:buttonTint="@color/colorPrimaryDark"
+            android:text="€ - EUR"/>
+
+        <RadioButton
+            android:id="@+id/btn_jpy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:shadowColor="@color/colorPrimaryDark"
+            android:textColor="@color/colorPrimaryDark"
+            android:buttonTint="@color/colorPrimaryDark"
+            android:text="¥ - JPY"/>
+
+        <RadioButton
+            android:id="@+id/btn_aud"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:shadowColor="@color/colorPrimaryDark"
+            android:textColor="@color/colorPrimaryDark"
+            android:buttonTint="@color/colorPrimaryDark"
+            android:text="$ - AUD"/>
     </RadioGroup>
-
-    <TextView
-        android:id="@+id/text_enter_conversion"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="PLEASE, ENTER THE CONVERTION"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="18sp"
-        android:textStyle="italic"
-        android:textAlignment="center"
-        app:layout_constraintTop_toBottomOf="@id/radio_group_choice"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/currency_text_input"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@id/text_enter_conversion"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
 
     <TextView
         android:id="@+id/title_date_format"
@@ -92,7 +96,7 @@
         android:textAlignment="center"
         android:textStyle="bold"
         android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/currency_text_input"
+        app:layout_constraintTop_toBottomOf="@id/radio_group_currency"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
@@ -108,7 +112,7 @@
         app:layout_constraintEnd_toStartOf="@id/hint_btn_us">
 
         <RadioButton
-            android:id="@+id/btn_us"
+            android:id="@+id/btn_date_us"
             android:layout_width="wrap_content"
             android:layout_height="48dp"
             android:shadowColor="@color/colorPrimaryDark"
@@ -117,7 +121,7 @@
             android:text="Month/Day/Year" />
 
         <RadioButton
-            android:id="@+id/btn_fr"
+            android:id="@+id/btn_date_fr"
             android:layout_width="wrap_content"
             android:layout_height="48dp"
             android:shadowColor="@color/colorPrimaryDark"
@@ -125,14 +129,6 @@
             android:buttonTint="@color/colorPrimaryDark"
             android:text="Day/Month/Year"/>
 
-        <RadioButton
-            android:id="@+id/btn_year_before"
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:shadowColor="@color/colorPrimaryDark"
-            android:textColor="@color/colorPrimaryDark"
-            android:buttonTint="@color/colorPrimaryDark"
-            android:text="Year/Month/Day"/>
     </RadioGroup>
 
     <TextView
@@ -144,6 +140,7 @@
         android:textColor="@color/colorAccent"
         android:textStyle="italic"
         app:layout_constraintBottom_toTopOf="@id/hint_btn_fr"
+        app:layout_constraintTop_toTopOf="@id/radio_group_date_format"
         app:layout_constraintStart_toEndOf="@id/radio_group_date_format"
         app:layout_constraintEnd_toEndOf="parent"/>
 
@@ -155,20 +152,8 @@
         android:gravity="center"
         android:textColor="@color/colorAccent"
         android:textStyle="italic"
-        app:layout_constraintTop_toTopOf="@id/radio_group_date_format"
+        app:layout_constraintTop_toBottomOf="@id/hint_btn_us"
         app:layout_constraintBottom_toBottomOf="@id/radio_group_date_format"
-        app:layout_constraintStart_toEndOf="@id/radio_group_date_format"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
-    <TextView
-        android:id="@+id/hint_btn_other"
-        android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:text="2021/02/15"
-        android:textColor="@color/colorAccent"
-        android:textStyle="italic"
-        android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@id/hint_btn_fr"
         app:layout_constraintStart_toEndOf="@id/radio_group_date_format"
         app:layout_constraintEnd_toEndOf="parent"/>
 

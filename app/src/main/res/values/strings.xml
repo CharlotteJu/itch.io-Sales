@@ -11,6 +11,7 @@
 
     <string name="no_sales_period">There is no sales in this period.</string>
     <string name="csv_integrate">CSV integrate !</string>
+    <string name="csv_problem">CSV not reading, please choose a file downloaded from Itch</string>
     <string name="period">PERIOD :</string>
     <string name="all">ALL</string>
     <string name="_3_bests">3 BESTS</string>

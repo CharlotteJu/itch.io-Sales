@@ -1,5 +1,6 @@
 package com.charlotte.judon.gifstats.views.fragments
 
+import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,19 +15,16 @@ import com.anychart.chart.common.dataentry.DataEntry
 import com.anychart.charts.Cartesian
 import com.anychart.data.Set
 import com.charlotte.judon.gifstats.R
-import com.charlotte.judon.gifstats.model.MpBarReturn
+import com.charlotte.judon.gifstats.model.CustomCurrency
 import com.charlotte.judon.gifstats.model.Sale
-import com.charlotte.judon.gifstats.utils.Utils
-import com.github.mikephil.charting.components.MarkerView
+import com.charlotte.judon.gifstats.utils.*
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
-import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import kotlinx.android.synthetic.main.fragment_graphs.view.*
-import kotlinx.android.synthetic.main.item_date_detail.view.*
 
 
 class GraphsFragment : Fragment(), OnChartValueSelectedListener {
@@ -38,6 +36,8 @@ class GraphsFragment : Fragment(), OnChartValueSelectedListener {
     private lateinit var set : Set
     private var xFormatter: IndexAxisValueFormatter? = null
     private var btnPackageChecked = 0
+    private lateinit var listCurrencies : List<CustomCurrency>
+    private lateinit var currentCurrency : CustomCurrency
 
 
     companion object {
@@ -61,11 +61,12 @@ class GraphsFragment : Fragment(), OnChartValueSelectedListener {
     {
         mView = inflater.inflate(R.layout.fragment_graphs, container, false)
 
+        getSharedPreferences()
         configureGraphView()
         configureSpinner()
         initPackageGraph()
 
-        mView.radio_group_choice.setOnCheckedChangeListener { _, checkedId ->
+        mView.radio_group_currency.setOnCheckedChangeListener { _, checkedId ->
             btnChecked = checkedId
             when (checkedId) {
 
@@ -136,7 +137,8 @@ class GraphsFragment : Fragment(), OnChartValueSelectedListener {
         return if (btnPackageChecked == R.id.btn_nb) {
             Utils.anyChartPackageNB(this.salesListFiltered)
         } else {
-            Utils.anyChartPackagePrice(this.salesListFiltered)
+            getSharedPreferences()
+            Utils.anyChartPackagePrice(this.salesListFiltered, currentCurrency, listCurrencies)
         }
     }
 
@@ -273,7 +275,7 @@ class GraphsFragment : Fragment(), OnChartValueSelectedListener {
             btnPackageChecked = checkedId
             when(checkedId) {
                 R.id.btn_nb -> chartVertical.data(Utils.anyChartPackageNB(this.salesListFiltered))
-                R.id.btn_price -> chartVertical.data(Utils.anyChartPackagePrice(this.salesListFiltered))
+                R.id.btn_price -> chartVertical.data(Utils.anyChartPackagePrice(this.salesListFiltered, currentCurrency, listCurrencies))
             }
         }
         mView.btn_nb.isChecked = true
@@ -296,6 +298,12 @@ class GraphsFragment : Fragment(), OnChartValueSelectedListener {
 
     override fun onNothingSelected() {
         mView.marker_text_all_graph.text = ""
+    }
+
+    private fun getSharedPreferences(){
+        val sharedPreferences = requireContext().getSharedPreferences(SHARED_PREFERENCES_CURRENCY, Context.MODE_PRIVATE)
+        listCurrencies = UtilsCurrency.getListCurrenciesFromSharedPreferences(sharedPreferences)
+        currentCurrency = UtilsCurrency.castStringInCurrency(sharedPreferences.getString(KEY_CURRENT_CURRENCY, CURRENCY_USD)!!)
     }
 
 }

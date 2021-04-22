@@ -7,7 +7,8 @@
     </string-array>
 
     <string name="no_sales_period">Il n\'y a pas de ventes pour cette période.</string>
-    <string name="csv_integrate">CSV intégre !</string>
+    <string name="csv_integrate">CSV intégré !</string>
+    <string name="csv_problem">CSV non lu, merci de choisir un fichier téléchargé depuis Itch</string>
     <string name="period">PERIODE :</string>
     <string name="all">TOUS</string>
     <string name="_3_bests">3 MEILLEURS</string>

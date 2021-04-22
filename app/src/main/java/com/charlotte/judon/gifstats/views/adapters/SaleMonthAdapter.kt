@@ -43,9 +43,9 @@ class SaleMonthAdapter (private var listSales : List<MonthSale>, private var onC
             itemView.total_txt.text = monthSale.totalPrice.toString()
 
             if (monthSale.isInProgress) {
-                itemView.logo_time_ic.setImageResource(R.drawable.ic_baseline_date_range_in_progress_24)
+                itemView.logo_time_ic.setImageResource(R.drawable.ic_baseline_date_range_purple_24)
             } else {
-                itemView.logo_time_ic.setImageResource(R.drawable.ic_baseline_date_range_finish_24)
+                itemView.logo_time_ic.setImageResource(R.drawable.ic_baseline_date_range_green_24)
             }
 
             itemView.setOnClickListener {

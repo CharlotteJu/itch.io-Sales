@@ -6,10 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.charlotte.judon.gifstats.views.activities.BACKSTACK
 import com.charlotte.judon.gifstats.R
 import com.charlotte.judon.gifstats.model.MonthSale
 import com.charlotte.judon.gifstats.model.Sale
+import com.charlotte.judon.gifstats.utils.BACKSTACK
 import com.charlotte.judon.gifstats.utils.Utils
 import com.charlotte.judon.gifstats.views.adapters.SaleMonthAdapter
 import kotlinx.android.synthetic.main.fragment_list.view.rcv

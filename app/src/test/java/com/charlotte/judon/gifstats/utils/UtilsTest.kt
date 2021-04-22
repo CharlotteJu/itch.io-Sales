@@ -1,5 +1,6 @@
 package com.charlotte.judon.gifstats.utils
 
+import android.icu.util.Currency
 import com.charlotte.judon.gifstats.model.Sale
 import okhttp3.internal.Util
 import org.junit.Assert.assertEquals
@@ -243,6 +244,7 @@ class UtilsTest  {
         val result = 0
         assertEquals(resultExpected, result)
     }
+
 
 
 }

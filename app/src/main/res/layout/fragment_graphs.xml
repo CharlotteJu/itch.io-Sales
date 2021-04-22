@@ -34,7 +34,7 @@
         app:layout_constraintEnd_toEndOf="parent"/>
 
     <RadioGroup
-        android:id="@+id/radio_group_choice"
+        android:id="@+id/radio_group_currency"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -86,7 +86,7 @@
         android:layout_width="match_parent"
         android:layout_height="550dp"
         android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/radio_group_choice"
+        app:layout_constraintTop_toBottomOf="@id/radio_group_currency"
         app:layout_constraintBottom_toBottomOf="parent"
         android:visibility="gone"/>
 
@@ -118,7 +118,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/radio_group_choice"
+        app:layout_constraintTop_toBottomOf="@id/radio_group_currency"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
@@ -150,7 +150,7 @@
         android:textColor="@color/colorPrimaryDark"
         android:layout_marginTop="8dp"
         android:textStyle="italic"
-        app:layout_constraintTop_toBottomOf="@id/radio_group_choice"
+        app:layout_constraintTop_toBottomOf="@id/radio_group_currency"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 

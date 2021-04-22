@@ -1,6 +1,5 @@
 package com.charlotte.judon.gifstats.views.fragments
 
-import android.graphics.RectF
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,16 +13,9 @@ import com.charlotte.judon.gifstats.model.DateDetail
 import com.charlotte.judon.gifstats.model.Sale
 import com.charlotte.judon.gifstats.utils.Utils
 import com.charlotte.judon.gifstats.views.adapters.DateDetailAdapter
-import com.github.mikephil.charting.components.YAxis.AxisDependency
-import com.github.mikephil.charting.data.BarEntry
-import com.github.mikephil.charting.data.Entry
-import com.github.mikephil.charting.highlight.Highlight
-import com.github.mikephil.charting.listener.OnChartValueSelectedListener
-import com.github.mikephil.charting.utils.MPPointF
 import kotlinx.android.synthetic.main.fragment_date_detail.view.*
-import kotlinx.android.synthetic.main.fragment_date_detail.view.radio_group_choice
+import kotlinx.android.synthetic.main.fragment_date_detail.view.radio_group_currency
 import kotlinx.android.synthetic.main.fragment_date_detail.view.spinner
-import kotlinx.android.synthetic.main.fragment_graphs.view.*
 
 
 class DateDetailFragment : Fragment() {
@@ -59,7 +51,7 @@ class DateDetailFragment : Fragment() {
         configureRcv()
         configureSpinner()
 
-        mView.radio_group_choice.setOnCheckedChangeListener { _, checkedId ->
+        mView.radio_group_currency.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
                 R.id.btn_all -> {
                     is3Best = false

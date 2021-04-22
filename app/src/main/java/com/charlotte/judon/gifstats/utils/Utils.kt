@@ -125,7 +125,6 @@ class Utils {
             return listToReturn.reversed()
         }
 
-
         fun convertDollarToEuros(price: Double): Double {
             val decimalFormat = DecimalFormat("####0.00")
             val separator = DecimalFormatSymbols()
@@ -450,7 +449,7 @@ class Utils {
 
         ///////////////////////////////////////// ANYCHART /////////////////////////////////////////
 
-        fun anyChartPackagePrice(list: List<Sale>): MutableList<DataEntry> {
+        fun anyChartPackagePrice(list: List<Sale>, currentCurrency : CustomCurrency, listCurrencies : List<CustomCurrency>): MutableList<DataEntry> {
             val listSorted = sortSalesByPackage(list)
             val listPrice = mutableListOf<DataEntry>()
 
@@ -464,10 +463,10 @@ class Utils {
                         namePackage = sale.objectName
                         totalPrice = sale.amountDelivered
                     } else {
-                        val price = if (sale.currency == "USD") {
-                            convertDollarToEuros(sale.amountDelivered)
-                        } else {
+                        val price = if(sale.currency == currentCurrency.code) {
                             sale.amountDelivered
+                        } else {
+                            UtilsCurrency.convertPriceInTwoCurrencies(sale.currency, currentCurrency, sale.amountDelivered, listCurrencies)
                         }
                         totalPrice += price
                     }

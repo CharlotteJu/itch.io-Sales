@@ -11,7 +11,6 @@ class Injection {
 
         fun configViewModelFactory(context: Context) : ViewModelFactory {
             val saleRepository = SaleRepository(getSaleDao(context))
-
             return ViewModelFactory(saleRepository)
         }
     }
