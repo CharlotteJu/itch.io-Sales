@@ -7,17 +7,6 @@
     android:background="@drawable/istock1"
     tools:context=".views.fragments.HomeFragment">
 
-    <TextView
-        android:id="@+id/bienvenue_gif"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@android:color/white"
-        android:textSize="40sp"
-        android:text="BIENVENUE GIF "
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/rafraichissement_btn"
-        app:layout_constraintEnd_toEndOf="parent"/>
 
     <Button
         android:id="@+id/rafraichissement_btn"
@@ -27,8 +16,8 @@
         android:text="@string/refresh_csv"
         android:background="@drawable/backgroung_btn"
         android:textColor="@android:color/white"
-        app:layout_constraintTop_toBottomOf="@id/bienvenue_gif"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/telechargement_btn"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
@@ -40,21 +29,21 @@
         android:text="@string/download_from_itch"
         android:background="@drawable/backgroung_btn"
         android:textColor="@android:color/white"
-        app:layout_constraintTop_toTopOf="@id/rafraichissement_btn"
+        app:layout_constraintTop_toBottomOf="@id/rafraichissement_btn"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <ImageView
-        android:id="@+id/picture"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:src="@drawable/gif_coeur"
-        android:backgroundTint="@android:color/transparent"
-        app:layout_constraintTop_toBottomOf="@id/bienvenue_gif"
-        app:layout_constraintBottom_toTopOf="@id/rafraichissement_btn"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+    <ImageButton
+        android:id="@+id/instructions_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_baseline_help_24"
+        android:layout_margin="32dp"
+        android:background="@android:color/transparent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

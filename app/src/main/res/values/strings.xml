@@ -28,7 +28,7 @@
     <string name="net_total">Net total</string>
     <string name="month">MONTH</string>
     <string name="nb_sales">NB SALES</string>
-    <string name="total_net">TOTAL NET €</string>
+    <string name="total_net">TOTAL NET</string>
     <string name="open_on_internet">Open on Internet</string>
     <string name="gross_point">GROSS :</string>
     <string name="net_point">NET :</string>
@@ -41,6 +41,21 @@
     <string name="sales">sales</string>
     <string name="sale">sale</string>
     <string name="Sales">Sales </string>
+    <string name="instructions">INSTRUCTIONS </string>
+    <string name="delete_all">DELETE ALL SALES</string>
+    <string name="dialog_message">Do you really want delete all the sales ? </string>
+    <string name="dialog_yes"> YES </string>
+    <string name="dialog_no"> NO </string>
+    <string name="date_format">DATE FORMAT :</string>
+    <string name="month_day">Month/Day</string>
+    <string name="day_month">Day/Month</string>
+    <string name="usd_symbol" translatable="false">$ - USD</string>
+    <string name="cad_symbol" translatable="false">$ - CAD</string>
+    <string name="gbp_symbol" translatable="false">£ - GBP</string>
+    <string name="eur_symbol" translatable="false">€ - EUR</string>
+    <string name="jpy_symbol" translatable="false">¥ - JPY</string>
+    <string name="hint_month_day" translatable="false">02/15</string>
+    <string name="hint_day_month" translatable="false">15/02</string>
 
     <string-array name="list_month">
         <item>JANUARY</item>
@@ -75,5 +90,7 @@
     <string name="list_detail">DETAILED LIST</string>
     <string name="suivi_global">SUIVI GLOBAL</string>
     <string name="settings">SETTINGS</string>
-    <string name="delete_all">DELETE ALL</string>
+
+
+
 </resources>

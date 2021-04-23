@@ -8,14 +8,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.charlotte.judon.gifstats.R
 import com.charlotte.judon.gifstats.model.DateDetail
-import com.charlotte.judon.gifstats.utils.CustomMarker
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
-import kotlinx.android.synthetic.main.fragment_graphs.view.*
 import kotlinx.android.synthetic.main.item_date_detail.view.*
 
 class DateDetailAdapter(private var listDateDetail : List<DateDetail>, private val context: Context)

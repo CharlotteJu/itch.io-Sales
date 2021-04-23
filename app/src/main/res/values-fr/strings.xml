@@ -25,7 +25,7 @@
     <string name="net_total">Net total</string>
     <string name="month">MOIS</string>
     <string name="nb_sales">NB VENTES</string>
-    <string name="total_net">TOTAL NET €</string>
+    <string name="total_net">TOTAL NET</string>
     <string name="open_on_internet">Ouvrir sur Internet</string>
     <string name="gross_point">BRUT :</string>
     <string name="net_point">NET :</string>
@@ -33,11 +33,20 @@
     <string name="gross">BRUT</string>
     <string name="net">NET</string>
     <string name="tips">TIP</string>
-    <string name="currency">CURRENCY :</string>
+    <string name="currency">DEVISE :</string>
     <string name="h">h :</string>
     <string name="sales">ventes</string>
     <string name="sale">vente</string>
     <string name="Sales">Ventes </string>
+    <string name="instructions">NOTICE </string>
+    <string name="delete_all">SUPPRIMER LES VENTES</string>
+    <string name="dialog_message">Voulez-vous vraiment supprimer toutes les ventes ? </string>
+    <string name="dialog_yes"> OUI </string>
+    <string name="dialog_no"> NON </string>
+    <string name="date_format">FORMAT DE DATE :</string>
+    <string name="month_day">Mois/Jour</string>
+    <string name="day_month">Jour/Mois</string>
+
 
     <string-array name="list_month">
         <item>JANVIER</item>
@@ -72,7 +81,6 @@
     <string name="list_detail">LISTE DETAILLEE</string>
     <string name="suivi_global">SUIVI GLOBAL</string>
     <string name="settings">PARAMETRES</string>
-    <string name="delete_all">DELETE ALL</string>
 
 
 </resources>

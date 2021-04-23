@@ -11,7 +11,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.charlotte.judon.gifstats.R
 import com.charlotte.judon.gifstats.model.DateDetail
 import com.charlotte.judon.gifstats.model.Sale
-import com.charlotte.judon.gifstats.utils.Utils
+import com.charlotte.judon.gifstats.utils.UtilsGeneral
+import com.charlotte.judon.gifstats.utils.UtilsCharts
 import com.charlotte.judon.gifstats.views.adapters.DateDetailAdapter
 import kotlinx.android.synthetic.main.fragment_date_detail.view.*
 import kotlinx.android.synthetic.main.fragment_date_detail.view.radio_group_currency
@@ -95,13 +96,13 @@ class DateDetailFragment : Fragment() {
                         updateList()
                     }
                     1 -> {
-                        val dateStart = Utils.getDateStartToFilter(7)
-                        salesListFiltered = Utils.filterList(salesList, dateStart)
+                        val dateStart = UtilsGeneral.getDateStartToFilter(7)
+                        salesListFiltered = UtilsGeneral.filterList(salesList, dateStart)
                         updateList()
                     }
                     2 -> {
-                        val dateStart = Utils.getDateStartToFilter(30)
-                        salesListFiltered = Utils.filterList(salesList, dateStart)
+                        val dateStart = UtilsGeneral.getDateStartToFilter(30)
+                        salesListFiltered = UtilsGeneral.filterList(salesList, dateStart)
                         updateList()
                     }
                 }
@@ -137,13 +138,13 @@ class DateDetailFragment : Fragment() {
 
     private fun getDateDetailList() {
         dateDetailList.clear()
-        dateDetailList.add(Utils.graphMPBarByDayWithHours(salesListFiltered, "Mon", requireContext()))
-        dateDetailList.add(Utils.graphMPBarByDayWithHours(salesListFiltered, "Tue", requireContext()))
-        dateDetailList.add(Utils.graphMPBarByDayWithHours(salesListFiltered, "Wed", requireContext()))
-        dateDetailList.add(Utils.graphMPBarByDayWithHours(salesListFiltered, "Thu", requireContext()))
-        dateDetailList.add(Utils.graphMPBarByDayWithHours(salesListFiltered, "Fri", requireContext()))
-        dateDetailList.add(Utils.graphMPBarByDayWithHours(salesListFiltered, "Sat", requireContext()))
-        dateDetailList.add(Utils.graphMPBarByDayWithHours(salesListFiltered, "Sun", requireContext()))
+        dateDetailList.add(UtilsCharts.graphMPBarByDayWithHours(salesListFiltered, "Mon", requireContext()))
+        dateDetailList.add(UtilsCharts.graphMPBarByDayWithHours(salesListFiltered, "Tue", requireContext()))
+        dateDetailList.add(UtilsCharts.graphMPBarByDayWithHours(salesListFiltered, "Wed", requireContext()))
+        dateDetailList.add(UtilsCharts.graphMPBarByDayWithHours(salesListFiltered, "Thu", requireContext()))
+        dateDetailList.add(UtilsCharts.graphMPBarByDayWithHours(salesListFiltered, "Fri", requireContext()))
+        dateDetailList.add(UtilsCharts.graphMPBarByDayWithHours(salesListFiltered, "Sat", requireContext()))
+        dateDetailList.add(UtilsCharts.graphMPBarByDayWithHours(salesListFiltered, "Sun", requireContext()))
         getList3Best()
     }
 

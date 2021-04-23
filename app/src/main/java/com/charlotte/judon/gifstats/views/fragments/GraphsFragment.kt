@@ -1,6 +1,5 @@
 package com.charlotte.judon.gifstats.views.fragments
 
-import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -38,17 +37,22 @@ class GraphsFragment : Fragment(), OnChartValueSelectedListener {
     private var btnPackageChecked = 0
     private lateinit var listCurrencies : List<CustomCurrency>
     private lateinit var currentCurrency : CustomCurrency
+    private lateinit var dateFormat : String
 
 
     companion object {
 
         @JvmStatic
-        fun newInstance(salesList: List<Sale>) : GraphsFragment
+        fun newInstance(salesList: List<Sale>, currentCurrency: CustomCurrency,
+                        listCurrencies : List<CustomCurrency>, dateFormat : String) : GraphsFragment
         {
             return GraphsFragment()
                 .apply {
                 this.salesList = salesList
                 this.salesListFiltered = salesList
+                    this.currentCurrency = currentCurrency
+                    this.listCurrencies = listCurrencies
+                    this.dateFormat = dateFormat
             }
         }
     }
@@ -61,7 +65,6 @@ class GraphsFragment : Fragment(), OnChartValueSelectedListener {
     {
         mView = inflater.inflate(R.layout.fragment_graphs, container, false)
 
-        getSharedPreferences()
         configureGraphView()
         configureSpinner()
         initPackageGraph()
@@ -99,14 +102,14 @@ class GraphsFragment : Fragment(), OnChartValueSelectedListener {
                         checkBtn()
                     }
                     1 -> {
-                        val dateStart = Utils.getDateStartToFilter(7)
-                        salesListFiltered = Utils.filterList(salesList, dateStart)
+                        val dateStart = UtilsGeneral.getDateStartToFilter(7)
+                        salesListFiltered = UtilsGeneral.filterList(salesList, dateStart)
                         chartVertical.data(getListForPackage())
                         checkBtn()
                     }
                     2 -> {
-                        val dateStart = Utils.getDateStartToFilter(30)
-                        salesListFiltered = Utils.filterList(salesList, dateStart)
+                        val dateStart = UtilsGeneral.getDateStartToFilter(30)
+                        salesListFiltered = UtilsGeneral.filterList(salesList, dateStart)
                         chartVertical.data(getListForPackage())
                         checkBtn()
                     }
@@ -135,10 +138,9 @@ class GraphsFragment : Fragment(), OnChartValueSelectedListener {
     private fun getListForPackage() : List<DataEntry>
     {
         return if (btnPackageChecked == R.id.btn_nb) {
-            Utils.anyChartPackageNB(this.salesListFiltered)
+            UtilsCharts.anyChartPackageNB(this.salesListFiltered)
         } else {
-            getSharedPreferences()
-            Utils.anyChartPackagePrice(this.salesListFiltered, currentCurrency, listCurrencies)
+            UtilsCharts.anyChartPackagePrice(this.salesListFiltered, currentCurrency, listCurrencies)
         }
     }
 
@@ -149,7 +151,7 @@ class GraphsFragment : Fragment(), OnChartValueSelectedListener {
         mView.anyChartView.visibility = View.GONE
         mView.radio_group_package.visibility = View.GONE
         mView.MpBarView.invalidate()
-        val mpBarReturn = Utils.graphMPBarByHour(salesListFiltered)
+        val mpBarReturn = UtilsCharts.graphMPBarByHour(salesListFiltered)
         if(mpBarReturn.barDataSet == null) {
             mView.MpBarView.visibility = View.GONE
             mView.no_sales_graph.visibility = View.VISIBLE
@@ -173,7 +175,7 @@ class GraphsFragment : Fragment(), OnChartValueSelectedListener {
         mView.anyChartView.visibility = View.GONE
         mView.radio_group_package.visibility = View.GONE
         mView.MpBarView.invalidate()
-        val mpBarReturn = Utils.graphMPBarByDayOfWeek(salesListFiltered)
+        val mpBarReturn = UtilsCharts.graphMPBarByDayOfWeek(salesListFiltered)
         if(mpBarReturn.barDataSet == null) {
             mView.MpBarView.visibility = View.GONE
             mView.no_sales_graph.visibility = View.VISIBLE
@@ -196,7 +198,7 @@ class GraphsFragment : Fragment(), OnChartValueSelectedListener {
         mView.anyChartView.visibility = View.GONE
         mView.radio_group_package.visibility = View.GONE
         mView.MpBarView.invalidate()
-        val mpBarReturn = Utils.graphMPByDay(salesListFiltered)
+        val mpBarReturn = UtilsCharts.graphMPByDay(salesListFiltered, dateFormat)
 
         if(mpBarReturn.barDataSet == null) {
             mView.MpBarView.visibility = View.GONE
@@ -259,7 +261,7 @@ class GraphsFragment : Fragment(), OnChartValueSelectedListener {
 
         chartVertical.legend().title().enabled(true)
         chartVertical.animation(true)
-        val packageList = Utils.anyChartPackageNB(salesListFiltered)
+        val packageList = UtilsCharts.anyChartPackageNB(salesListFiltered)
         val column = chartVertical.bar(packageList)
         column.name(resources.getString(R.string.Sales))
         column.fill("function() {" +
@@ -274,8 +276,8 @@ class GraphsFragment : Fragment(), OnChartValueSelectedListener {
         mView.radio_group_package.setOnCheckedChangeListener { _, checkedId ->
             btnPackageChecked = checkedId
             when(checkedId) {
-                R.id.btn_nb -> chartVertical.data(Utils.anyChartPackageNB(this.salesListFiltered))
-                R.id.btn_price -> chartVertical.data(Utils.anyChartPackagePrice(this.salesListFiltered, currentCurrency, listCurrencies))
+                R.id.btn_nb -> chartVertical.data(UtilsCharts.anyChartPackageNB(this.salesListFiltered))
+                R.id.btn_price -> chartVertical.data(UtilsCharts.anyChartPackagePrice(this.salesListFiltered, currentCurrency, listCurrencies))
             }
         }
         mView.btn_nb.isChecked = true
@@ -298,12 +300,6 @@ class GraphsFragment : Fragment(), OnChartValueSelectedListener {
 
     override fun onNothingSelected() {
         mView.marker_text_all_graph.text = ""
-    }
-
-    private fun getSharedPreferences(){
-        val sharedPreferences = requireContext().getSharedPreferences(SHARED_PREFERENCES_CURRENCY, Context.MODE_PRIVATE)
-        listCurrencies = UtilsCurrency.getListCurrenciesFromSharedPreferences(sharedPreferences)
-        currentCurrency = UtilsCurrency.castStringInCurrency(sharedPreferences.getString(KEY_CURRENT_CURRENCY, CURRENCY_USD)!!)
     }
 
 }

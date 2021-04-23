@@ -1,24 +1,26 @@
 package com.charlotte.judon.gifstats.views.adapters
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.charlotte.judon.gifstats.R
+import com.charlotte.judon.gifstats.model.CustomCurrency
 import com.charlotte.judon.gifstats.model.Sale
-import com.charlotte.judon.gifstats.utils.Utils
+import com.charlotte.judon.gifstats.utils.UtilsGeneral
+import com.charlotte.judon.gifstats.utils.UtilsCurrency
 import kotlinx.android.synthetic.main.item_sale.view.*
 
-class SaleAdapter (private var listSales : List<Sale>, private val context: Context) : RecyclerView.Adapter<SaleAdapter.SaleViewHolder>(){
+class SaleAdapter (private var listSales : List<Sale>,
+                   private val currentCurrency: CustomCurrency,
+                   private val listCurrencies : List<CustomCurrency>,
+                   private val dateFormat : String)
+    : RecyclerView.Adapter<SaleAdapter.SaleViewHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SaleViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val view = layoutInflater.inflate(R.layout.item_sale, parent, false)
         return SaleViewHolder(
-            view,
-            listSales,
-            context
-        )
+            view, currentCurrency, listCurrencies, dateFormat)
     }
 
     override fun onBindViewHolder(holder: SaleViewHolder, position: Int) {
@@ -36,20 +38,32 @@ class SaleAdapter (private var listSales : List<Sale>, private val context: Cont
         this.notifyDataSetChanged()
     }
 
-    class SaleViewHolder (itemView : View, private var listSales: List<Sale>, private val context: Context) : RecyclerView.ViewHolder(itemView) {
+    class SaleViewHolder (itemView : View,
+                          private val currentCurrency: CustomCurrency,
+                          private val listCurrencies : List<CustomCurrency>,
+                          private val dateFormat : String)
+        : RecyclerView.ViewHolder(itemView) {
 
         fun configureDesign(sale : Sale) {
-            if (sale.currency == "USD") {
-                itemView.original_price_content.text = "${Utils.convertDollarToEuros(sale.amount)} €"
-                itemView.encaisse_price_content.text = "${Utils.convertDollarToEuros(sale.amountDelivered)} €"
+
+            val priceNet = if(sale.currency == currentCurrency.code) {
+                sale.amountDelivered
             } else {
-                itemView.original_price_content.text = "${sale.amount} €"
-                itemView.encaisse_price_content.text = "${sale.amountDelivered} €"
+                UtilsCurrency.convertPriceInTwoCurrencies(sale.currency, currentCurrency, sale.amountDelivered, listCurrencies)
             }
+
+            val priceBrut = if(sale.currency == currentCurrency.code) {
+                sale.amount
+            } else {
+                UtilsCurrency.convertPriceInTwoCurrencies(sale.currency, currentCurrency, sale.amount, listCurrencies)
+            }
+
+            itemView.original_price_content.text = "$priceBrut"
+            itemView.encaisse_price_content.text = "$priceNet"
 
             itemView.date.text = sale.dateString
 
-            val dateString = Utils.convertStringToDateWithLocale(sale.dateString, sale.hour,"MM/dd")
+            val dateString = UtilsGeneral.convertStringToDateWithLocale(sale.dateString, sale.hour,dateFormat)
             itemView.date.text = dateString[0]
             itemView.hour.text = dateString[1]
             itemView.country_code.text = sale.countryCode

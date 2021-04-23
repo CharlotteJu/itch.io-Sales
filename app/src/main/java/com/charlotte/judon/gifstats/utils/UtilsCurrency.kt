@@ -2,6 +2,7 @@ package com.charlotte.judon.gifstats.utils
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.icu.util.Currency
 import com.charlotte.judon.gifstats.model.CustomCurrency
 import com.google.gson.Gson
 import org.json.JSONObject
@@ -25,35 +26,46 @@ class UtilsCurrency {
             )
         }
 
-        fun castJsonInListCurrencies(json : JSONObject) : List<CustomCurrency> {
+        fun castJsonInListCurrencies(json: JSONObject) : List<CustomCurrency> {
             val usdCurrency = CustomCurrency("USD", 1.0, 1.0, "$")
             return listOf(
                 usdCurrency,
-                castJsonInCurrency(json, CURRENCY_CAD),
-                castJsonInCurrency(json, CURRENCY_GBP),
-                castJsonInCurrency(json, CURRENCY_EUR),
-                castJsonInCurrency(json, CURRENCY_JPY),
-                castJsonInCurrency(json, CURRENCY_AUD),
+                castJsonInCurrency(json, CURRENCY_CAD, "$"),
+                castJsonInCurrency(json, CURRENCY_GBP, "£"),
+                castJsonInCurrency(json, CURRENCY_EUR, "€"),
+                castJsonInCurrency(json, CURRENCY_JPY, "¥"),
+                castJsonInCurrency(json, CURRENCY_AUD, "$"),
             )
         }
 
-        private fun castJsonInCurrency(json : JSONObject, name : String) : CustomCurrency {
+        private fun castJsonInCurrency(json: JSONObject, name: String, symbol : String) : CustomCurrency {
             val custom = json.getJSONObject(name)
-            val currency = Currency.getInstance(name)
-            return CustomCurrency(custom.getString("alphaCode"), custom.getDouble("rate"), custom.getDouble("inverseRate"), currency.symbol)
+            return CustomCurrency(
+                custom.getString("alphaCode"), custom.getDouble("rate"), custom.getDouble("inverseRate"), symbol
+            )
         }
 
-        fun castCurrencyInString(currency : CustomCurrency) : String{
+        fun castCurrencyInString(currency: CustomCurrency) : String{
             val gson = Gson()
             return gson.toJson(currency)
         }
 
-        fun castStringInCurrency(string : String) : CustomCurrency{
-            val gson = Gson()
-            return gson.fromJson(string, CustomCurrency::class.java)
+        fun castStringInCurrency(string: String?) : CustomCurrency{
+            return if(string != null) {
+                val gson = Gson()
+                gson.fromJson(string, CustomCurrency::class.java)
+            } else {
+                CustomCurrency("USD", 1.0, 1.0, "$")
+            }
+
         }
 
-        fun convertPriceInTwoCurrencies(csvCurrency : String, goalCurrency : CustomCurrency,price : Double, listCurrency: List<CustomCurrency>) : Double {
+        fun convertPriceInTwoCurrencies(
+            csvCurrency: String,
+            goalCurrency: CustomCurrency,
+            price: Double,
+            listCurrency: List<CustomCurrency>
+        ) : Double {
             var priceInUSD = price
             if(csvCurrency != "USD"){
                 var inverseRate = 0.0
@@ -75,7 +87,7 @@ class UtilsCurrency {
             return decimalFormat.format(priceInUSD * goalCurrency.rate).toDouble()
         }
 
-        private fun convertPriceInUSD(price : Double, currencyFactor : Double) : Double {
+        private fun convertPriceInUSD(price: Double, currencyFactor: Double) : Double {
             val decimalFormat = DecimalFormat("####0.00")
             val separator = DecimalFormatSymbols()
             separator.decimalSeparator = '.'

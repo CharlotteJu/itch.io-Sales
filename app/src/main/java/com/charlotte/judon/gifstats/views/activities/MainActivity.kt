@@ -1,16 +1,13 @@
 package com.charlotte.judon.gifstats.views.activities
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.icu.util.Currency
 import android.net.Uri
 import android.os.Bundle
-import android.view.Gravity
 import android.view.MenuItem
-import android.view.View
 import android.view.WindowManager
-import android.webkit.MimeTypeMap
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -30,16 +27,12 @@ import com.charlotte.judon.gifstats.viewModel.ViewModelFactory
 import com.charlotte.judon.gifstats.views.fragments.*
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.json.responseJson
+import com.github.kittinunf.result.failure
 import com.github.kittinunf.result.success
 import com.google.android.material.navigation.NavigationView
-import com.google.gson.Gson
-import io.reactivex.Scheduler
-import io.reactivex.observers.DisposableObserver
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
-import java.text.SimpleDateFormat
-import java.util.*
 import kotlin.collections.ArrayList
 
 
@@ -54,6 +47,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var mDrawerLayout: DrawerLayout
     private lateinit var mNavigationView: NavigationView
     private var listCurrencies : List<CustomCurrency> = mutableListOf()
+    private lateinit var currentCurrency : CustomCurrency
+    private lateinit var currentDateFormat : String
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,11 +70,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             roomListSales = it as ArrayList<Sale>
             displayFragment(HomeFragment.newInstance(roomListSales))
         })
-        Fuel.get("https://www.floatrates.com/daily/usd.json").responseJson { request, response, result ->
+        Fuel.get("https://www.floatrates.com/daily/usd.json").responseJson { _, _, result ->
             result.success {
-                val test = it.obj()
-                listCurrencies =  UtilsCurrency.castJsonInListCurrencies(test)
+                listCurrencies =  UtilsCurrency.castJsonInListCurrencies(it.obj())
                 editSharedPreferencesForCurrencies()
+                getSharedPreferences()
+            }
+            result.failure {
+                getSharedPreferences()
             }
         }
         configureToolbar()
@@ -131,7 +129,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     tokens = line.split(";")
                 }
 
-                val date = Utils.convertStringToDate(tokens[4])
+                val date = UtilsGeneral.convertStringToDate(tokens[4])
 
                 val dateString = tokens[4].substring(0, 10)
                 val timeString = tokens[4].substring(11, 19)
@@ -233,14 +231,23 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when (item.itemId)
         {
             R.id.action_home -> displayFragment(HomeFragment.newInstance(roomListSales))
-            R.id.action_date -> displayFragment(GraphsFragment.newInstance(roomListSales))
+            R.id.action_date -> displayFragment(GraphsFragment.newInstance(roomListSales, currentCurrency, listCurrencies, currentDateFormat))
             R.id.action_date_explain -> displayFragment(DateDetailFragment.newInstance(roomListSales))
             R.id.action_map -> displayFragment(MapFragment.newInstance(roomListSales))
-            R.id.action_list -> displayFragment(ListMonthFragment.newInstance(roomListSales))
-            R.id.action_settings -> displayFragment(SettingsFragment.newInstance(viewModel, roomListSales))
+            R.id.action_list -> displayFragment(ListMonthFragment.newInstance(roomListSales, currentCurrency, listCurrencies, currentDateFormat))
+            R.id.action_settings -> displayFragment(SettingsFragment.newInstance(viewModel, roomListSales, currentCurrency, listCurrencies, currentDateFormat))
         }
         // To Close drawerLayout auto
         this.mDrawerLayout.closeDrawer(GravityCompat.START)
         return true
+    }
+
+     fun getSharedPreferences(){
+         val sharedPreferences = getSharedPreferences(SHARED_PREFERENCES_CURRENCY, Context.MODE_PRIVATE)
+         listCurrencies = UtilsCurrency.getListCurrenciesFromSharedPreferences(sharedPreferences)
+         currentCurrency = UtilsCurrency.castStringInCurrency(sharedPreferences.getString(KEY_CURRENT_CURRENCY, null))
+
+         val sharedDateFormat = getSharedPreferences(SHARED_PREFERENCES_DATE_FORMAT, Context.MODE_PRIVATE)
+         currentDateFormat = sharedDateFormat.getString(KEY_CURRENT_DATE_FORMAT, US_DATE_FORMAT)!!
     }
 }

@@ -1,16 +1,20 @@
 package com.charlotte.judon.gifstats.views.fragments
 
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.charlotte.judon.gifstats.R
 import com.charlotte.judon.gifstats.model.CustomCurrency
 import com.charlotte.judon.gifstats.model.Sale
 import com.charlotte.judon.gifstats.utils.*
 import com.charlotte.judon.gifstats.viewModel.ViewModel
+import com.charlotte.judon.gifstats.views.activities.MainActivity
 import kotlinx.android.synthetic.main.fragment_settings.view.*
 
 class SettingsFragment : Fragment() {
@@ -18,20 +22,24 @@ class SettingsFragment : Fragment() {
     private lateinit var viewModel : ViewModel
     private lateinit var listSales : List<Sale>
     private lateinit var mView : View
-    private var currency : String? = null
+    private lateinit var currency : String
     private lateinit var currentCurrency : CustomCurrency
-    private var dateFormat : String? = null
+    private lateinit var dateFormat : String
     private lateinit var listCurrencies : List<CustomCurrency>
 
     companion object {
 
         @JvmStatic
-        fun newInstance(viewModel: ViewModel, listSales : List<Sale>) : SettingsFragment
+        fun newInstance(viewModel: ViewModel, listSales : List<Sale>, currentCurrency: CustomCurrency,
+                        listCurrencies : List<CustomCurrency>, dateFormat : String) : SettingsFragment
         {
             return SettingsFragment()
                 .apply {
                     this.viewModel = viewModel
                     this.listSales = listSales
+                    this.currentCurrency = currentCurrency
+                    this.listCurrencies = listCurrencies
+                    this.dateFormat = dateFormat
                 }
         }
     }
@@ -45,10 +53,9 @@ class SettingsFragment : Fragment() {
         savedInstanceState: Bundle?): View {
         mView = inflater.inflate(R.layout.fragment_settings, container, false)
 
-        getSharedPreferences()
         populateBtnWithSP()
 
-        mView.radio_group_currency.setOnCheckedChangeListener { group, checkedId ->
+        mView.radio_group_currency.setOnCheckedChangeListener { _, checkedId ->
             when(checkedId) {
                 R.id.btn_usd -> currency = UtilsCurrency.castCurrencyInString(listCurrencies[0])
                 R.id.btn_cad -> currency = UtilsCurrency.castCurrencyInString(listCurrencies[1])
@@ -60,7 +67,7 @@ class SettingsFragment : Fragment() {
             editCurrencySP()
         }
 
-        mView.radio_group_date_format.setOnCheckedChangeListener { group, checkedId ->
+        mView.radio_group_date_format.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
                 R.id.btn_date_us -> dateFormat = US_DATE_FORMAT
                 R.id.btn_date_fr -> dateFormat = FR_DATE_FORMAT
@@ -68,35 +75,27 @@ class SettingsFragment : Fragment() {
             editDateFormatSP()
         }
 
-        mView.button_delete.setOnClickListener {
-            viewModel.deleteAllSales(requireContext(), listSales)
+        mView.button_instructions.setOnClickListener {
+            goToInstructions()
         }
+
+        mView.button_delete.setOnClickListener {
+            getAlertDialog()
+        }
+
         return mView
     }
 
     private fun editCurrencySP(){
         val sharedCurrency = requireContext().getSharedPreferences(SHARED_PREFERENCES_CURRENCY, Context.MODE_PRIVATE)
         sharedCurrency.edit().putString(KEY_CURRENT_CURRENCY, currency).apply()
-        getSharedPreferences()
+        (activity as MainActivity).getSharedPreferences()
     }
 
     private fun editDateFormatSP(){
         val sharedDateFormat = requireContext().getSharedPreferences(SHARED_PREFERENCES_DATE_FORMAT, Context.MODE_PRIVATE)
         sharedDateFormat.edit().putString(KEY_CURRENT_DATE_FORMAT, dateFormat).apply()
-    }
-
-    private fun getSharedPreferences() {
-        val sharedCurrency = requireContext().getSharedPreferences(SHARED_PREFERENCES_CURRENCY, Context.MODE_PRIVATE)
-        listCurrencies = UtilsCurrency.getListCurrenciesFromSharedPreferences(sharedCurrency)
-        val currentString = sharedCurrency.getString(KEY_CURRENT_CURRENCY, null)
-        if(currentString != null) {
-            currentCurrency = UtilsCurrency.castStringInCurrency(sharedCurrency.getString(KEY_CURRENT_CURRENCY, null)!!)
-        } else {
-            currentCurrency = listCurrencies[0]
-        }
-
-        val sharedDateFormat = requireContext().getSharedPreferences(SHARED_PREFERENCES_DATE_FORMAT, Context.MODE_PRIVATE)
-        dateFormat = sharedDateFormat.getString(KEY_CURRENT_DATE_FORMAT, null)
+        (activity as MainActivity).getSharedPreferences()
     }
 
     private fun populateBtnWithSP() {
@@ -111,11 +110,29 @@ class SettingsFragment : Fragment() {
         }
 
         when(dateFormat) {
-            null -> mView.btn_date_us.isChecked = true
             US_DATE_FORMAT -> mView.btn_date_us.isChecked = true
             FR_DATE_FORMAT -> mView.btn_date_fr.isChecked = true
         }
 
+    }
+
+    private fun getAlertDialog(){
+        val builder = AlertDialog.Builder(requireContext(), R.style.AlertDialogCustom)
+        builder.setMessage(R.string.dialog_message)
+        builder.setPositiveButton(R.string.dialog_yes) { _, _ ->
+            viewModel.deleteAllSales(requireContext(), listSales)
+        }
+        builder.setNegativeButton(R.string.dialog_no) { _, _ ->}
+        builder.create()
+        builder.show()
+    }
+
+    private fun goToInstructions() {
+        parentFragmentManager.apply {
+            val instructionsFragment = InstructionsFragment()
+            val ft = this.beginTransaction()
+            ft.replace(R.id.container, instructionsFragment).addToBackStack(BACKSTACK).commit()
+        }
     }
 
 }

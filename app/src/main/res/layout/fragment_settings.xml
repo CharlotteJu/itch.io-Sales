@@ -38,7 +38,7 @@
             android:shadowColor="@color/colorPrimaryDark"
             android:textColor="@color/colorPrimaryDark"
             android:buttonTint="@color/colorPrimaryDark"
-            android:text="$ - USD"/>
+            android:text="@string/usd_symbol"/>
 
         <RadioButton
             android:id="@+id/btn_cad"
@@ -47,7 +47,7 @@
             android:shadowColor="@color/colorPrimaryDark"
             android:textColor="@color/colorPrimaryDark"
             android:buttonTint="@color/colorPrimaryDark"
-            android:text="$ - CAD"/>
+            android:text="@string/cad_symbol"/>
 
         <RadioButton
             android:id="@+id/btn_gbp"
@@ -56,7 +56,7 @@
             android:shadowColor="@color/colorPrimaryDark"
             android:textColor="@color/colorPrimaryDark"
             android:buttonTint="@color/colorPrimaryDark"
-            android:text="£ - GBP"/>
+            android:text="@string/gbp_symbol"/>
 
         <RadioButton
             android:id="@+id/btn_eur"
@@ -65,7 +65,7 @@
             android:shadowColor="@color/colorPrimaryDark"
             android:textColor="@color/colorPrimaryDark"
             android:buttonTint="@color/colorPrimaryDark"
-            android:text="€ - EUR"/>
+            android:text="@string/eur_symbol"/>
 
         <RadioButton
             android:id="@+id/btn_jpy"
@@ -74,7 +74,7 @@
             android:shadowColor="@color/colorPrimaryDark"
             android:textColor="@color/colorPrimaryDark"
             android:buttonTint="@color/colorPrimaryDark"
-            android:text="¥ - JPY"/>
+            android:text="@string/jpy_symbol"/>
 
         <RadioButton
             android:id="@+id/btn_aud"
@@ -90,7 +90,7 @@
         android:id="@+id/title_date_format"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="DATE FORMAT :"
+        android:text="@string/date_format"
         android:textColor="@color/colorPrimaryDark"
         android:textSize="18sp"
         android:textAlignment="center"
@@ -118,7 +118,7 @@
             android:shadowColor="@color/colorPrimaryDark"
             android:textColor="@color/colorPrimaryDark"
             android:buttonTint="@color/colorPrimaryDark"
-            android:text="Month/Day/Year" />
+            android:text="@string/month_day" />
 
         <RadioButton
             android:id="@+id/btn_date_fr"
@@ -127,7 +127,7 @@
             android:shadowColor="@color/colorPrimaryDark"
             android:textColor="@color/colorPrimaryDark"
             android:buttonTint="@color/colorPrimaryDark"
-            android:text="Day/Month/Year"/>
+            android:text="@string/day_month"/>
 
     </RadioGroup>
 
@@ -135,7 +135,7 @@
         android:id="@+id/hint_btn_us"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
-        android:text="02/15/2021"
+        android:text="@string/hint_month_day"
         android:gravity="center"
         android:textColor="@color/colorAccent"
         android:textStyle="italic"
@@ -148,7 +148,7 @@
         android:id="@+id/hint_btn_fr"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
-        android:text="15/02/2021"
+        android:text="@string/hint_day_month"
         android:gravity="center"
         android:textColor="@color/colorAccent"
         android:textStyle="italic"
@@ -158,10 +158,25 @@
         app:layout_constraintEnd_toEndOf="parent"/>
 
     <Button
+        android:id="@+id/button_instructions"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/instructions"
+        android:textColor="@color/colorWhite"
+        android:background="@drawable/backgroung_btn"
+        app:layout_constraintBottom_toTopOf="@id/button_delete"
+        app:layout_constraintTop_toBottomOf="@id/radio_group_date_format"
+        app:layout_constraintStart_toStartOf="@id/button_delete"
+        app:layout_constraintEnd_toEndOf="@id/button_delete"/>
+
+    <Button
         android:id="@+id/button_delete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/delete_all"
+        android:textColor="@color/colorWhite"
+        android:background="@drawable/backgroung_btn"
+        android:layout_marginBottom="32dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>

@@ -7,12 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.charlotte.judon.gifstats.R
+import com.charlotte.judon.gifstats.model.CustomCurrency
 import com.charlotte.judon.gifstats.model.MonthSale
 import com.charlotte.judon.gifstats.model.Sale
-import com.charlotte.judon.gifstats.utils.BACKSTACK
-import com.charlotte.judon.gifstats.utils.Utils
+import com.charlotte.judon.gifstats.utils.*
 import com.charlotte.judon.gifstats.views.adapters.SaleMonthAdapter
-import kotlinx.android.synthetic.main.fragment_list.view.rcv
 import kotlinx.android.synthetic.main.fragment_list_month.view.*
 
 class ListMonthFragment : Fragment(),
@@ -21,15 +20,22 @@ class ListMonthFragment : Fragment(),
     private lateinit var adapter : SaleMonthAdapter
     private lateinit var mView: View
     private lateinit var saleMonthList : List<MonthSale>
+    private lateinit var listCurrencies : List<CustomCurrency>
+    private lateinit var currentCurrency : CustomCurrency
+    private lateinit var dateFormat : String
 
     companion object {
 
         @JvmStatic
-        fun newInstance(salesList: List<Sale>) : ListMonthFragment
+        fun newInstance(salesList: List<Sale>, currentCurrency: CustomCurrency,
+                        listCurrencies : List<CustomCurrency>, dateFormat : String) : ListMonthFragment
         {
             return ListMonthFragment()
                 .apply {
-                this.salesList = salesList
+                    this.salesList = salesList
+                    this.currentCurrency = currentCurrency
+                    this.listCurrencies = listCurrencies
+                    this.dateFormat = dateFormat
             }
         }
     }
@@ -41,6 +47,7 @@ class ListMonthFragment : Fragment(),
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
     {
         mView = inflater.inflate(R.layout.fragment_list_month, container, false)
+        //getSharedPreferences()
         configurePrices()
         return mView
     }
@@ -55,17 +62,17 @@ class ListMonthFragment : Fragment(),
 
 
     private fun configurePrices() {
-        saleMonthList = Utils.castSaleListInSaleMonthList(salesList)
+        saleMonthList = UtilsGeneral.castSaleListInSaleMonthList(salesList, currentCurrency, listCurrencies)
 
         if(saleMonthList.isNotEmpty()) {
             changeViews(true)
-            val totalBrut = Utils.calculTotalBrutSales(salesList)
-            mView.total_brut_txt.text = "$totalBrut €"
+            val totalBrut = UtilsGeneral.calculTotalBrutSales(salesList, currentCurrency, listCurrencies)
+            mView.total_brut_txt.text = "$totalBrut ${currentCurrency.symbol}"
 
-            val totalNet = Utils.calculTotalNetSales(salesList)
-            mView.total_net_txt.text = "$totalNet €"
+            val totalNet = UtilsGeneral.calculTotalNetSales(salesList, currentCurrency, listCurrencies)
+            mView.total_net_txt.text = "$totalNet ${currentCurrency.symbol}"
 
-            val charges = Utils.calculChargesSales(totalBrut, totalNet)
+            val charges = UtilsGeneral.calculChargesSales(totalBrut, totalNet)
             mView.charges_txt.text = "$charges %"
 
             configureRcv()
@@ -90,7 +97,7 @@ class ListMonthFragment : Fragment(),
 
     override fun onClickMonthItem(saleList: List<Sale>) {
         parentFragmentManager.apply {
-            val listFragment = ListFragment.newInstance(saleList)
+            val listFragment = ListSalesFragment.newInstance(saleList, currentCurrency, listCurrencies, dateFormat)
             val ft = this.beginTransaction()
             ft.replace(R.id.container, listFragment).addToBackStack(BACKSTACK).commit()
         }

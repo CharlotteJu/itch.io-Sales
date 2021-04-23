@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.charlotte.judon.gifstats.R
 import com.charlotte.judon.gifstats.model.Sale
+import com.charlotte.judon.gifstats.utils.BACKSTACK
 import com.charlotte.judon.gifstats.utils.PICK_FILE_CODE
 import kotlinx.android.synthetic.main.fragment_home.view.*
 import kotlin.collections.ArrayList
@@ -42,6 +43,10 @@ class HomeFragment : Fragment() {
         mView.telechargement_btn.setOnClickListener {
             downloadCsvFromItch()
         }
+
+        mView.instructions_btn.setOnClickListener {
+            goToInstructions()
+        }
         return mView
     }
 
@@ -58,6 +63,14 @@ class HomeFragment : Fragment() {
         val intent = Intent(Intent.ACTION_VIEW)
         intent.data = Uri.parse(URL_ITCH)
         startActivity(intent)
+    }
+
+    private fun goToInstructions() {
+        parentFragmentManager.apply {
+            val instructionsFragment = InstructionsFragment()
+            val ft = this.beginTransaction()
+            ft.replace(R.id.container, instructionsFragment).addToBackStack(BACKSTACK).commit()
+        }
     }
 
 
