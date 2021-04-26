@@ -2,7 +2,7 @@ package com.charlotte.judon.gifstats.utils
 
 import com.charlotte.judon.gifstats.model.CustomCurrency
 import com.charlotte.judon.gifstats.model.Sale
-import org.junit.Assert.assertEquals
+import org.junit.Assert.*
 import org.junit.Test
 import java.time.temporal.ChronoUnit
 
@@ -22,7 +22,7 @@ class UtilsGeneralTest  {
         CustomCurrency("AUD", 1.29, 0.77, "$"),
     )
 
-    private fun getListSalesForMoney(list: List<Date>) : List<Sale>{
+    private fun getListSales(list: List<Date>) : List<Sale>{
         val listReturn = mutableListOf<Sale>()
         for (date in list) {
             val sale = Sale(
@@ -56,7 +56,6 @@ class UtilsGeneralTest  {
 
     @Test
     fun convertStringToDate_isCorrect() {
-        //val dateString = "2021-03-13 03:08:28 UTC"
         val calendar = Calendar.getInstance()
         calendar.set(2021, 2,13, 3,8,28)
         val resultExpected = calendar.time.toInstant().truncatedTo(ChronoUnit.SECONDS)
@@ -86,48 +85,27 @@ class UtilsGeneralTest  {
     fun getDateStartToFilter_isCorrect() {
         val calendar = Calendar.getInstance()
         //Think to change with good date
-        calendar.set(2021, 3, 16)
+        calendar.set(2021, 3, 19)
         val resultExpected = calendar.time.toInstant().truncatedTo(ChronoUnit.DAYS)
         val result = UtilsGeneral.getDateStartToFilter(7).toInstant().truncatedTo(ChronoUnit.DAYS)
         assertEquals(resultExpected, result)
     }
 
     @Test
-    fun convertDollarToEuros_isCorrect() {
-        val resultExpected = 4.15
-        val result = UtilsGeneral.convertDollarToEuros(5.0)
-        assertEquals(resultExpected, result,0.0)
-    }
-
-    @Test
-    fun convertDollarToEuros_0_isCorrect() {
-        val resultExpected = 0.0
-        val result = UtilsGeneral.convertDollarToEuros(0.0)
-        assertEquals(resultExpected, result,0.0)
-    }
-
-    @Test
-    fun convertDollarToEuros_01_isCorrect() {
-        val resultExpected = 0.01
-        val result = UtilsGeneral.convertDollarToEuros(0.01)
-        assertEquals(resultExpected, result,0.0)
-    }
-
-    @Test
     fun calculTotalNetSales_isCorrect() {
         val calendar = Calendar.getInstance()
         val listDates = arrayListOf(calendar.time, calendar.time, calendar.time)
-        val listSales = getListSalesForMoney(listDates)
-        val resultExpected = listSales[0].amountDelivered *3 * 0.83
+        val listSales = getListSales(listDates)
+        val resultExpected = listSales[0].amountDelivered *3 * listCurrencies[3].inverseRate
         val result = UtilsGeneral.calculTotalNetSales(listSales, listCurrencies[0], listCurrencies)
-        assertEquals(resultExpected, result, 0.0)
+        assertEquals(resultExpected, result, 0.1)
     }
 
     @Test
     fun calculTotalNetSales_USD_isCorrect() {
         val calendar = Calendar.getInstance()
         val listDates = arrayListOf(calendar.time, calendar.time, calendar.time)
-        val listSales = getListSalesForMoney(listDates)
+        val listSales = getListSales(listDates)
         for (sale in listSales) {
             sale.currency = "USD"
         }
@@ -140,17 +118,17 @@ class UtilsGeneralTest  {
     fun calculTotalBrutSales_isCorrect() {
         val calendar = Calendar.getInstance()
         val listDates = arrayListOf(calendar.time, calendar.time, calendar.time)
-        val listSales = getListSalesForMoney(listDates)
-        val resultExpected = listSales[0].amount *3 * 0.83
+        val listSales = getListSales(listDates)
+        val resultExpected = listSales[0].amount *3 * listCurrencies[3].inverseRate
         val result = UtilsGeneral.calculTotalBrutSales(listSales, listCurrencies[0], listCurrencies)
-        assertEquals(resultExpected, result, 0.0)
+        assertEquals(resultExpected, result, 0.1)
     }
 
     @Test
     fun calculTotalBrutSales_USD_isCorrect() {
         val calendar = Calendar.getInstance()
         val listDates = arrayListOf(calendar.time, calendar.time, calendar.time)
-        val listSales = getListSalesForMoney(listDates)
+        val listSales = getListSales(listDates)
         for (sale in listSales) {
             sale.currency = "USD"
         }
@@ -158,6 +136,7 @@ class UtilsGeneralTest  {
         val result = UtilsGeneral.calculTotalBrutSales(listSales, listCurrencies[0], listCurrencies)
         assertEquals(resultExpected, result, 0.1)
     }
+
 
     @Test
     fun calculChargesSales_isCorrect() {
@@ -245,13 +224,64 @@ class UtilsGeneralTest  {
         assertEquals(resultExpected, result)
     }
 
+
     @Test
-    fun xx_isCorrect() {
-        val resultExpected = 0
-        val result = 0
+    fun filterList_7Days_isCorrect() {
+        val calendar = Calendar.getInstance()
+        val date1 = calendar.time
+        calendar.set(2021, 3, 20)
+        val date2 = calendar.time
+        calendar.set(2021, 3, 15)
+        val date3 = calendar.time
+        val listSales = getListSales(listOf(date1, date2, date3))
+        val dateStart = UtilsGeneral.getDateStartToFilter(7)
+        val resultExpected = 2
+        val result = UtilsGeneral.filterList(listSales, dateStart).size
         assertEquals(resultExpected, result)
     }
 
+    @Test
+    fun filterList_30Days_isCorrect() {
+        val calendar = Calendar.getInstance()
+        val date1 = calendar.time
+        calendar.set(2021, 3, 20)
+        val date2 = calendar.time
+        calendar.set(2021, 3, 15)
+        val date3 = calendar.time
+        val listSales = getListSales(listOf(date1, date2, date3))
+        val dateStart = UtilsGeneral.getDateStartToFilter(30)
+        val resultExpected = 3
+        val result = UtilsGeneral.filterList(listSales, dateStart).size
+        assertEquals(resultExpected, result)
+    }
 
+    @Test
+    fun castSaleListInSaleMonthList_isCorrect() {
+        val listSales = getListSales(getListDates())
+        val resultExpectedSize = 6
+        val resultExpectedNb = 6
+        val resultExpectedNet = listSales[0].amountDelivered*6
+        val result = UtilsGeneral.castSaleListInSaleMonthList(listSales, listCurrencies[3], listCurrencies)
+        assertEquals(resultExpectedSize, result.size)
+        assertEquals("Jul", result[0].month)
+        assertEquals("2021", result[0].year)
+        assertFalse(result[0].isInProgress)
+        assertEquals(resultExpectedNb, result[0].list.size)
+        assertEquals(resultExpectedNet, result[0].totalPrice, 0.01)
+    }
+
+    private fun getListDates() : List<Date>{
+        val calendar = Calendar.getInstance()
+        val list = mutableListOf<Date>()
+
+        for (month in 1..6 ) {
+            for (day in 1 ..28 step 5) {
+                calendar.set(2021, month, day)
+                list.add(calendar.time)
+            }
+        }
+
+        return list
+    }
 
 }

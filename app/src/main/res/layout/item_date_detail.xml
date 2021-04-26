@@ -16,7 +16,7 @@
         android:textColor="@android:color/white"
         android:textStyle="bold"
         android:textSize="16sp"
-        android:background="@color/colorPrimary"
+        android:background="@color/colorAccent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
 

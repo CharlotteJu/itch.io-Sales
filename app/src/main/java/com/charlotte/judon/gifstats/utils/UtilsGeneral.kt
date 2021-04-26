@@ -1,14 +1,6 @@
 package com.charlotte.judon.gifstats.utils
 
-import android.content.Context
-import android.graphics.Color
-import android.util.Log
-import com.anychart.chart.common.dataentry.DataEntry
-import com.anychart.chart.common.dataentry.ValueDataEntry
-import com.charlotte.judon.gifstats.R
 import com.charlotte.judon.gifstats.model.*
-import com.github.mikephil.charting.data.BarDataSet
-import com.github.mikephil.charting.data.BarEntry
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.text.DecimalFormat
@@ -59,19 +51,6 @@ class UtilsGeneral {
             val calendar = Calendar.getInstance()
             calendar.add(Calendar.DAY_OF_YEAR, -daysAgo)
             return calendar.time
-        }
-
-        fun filterList(list: List<Sale>, dateStart: Date): List<Sale> {
-            val listToReturn = arrayListOf<Sale>()
-            for (sale in list) {
-                val dateTemp = sale.dateDate
-                if (dateTemp.toInstant().truncatedTo(ChronoUnit.DAYS) >= dateStart.toInstant()
-                        .truncatedTo(ChronoUnit.DAYS)
-                ) {
-                    listToReturn.add(sale)
-                }
-            }
-            return listToReturn
         }
 
         fun castSaleListInSaleMonthList(salesList: List<Sale>, currentCurrency: CustomCurrency,
@@ -131,13 +110,6 @@ class UtilsGeneral {
             return listToReturn.reversed()
         }
 
-        fun convertDollarToEuros(price: Double): Double {
-            val decimalFormat = DecimalFormat("####0.00")
-            val separator = DecimalFormatSymbols()
-            separator.decimalSeparator = '.'
-            decimalFormat.decimalFormatSymbols = separator
-            return decimalFormat.format(price * 0.83).toDouble()
-        }
 
         fun calculTotalNetSales(list: List<Sale>, currentCurrency: CustomCurrency,
             listCurrencies: List<CustomCurrency>): Double {
@@ -148,7 +120,7 @@ class UtilsGeneral {
                 val price = if (sale.currency == currentCurrency.code) {
                     sale.amountDelivered
                 } else {
-                    UtilsCurrency.convertPriceInTwoCurrencies(
+                    UtilsCurrency.convertPriceBetweenTwoCurrencies(
                         sale.currency,
                         currentCurrency,
                         sale.amountDelivered,
@@ -171,7 +143,7 @@ class UtilsGeneral {
                 val price = if (sale.currency == currentCurrency.code) {
                     sale.amount
                 } else {
-                    UtilsCurrency.convertPriceInTwoCurrencies(
+                    UtilsCurrency.convertPriceBetweenTwoCurrencies(
                         sale.currency,
                         currentCurrency,
                         sale.amount,
@@ -234,6 +206,19 @@ class UtilsGeneral {
             return difInt
         }
 
+
+        fun filterList(list: List<Sale>, dateStart: Date): List<Sale> {
+            val listToReturn = arrayListOf<Sale>()
+            for (sale in list) {
+                val dateTemp = sale.dateDate
+                if (dateTemp.toInstant().truncatedTo(ChronoUnit.DAYS) >= dateStart.toInstant()
+                        .truncatedTo(ChronoUnit.DAYS)
+                ) {
+                    listToReturn.add(sale)
+                }
+            }
+            return listToReturn
+        }
 
         fun sortByCountry(list: List<Sale>): List<Sale> {
             return list.sortedWith(compareBy { it.countryCode })

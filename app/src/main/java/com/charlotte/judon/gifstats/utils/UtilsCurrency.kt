@@ -60,12 +60,8 @@ class UtilsCurrency {
 
         }
 
-        fun convertPriceInTwoCurrencies(
-            csvCurrency: String,
-            goalCurrency: CustomCurrency,
-            price: Double,
-            listCurrency: List<CustomCurrency>
-        ) : Double {
+        fun convertPriceBetweenTwoCurrencies(csvCurrency: String, goalCurrency: CustomCurrency,
+                                             price: Double, listCurrency: List<CustomCurrency>) : Double {
             var priceInUSD = price
             if(csvCurrency != "USD"){
                 var inverseRate = 0.0

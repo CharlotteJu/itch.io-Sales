@@ -49,13 +49,13 @@ class SaleAdapter (private var listSales : List<Sale>,
             val priceNet = if(sale.currency == currentCurrency.code) {
                 sale.amountDelivered
             } else {
-                UtilsCurrency.convertPriceInTwoCurrencies(sale.currency, currentCurrency, sale.amountDelivered, listCurrencies)
+                UtilsCurrency.convertPriceBetweenTwoCurrencies(sale.currency, currentCurrency, sale.amountDelivered, listCurrencies)
             }
 
             val priceBrut = if(sale.currency == currentCurrency.code) {
                 sale.amount
             } else {
-                UtilsCurrency.convertPriceInTwoCurrencies(sale.currency, currentCurrency, sale.amount, listCurrencies)
+                UtilsCurrency.convertPriceBetweenTwoCurrencies(sale.currency, currentCurrency, sale.amount, listCurrencies)
             }
 
             itemView.original_price_content.text = "$priceBrut"

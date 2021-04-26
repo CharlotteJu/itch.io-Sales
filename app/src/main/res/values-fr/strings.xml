@@ -47,6 +47,17 @@
     <string name="month_day">Mois/Jour</string>
     <string name="day_month">Jour/Mois</string>
 
+    <string name="instructions_title_general"><u>Comment utiliser l\'application ? </u></string>
+    <string name="instructions_title_download"><u>Télécharger le csv : </u></string>
+    <string name="instructions_download_txt_1">Cliquez sur le bouton <u>"Télécharger depuis Itch"</u> depuis la page d\'accueil.</string>
+    <string name="instructions_download_txt_2">Ca ouvrira votre navigateur, si vous n\'êtes pas connecté, il faudra vous logger à votre compte Itch.</string>
+    <string name="instructions_download_txt_3">Une fois dans l\'onglet Payments, cliquez sur "Export everything as CSV".</string>
+    <string name="instructions_download_txt_4">Le téléchargement s\'effectuera sur votre téléphone.</string>
+    <string name="instructions_title_import"><u>Importer le fichier : </u></string>
+    <string name="instructions_import_txt_1">Cliquez sur le bouton <u>"Rafraichir le csv"</u> depuis la page d\accueil.</string>
+    <string name="instructions_import_txt_2">Ca ouvrira votre explorateur de fichier, pour une meilleure lisibilité, cliquez sur Documents.</string>
+    <string name="instructions_import_txt_3">Sélectionnez le fichier csv téléchargé depuis Itch.</string>
+
 
     <string-array name="list_month">
         <item>JANVIER</item>

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">Gif Itch</string>
+    <string name="app_name" translatable="false">itch.io Stats</string>
     <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
     <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
 
@@ -56,6 +56,19 @@
     <string name="jpy_symbol" translatable="false">¥ - JPY</string>
     <string name="hint_month_day" translatable="false">02/15</string>
     <string name="hint_day_month" translatable="false">15/02</string>
+
+    <string name="instructions_title_general"><u>How use the application ? </u></string>
+    <string name="instructions_title_download"><u>Download the csv : </u></string>
+    <string name="instructions_download_txt_1">Click on the button <u>"Download from Itch"</u> from the home page.</string>
+    <string name="instructions_download_txt_2">That will open your browser, if you are not connected, you will need to log in your Itch count.</string>
+    <string name="instructions_download_txt_3">Once in the Payment\'s tab, click on "Export everything as CSV".</string>
+    <string name="instructions_download_txt_4">The downloading will take place on your phone.</string>
+    <string name="instructions_title_import"><u>Import the file : </u></string>
+    <string name="instructions_import_txt_1">Click on the button <u>"Refresh CSV"</u> from the home page.</string>
+    <string name="instructions_import_txt_2">That will open your file explorer, for a better readability, click on Documents.</string>
+    <string name="instructions_import_txt_3">Select the csv file downloaded from Itch.</string>
+
+
 
     <string-array name="list_month">
         <item>JANUARY</item>

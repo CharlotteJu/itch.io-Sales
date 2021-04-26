@@ -12,6 +12,7 @@
         <item name="windowNoTitle">true</item>
         <item name="android:actionMenuTextColor">@android:color/white</item>
         <item name="android:statusBarColor">@color/colorPrimaryDark</item>
+        <item name="android:fontFamily">@font/lato</item>
 
     </style>
 
@@ -20,15 +21,38 @@
     <style name="AppTheme.MyTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="android:actionMenuTextColor">@android:color/white</item>
         <item name="android:statusBarColor">@color/colorPrimaryDark</item>
+        <item name="android:fontFamily">@font/lato</item>
     </style>
 
 
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:fontFamily">@font/lato</item>
+    </style>
 
     <style name="AlertDialogCustom" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="Text_title">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textSize">20sp</item>
+        <item name="fontFamily">@font/lato_bold</item>
+    </style>
+
+    <style name="Text_body">
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textSize">16sp</item>
+        <item name="fontFamily">@font/lato</item>
+    </style>
+
+    <style name="Text_italic">
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textStyle">italic</item>
+        <item name="fontFamily">@font/lato_light_italic</item>
+        <item name="android:textSize">14sp</item>
     </style>
 
 

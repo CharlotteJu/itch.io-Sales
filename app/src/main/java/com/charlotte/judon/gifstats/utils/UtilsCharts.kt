@@ -18,18 +18,9 @@ class UtilsCharts {
     companion object {
         ///////////////////////////////////////// MPBAR /////////////////////////////////////////
 
-        fun graphMPByDay(salesList: List<Sale>, format : String)  : MpBarReturn {
-
-            val listSorted = UtilsGeneral.sortSalesByDate(salesList)
+        fun getDataForGraphByDay(listSorted: List<Sale>) : List<BarEntry> {
             val listEntry = arrayListOf<BarEntry>()
-            val listString = arrayListOf<String>()
-            val formatterDate = SimpleDateFormat(format, Locale.getDefault())
             var nbPerDay = 0f
-
-            if(listSorted.isEmpty()) {
-                return MpBarReturn(null)
-            }
-
             var dateOfReference = listSorted[0].dateDate
 
             for (sale in listSorted) {
@@ -43,41 +34,34 @@ class UtilsCharts {
                         nbPerDay++
                     }
                     UtilsGeneral.CompareDates.PLUS_ONE -> {
-                        val dateString = formatterDate.format(dateOfReference)
-                        listEntry.add(BarEntry(listString.size.toFloat(), nbPerDay))
-                        listString.add(dateString)
+                        val x = listEntry.size
+                        listEntry.add(BarEntry(x.toFloat(), nbPerDay))
                         dateOfReference = dateTemp
                         nbPerDay = 1f
                         isLastAdding = true
                     }
                     UtilsGeneral.CompareDates.PLUS_OTHER -> {
-                        val dateString = formatterDate.format(dateOfReference)
-                        listEntry.add(BarEntry(listString.size.toFloat(), nbPerDay))
-                        listString.add(dateString)
-
+                        val x = listEntry.size
+                        listEntry.add(BarEntry(x.toFloat(), nbPerDay))
                         val difInt = UtilsGeneral.calculateNumberOfDaysOfDifference(dateOfReference, dateTemp)
                         for (i in 0 until difInt -1) {
                             val calendarTemp = Calendar.getInstance()
                             calendarTemp.time = dateOfReference
                             calendarTemp.add(Calendar.DAY_OF_YEAR, i.toInt()+1)
-                            val dateStringTemp = formatterDate.format(calendarTemp.time)
-                            listEntry.add(BarEntry(listString.size.toFloat(), 0f))
-                            listString.add(dateStringTemp)
+                            val xTemp = listEntry.size
+                            listEntry.add(BarEntry(xTemp.toFloat(), 0f))
                         }
 
                         dateOfReference = dateTemp
                         nbPerDay = 1f
                         isLastAdding = true
                     }
-                    UtilsGeneral.CompareDates.ERROR -> {
-                        //TODO
-                    }
+                    UtilsGeneral.CompareDates.ERROR -> {}
                 }
 
                 if (listSorted.indexOf(sale) == listSorted.size - 1 && !isLastAdding) {
-                    val dateString = formatterDate.format(dateOfReference)
-                    listEntry.add(BarEntry(listString.size.toFloat(), nbPerDay))
-                    listString.add(dateString)
+                    val x = listEntry.size
+                    listEntry.add(BarEntry(x.toFloat(), nbPerDay))
                 }
             }
 
@@ -92,11 +76,39 @@ class UtilsCharts {
                     val calendarTemp = Calendar.getInstance()
                     calendarTemp.time = dateOfReference
                     calendarTemp.add(Calendar.DAY_OF_YEAR, i.toInt() +1)
-                    val dateString = formatterDate.format(calendarTemp.time)
-                    listEntry.add(BarEntry(listString.size.toFloat(), 0f))
-                    listString.add(dateString)
+                        val x = listEntry.size
+                    listEntry.add(BarEntry(x.toFloat(), 0f))
                 }
             }
+
+            return listEntry
+        }
+
+        fun getStringsDaysForGraphByDay(firstDate : Date, sizeList: Int, format: String) : List<String> {
+            val listString = arrayListOf<String>()
+            val formatterDate = SimpleDateFormat(format, Locale.getDefault())
+            for (i in 0 until sizeList) {
+                val calendarTemp = Calendar.getInstance()
+                calendarTemp.time = firstDate
+                calendarTemp.add(Calendar.DAY_OF_YEAR, i)
+                val dateString = formatterDate.format(calendarTemp.time)
+                listString.add(dateString)
+            }
+
+            return listString
+        }
+
+        fun graphMPByDay(salesList: List<Sale>, format : String)  : MpBarReturn
+        {
+
+            val listSorted = UtilsGeneral.sortSalesByDate(salesList)
+
+            if(listSorted.isEmpty()) {
+                return MpBarReturn(null)
+            }
+
+            val listEntry = getDataForGraphByDay(listSorted)
+            val listString = getStringsDaysForGraphByDay(listSorted[0].dateDate, listEntry.size, format)
 
             val barDataSet = BarDataSet(listEntry, " ")
             barDataSet.color = Color.parseColor("#F80039")
@@ -105,12 +117,12 @@ class UtilsCharts {
             return (MpBarReturn(barDataSet, listString))
         }
 
-        fun graphMPBarByHour(salesList: List<Sale>) : MpBarReturn {
+        private fun getDataForGraphByHour(salesList: List<Sale>) : List<BarEntry>{
             val listEntry = arrayListOf<BarEntry>()
             val listHours = arrayListOf<HourList>()
 
             if(salesList.isEmpty()) {
-                return MpBarReturn(null)
+                return listEntry
             }
 
             for (i in 0 .. 23) {
@@ -118,31 +130,32 @@ class UtilsCharts {
             }
 
             for (sale in salesList) {
-                val date =
-                    UtilsGeneral.convertStringToDateWithLocale(sale.dateString, sale.hour, "MM/dd/yyyy")
+                val date = UtilsGeneral.convertStringToDateWithLocale(sale.dateString, sale.hour, "MM/dd/yyyy")
                 val hourString = date[1].substring(0, 2)
                 val hourSale = hourString.toInt()
-                listHours.get(hourSale).nb ++
+                listHours[hourSale].nb ++
             }
 
             for (hourItem in listHours) {
                 listEntry.add(BarEntry(hourItem.hour.toFloat(), hourItem.nb.toFloat()))
             }
 
+            return listEntry
+        }
+
+        fun graphMPBarByHour(listSales : List<Sale>) : MpBarReturn {
+            if(listSales.isEmpty()) {
+                return MpBarReturn(BarDataSet(null, ""))
+            }
+            val listEntry = getDataForGraphByHour(listSales)
             val barDataSet = BarDataSet(listEntry, " ")
             barDataSet.color = Color.parseColor("#F80039")
             barDataSet.highLightColor = Color.parseColor("#4B2E5A")
             barDataSet.setDrawValues(false)
             return MpBarReturn(barDataSet)
-
         }
 
-        fun graphMPBarByDayOfWeek(list: List<Sale>) : MpBarReturn {
-
-            if (list.isEmpty()) {
-                return MpBarReturn(null)
-            }
-
+        private fun getDataForGraphByDayOfWeek(list: List<Sale>) : List<BarEntry> {
             var nbMonday = 0
             var nbTuesday = 0
             var nbWednesday = 0
@@ -164,7 +177,7 @@ class UtilsCharts {
                     listDay[6] -> nbSunday++
                 }
             }
-            val listBarEntry = arrayListOf<BarEntry>(
+            val listBarEntry = arrayListOf(
                 BarEntry(0f, nbMonday.toFloat()),
                 BarEntry(1f, nbTuesday.toFloat()),
                 BarEntry(2f, nbWednesday.toFloat()),
@@ -173,6 +186,17 @@ class UtilsCharts {
                 BarEntry(5f, nbSaturday.toFloat()),
                 BarEntry(6f, nbSunday.toFloat())
             )
+
+            return listBarEntry
+
+        }
+
+        fun graphMPBarByDayOfWeek(list: List<Sale>) : MpBarReturn {
+            if (list.isEmpty()) {
+                return MpBarReturn(null)
+            }
+            val listDay = arrayListOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
+            val listBarEntry = getDataForGraphByDayOfWeek(list)
 
             val barDataSet = BarDataSet(listBarEntry, " ")
             barDataSet.color = Color.parseColor("#F80039")
@@ -191,10 +215,8 @@ class UtilsCharts {
             return listToReturn
         }
 
-
-        fun graphMPBarByDayWithHours(list: List<Sale>, day : String, context : Context)  : DateDetail {
+        private fun getDataForGraphByDaysWithHours(listSorted: List<Sale>) : List<BarEntry> {
             val listEntry = arrayListOf<BarEntry>()
-            val listSorted = UtilsGeneral.sortSalesByHour(getListForOneDay(list, day))
             val listHours = arrayListOf<HourList>()
 
             for (i in 0 .. 23) {
@@ -202,21 +224,26 @@ class UtilsCharts {
             }
 
             for (sale in listSorted) {
-                val date =
-                    UtilsGeneral.convertStringToDateWithLocale(sale.dateString, sale.hour, "MM/dd/yyyy")
+                val date = UtilsGeneral.convertStringToDateWithLocale(sale.dateString, sale.hour, "MM/dd/yyyy")
                 val hourString = date[1].substring(0, 2)
                 val hourSale = hourString.toInt()
 
-                listHours.get(hourSale).nb ++
+                listHours[hourSale].nb ++
             }
 
             for (hourItem in listHours) {
                 listEntry.add(BarEntry(hourItem.hour.toFloat(), hourItem.nb.toFloat()))
             }
 
-            var name = ""
+            return listEntry
+        }
+
+        fun graphMPBarByDayWithHours(list: List<Sale>, day : String, context : Context)  : DateDetail {
+            val listSorted = UtilsGeneral.sortSalesByHour(getListForOneDay(list, day))
+            val listEntry = getDataForGraphByDaysWithHours(listSorted)
             val listDay = arrayListOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
             val listDayFromResources = context.resources.getStringArray(R.array.list_days)
+            var name = ""
             when (day) {
                 listDay[0] -> name = listDayFromResources[0]
                 listDay[1] -> name = listDayFromResources[1]
@@ -228,8 +255,6 @@ class UtilsCharts {
             }
             return DateDetail(name, listEntry, null, listSorted.size)
         }
-
-
 
         ///////////////////////////////////////// ANYCHART /////////////////////////////////////////
 
@@ -250,7 +275,7 @@ class UtilsCharts {
                         val price = if(sale.currency == currentCurrency.code) {
                             sale.amountDelivered
                         } else {
-                            UtilsCurrency.convertPriceInTwoCurrencies(sale.currency, currentCurrency, sale.amountDelivered, listCurrencies)
+                            UtilsCurrency.convertPriceBetweenTwoCurrencies(sale.currency, currentCurrency, sale.amountDelivered, listCurrencies)
                         }
                         totalPrice += price
                     }
@@ -307,7 +332,7 @@ class UtilsCharts {
                         maxNb = nbPerPackage
                     }
                     listCountry.add(Country(country, nbPerPackage))
-                    listEntry.add(CustomDataEntryChrono(country, nbPerPackage))
+                    listEntry.add(CustomDataEntryChronopleth(country, nbPerPackage))
                     nbPerPackage = 1
                     country = sale.countryCode
 
@@ -321,13 +346,13 @@ class UtilsCharts {
                         maxNb = nbPerPackage
                     }
                     listCountry.add(Country(country, nbPerPackage))
-                    listEntry.add(CustomDataEntryChrono(country, nbPerPackage))
+                    listEntry.add(CustomDataEntryChronopleth(country, nbPerPackage))
                 }
             }
 
             for (countryCode in listCountries) {
                 listCountry.add(Country(countryCode, 0))
-                listEntry.add(CustomDataEntryChrono(countryCode, 0))
+                listEntry.add(CustomDataEntryChronopleth(countryCode, 0))
             }
 
             listCountry.sortBy { countrySale ->  countrySale.nb}
@@ -401,7 +426,8 @@ class UtilsCharts {
             return arrayOf("{less: 1}", "{from: 1, to: $nb1}", "{from: $nb1, to: $nb2}", "{from: $nb2, to: $nb3}", "{from: $nb3, to: $nb4}", "{greater: $nb4}")
         }
     }
-    class CustomDataEntryChrono(val id : String, val value : Number) : DataEntry() {
+
+    class CustomDataEntryChronopleth(val id : String, val value : Number) : DataEntry() {
         init {
             setValue("id", id);
             setValue("value", value);
@@ -409,6 +435,97 @@ class UtilsCharts {
     }
 
 }
+
+/*fun graphMPByDay(salesList: List<Sale>, format : String)  : MpBarReturn
+        {
+
+            val listSorted = UtilsGeneral.sortSalesByDate(salesList)
+
+            if(listSorted.isEmpty()) {
+                return MpBarReturn(null)
+            }
+
+            val listEntry = arrayListOf<BarEntry>()
+            val listString = arrayListOf<String>()
+            val formatterDate = SimpleDateFormat(format, Locale.getDefault())
+            var nbPerDay = 0f
+
+            if(listSorted.isEmpty()) {
+                return MpBarReturn(null)
+            }
+
+            var dateOfReference = listSorted[0].dateDate
+
+            for (sale in listSorted) {
+                val dateTemp = sale.dateDate
+                var isLastAdding = false
+
+                val diffDates = UtilsGeneral.calculateDiffBetweenTwoDates(dateOfReference, dateTemp)
+
+                when (diffDates){
+                    UtilsGeneral.CompareDates.SAME -> {
+                        nbPerDay++
+                    }
+                    UtilsGeneral.CompareDates.PLUS_ONE -> {
+                        val dateString = formatterDate.format(dateOfReference)
+                        listEntry.add(BarEntry(listString.size.toFloat(), nbPerDay))
+                        listString.add(dateString)
+                        dateOfReference = dateTemp
+                        nbPerDay = 1f
+                        isLastAdding = true
+                    }
+                    UtilsGeneral.CompareDates.PLUS_OTHER -> {
+                        val dateString = formatterDate.format(dateOfReference)
+                        listEntry.add(BarEntry(listString.size.toFloat(), nbPerDay))
+                        listString.add(dateString)
+
+                        val difInt = UtilsGeneral.calculateNumberOfDaysOfDifference(dateOfReference, dateTemp)
+                        for (i in 0 until difInt -1) {
+                            val calendarTemp = Calendar.getInstance()
+                            calendarTemp.time = dateOfReference
+                            calendarTemp.add(Calendar.DAY_OF_YEAR, i.toInt()+1)
+                            val dateStringTemp = formatterDate.format(calendarTemp.time)
+                            listEntry.add(BarEntry(listString.size.toFloat(), 0f))
+                            listString.add(dateStringTemp)
+                        }
+
+                        dateOfReference = dateTemp
+                        nbPerDay = 1f
+                        isLastAdding = true
+                    }
+                    UtilsGeneral.CompareDates.ERROR -> {}
+                }
+
+                if (listSorted.indexOf(sale) == listSorted.size - 1 && !isLastAdding) {
+                    val dateString = formatterDate.format(dateOfReference)
+                    listEntry.add(BarEntry(listString.size.toFloat(), nbPerDay))
+                    listString.add(dateString)
+                }
+            }
+
+            val calendarNow = Calendar.getInstance()
+            val timeNow = calendarNow.time
+
+            if(dateOfReference.time != timeNow.time) {
+                val difLong = timeNow.time - dateOfReference.time
+                val difInt = TimeUnit.DAYS.convert(difLong, TimeUnit.MILLISECONDS)
+
+                for (i in 0 until difInt) {
+                    val calendarTemp = Calendar.getInstance()
+                    calendarTemp.time = dateOfReference
+                    calendarTemp.add(Calendar.DAY_OF_YEAR, i.toInt() +1)
+                    val dateString = formatterDate.format(calendarTemp.time)
+                    listEntry.add(BarEntry(listString.size.toFloat(), 0f))
+                    listString.add(dateString)
+                }
+            }
+
+            val barDataSet = BarDataSet(listEntry, " ")
+            barDataSet.color = Color.parseColor("#F80039")
+            barDataSet.highLightColor = Color.parseColor("#4B2E5A")
+            barDataSet.setDrawValues(false)
+            return (MpBarReturn(barDataSet, listString))
+        }*/
 
 
 
