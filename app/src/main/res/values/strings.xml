@@ -5,12 +5,13 @@
 
     <string-array name="spinner_filter">
         <item>ALL</item>
-        <item>7 LAST DAYS</item>
-        <item>30 LAST DAYS</item>
+        <item>THESE 7 LAST DAYS</item>
+        <item>THESE 30 LAST DAYS</item>
     </string-array>
 
     <string name="no_sales_period">There is no sales in this period.</string>
     <string name="csv_integrate">CSV integrate !</string>
+    <string name="everything_deleted">Everything is deleted !</string>
     <string name="csv_problem">CSV not reading, please choose a file downloaded from Itch</string>
     <string name="period">PERIOD :</string>
     <string name="all">ALL</string>

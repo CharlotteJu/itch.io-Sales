@@ -58,6 +58,7 @@ class ViewModel(private val saleRepository: SaleRepository) : ViewModel() {
    }
 
     fun deleteAllSales(context: Context, list: List<Sale>) {
+        val stringCsv = context.resources.getString(R.string.everything_deleted)
         viewModelScope.launch(Dispatchers.IO) {
             val thread = viewModelScope.async {
                 for (sale in list) {
@@ -66,7 +67,7 @@ class ViewModel(private val saleRepository: SaleRepository) : ViewModel() {
             }
             thread.await()
             withContext(Dispatchers.Main) {
-                Toast.makeText(context, "TOUT EST SUPPRIME", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, stringCsv, Toast.LENGTH_LONG).show()
             }
         }
     }

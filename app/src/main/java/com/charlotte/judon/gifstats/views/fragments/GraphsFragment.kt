@@ -48,8 +48,8 @@ class GraphsFragment : Fragment(), OnChartValueSelectedListener {
         {
             return GraphsFragment()
                 .apply {
-                this.salesList = salesList
-                this.salesListFiltered = salesList
+                    this.salesList = salesList
+                    this.salesListFiltered = salesList
                     this.currentCurrency = currentCurrency
                     this.listCurrencies = listCurrencies
                     this.dateFormat = dateFormat
@@ -61,8 +61,7 @@ class GraphsFragment : Fragment(), OnChartValueSelectedListener {
         super.onCreate(savedInstanceState)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View
-    {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         mView = inflater.inflate(R.layout.fragment_graphs, container, false)
 
         configureGraphView()
@@ -84,15 +83,12 @@ class GraphsFragment : Fragment(), OnChartValueSelectedListener {
         return mView
     }
 
-    private fun configureSpinner()
-    {
+    private fun configureSpinner() {
         val spinnerFilter = resources.getStringArray(R.array.spinner_filter)
         val adapter = ArrayAdapter(requireContext(), R.layout.item_spinner, spinnerFilter)
         mView.spinner.adapter = adapter
         mView.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                TODO("Not yet implemented")
-            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
 
                 when (position) {
@@ -118,8 +114,7 @@ class GraphsFragment : Fragment(), OnChartValueSelectedListener {
         }
     }
 
-    private fun checkBtn()
-    {
+    private fun checkBtn() {
         val temp = btnChecked
         if(btnChecked == R.id.btn_hour) {
             mView.btn_date.isChecked = true
@@ -132,11 +127,9 @@ class GraphsFragment : Fragment(), OnChartValueSelectedListener {
             R.id.btn_date -> mView.btn_date.isChecked = true
             R.id.btn_package -> mView.btn_package.isChecked = true
         }
-
     }
 
-    private fun getListForPackage() : List<DataEntry>
-    {
+    private fun getListForPackage() : List<DataEntry> {
         return if (btnPackageChecked == R.id.btn_nb) {
             UtilsCharts.anyChartPackageNB(this.salesListFiltered)
         } else {
@@ -144,8 +137,7 @@ class GraphsFragment : Fragment(), OnChartValueSelectedListener {
         }
     }
 
-    private fun getBarGraphByHour()
-    {
+    private fun getBarGraphByHour() {
         onNothingSelected()
         mView.MpBarView.visibility = View.VISIBLE
         mView.anyChartView.visibility = View.GONE
@@ -168,8 +160,7 @@ class GraphsFragment : Fragment(), OnChartValueSelectedListener {
         }
     }
 
-    private fun getBarGraphByDayOfWeek()
-    {
+    private fun getBarGraphByDayOfWeek() {
         onNothingSelected()
         mView.MpBarView.visibility = View.VISIBLE
         mView.anyChartView.visibility = View.GONE
@@ -192,8 +183,7 @@ class GraphsFragment : Fragment(), OnChartValueSelectedListener {
         }
     }
 
-    private fun getBarGraphByDate()
-    {
+    private fun getBarGraphByDate() {
         onNothingSelected()
         mView.anyChartView.visibility = View.GONE
         mView.radio_group_package.visibility = View.GONE
@@ -209,22 +199,15 @@ class GraphsFragment : Fragment(), OnChartValueSelectedListener {
             mView.no_sales_graph.visibility = View.GONE
             mView.marker_text_all_graph.visibility = View.VISIBLE
 
-            val barDataSet = mpBarReturn.barDataSet
-            barDataSet.color = Color.parseColor("#F80039")
-            barDataSet.highLightColor = Color.parseColor("#4B2E5A")
-            barDataSet.setDrawValues(false)
-
-            val data = BarData(barDataSet)
+            val data = BarData(mpBarReturn.barDataSet)
             xFormatter = IndexAxisValueFormatter(mpBarReturn.listString)
-
             mView.MpBarView.data = data
             mView.MpBarView.xAxis.valueFormatter = xFormatter
 
         }
     }
 
-    private fun getBarGraphByPackage()
-    {
+    private fun getBarGraphByPackage() {
         onNothingSelected()
         mView.MpBarView.visibility = View.GONE
         mView.MpBarView.invalidate()
@@ -243,8 +226,7 @@ class GraphsFragment : Fragment(), OnChartValueSelectedListener {
         APIlib.getInstance().setActiveAnyChartView(mView.anyChartView)
     }
 
-    private fun configureGraphView()
-    {
+    private fun configureGraphView() {
         mView.MpBarView.description.isEnabled = false
         mView.MpBarView.legend.isEnabled = false
         mView.MpBarView.xAxis.position = XAxis.XAxisPosition.BOTTOM
@@ -254,8 +236,7 @@ class GraphsFragment : Fragment(), OnChartValueSelectedListener {
         mView.MpBarView.xAxis.valueFormatter = xFormatter
     }
 
-    private fun initPackageGraph()
-    {
+    private fun initPackageGraph() {
         APIlib.getInstance().setActiveAnyChartView(mView.anyChartView)
         chartVertical = AnyChart.vertical()
 
@@ -265,10 +246,10 @@ class GraphsFragment : Fragment(), OnChartValueSelectedListener {
         val column = chartVertical.bar(packageList)
         column.name(resources.getString(R.string.Sales))
         column.fill("function() {" +
-                "            return '#F80039';" +
+                "            return '#FA5C5C';" +
                 "        }")
         column.stroke("function() {" +
-                "            return '#F80039';" +
+                "            return '#FA5C5C';" +
                 "        }")
 
         mView.anyChartView.setChart(chartVertical)

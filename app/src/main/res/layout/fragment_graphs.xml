@@ -14,7 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/period"
-        android:textColor="@color/colorPrimaryDark"
+        android:textColor="@color/colorAccent"
         android:textSize="18sp"
         app:layout_constraintTop_toTopOf="@id/spinner"
         app:layout_constraintBottom_toBottomOf="@id/spinner"
@@ -28,7 +28,7 @@
         android:textAlignment="center"
         android:textDirection="rtl"
         android:gravity="center"
-        android:backgroundTint="@color/colorPrimaryDark"
+        android:backgroundTint="@color/colorAccent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@id/text_filter"
         app:layout_constraintEnd_toEndOf="parent"/>
@@ -47,36 +47,36 @@
             android:id="@+id/btn_hour"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:shadowColor="@color/colorPrimaryDark"
-            android:textColor="@color/colorPrimaryDark"
-            android:buttonTint="@color/colorPrimaryDark"
+            android:shadowColor="@color/colorAccent"
+            android:textColor="@color/colorAccent"
+            android:buttonTint="@color/colorAccent"
             android:text="@string/hour"/>
 
         <RadioButton
             android:id="@+id/btn_day_of_week"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:shadowColor="@color/colorPrimaryDark"
-            android:textColor="@color/colorPrimaryDark"
-            android:buttonTint="@color/colorPrimaryDark"
+            android:shadowColor="@color/colorAccent"
+            android:textColor="@color/colorAccent"
+            android:buttonTint="@color/colorAccent"
             android:text="@string/week"/>
 
         <RadioButton
             android:id="@+id/btn_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:shadowColor="@color/colorPrimaryDark"
-            android:textColor="@color/colorPrimaryDark"
-            android:buttonTint="@color/colorPrimaryDark"
+            android:shadowColor="@color/colorAccent"
+            android:textColor="@color/colorAccent"
+            android:buttonTint="@color/colorAccent"
             android:text="@string/date"/>
 
         <RadioButton
             android:id="@+id/btn_package"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:shadowColor="@color/colorPrimaryDark"
-            android:textColor="@color/colorPrimaryDark"
-            android:buttonTint="@color/colorPrimaryDark"
+            android:shadowColor="@color/colorAccent"
+            android:textColor="@color/colorAccent"
+            android:buttonTint="@color/colorAccent"
             android:text="@string/package_radio"/>
 
     </RadioGroup>
@@ -84,7 +84,7 @@
     <com.github.mikephil.charting.charts.BarChart
         android:id="@+id/MpBarView"
         android:layout_width="match_parent"
-        android:layout_height="550dp"
+        android:layout_height="0dp"
         android:layout_marginTop="16dp"
         app:layout_constraintTop_toBottomOf="@id/radio_group_currency"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -93,7 +93,7 @@
     <com.anychart.AnyChartView
         android:id="@+id/anyChartView"
         android:layout_width="match_parent"
-        android:layout_height="550dp"
+        android:layout_height="0dp"
         android:layout_marginTop="8dp"
         app:layout_constraintTop_toBottomOf="@id/radio_group_package"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -126,9 +126,9 @@
             android:id="@+id/btn_nb"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:shadowColor="@color/colorPrimaryDark"
-            android:textColor="@color/colorPrimaryDark"
-            android:buttonTint="@color/colorPrimaryDark"
+            android:shadowColor="@color/colorAccent"
+            android:textColor="@color/colorAccent"
+            android:buttonTint="@color/colorAccent"
             android:text="@string/sales_title"/>
 
         <RadioButton
@@ -136,9 +136,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:shadowColor="@color/colorPrimaryDark"
-            android:textColor="@color/colorPrimaryDark"
-            android:buttonTint="@color/colorPrimaryDark"
+            android:shadowColor="@color/colorAccent"
+            android:textColor="@color/colorAccent"
+            android:buttonTint="@color/colorAccent"
             android:text="@string/price"/>
     </RadioGroup>
 
@@ -147,7 +147,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="16h = 12 sales"
-        android:textColor="@color/colorAccent"
+        android:textColor="@color/colorPrimaryDark"
         android:layout_marginTop="8dp"
         android:textStyle="italic"
         app:layout_constraintTop_toBottomOf="@id/radio_group_currency"

@@ -33,11 +33,6 @@ class SaleAdapter (private var listSales : List<Sale>,
         return this.listSales.size
     }
 
-    fun notify (listSales: List<Sale>) {
-        this.listSales = listSales
-        this.notifyDataSetChanged()
-    }
-
     class SaleViewHolder (itemView : View,
                           private val currentCurrency: CustomCurrency,
                           private val listCurrencies : List<CustomCurrency>,
@@ -59,7 +54,7 @@ class SaleAdapter (private var listSales : List<Sale>,
             }
 
             itemView.original_price_content.text = "$priceBrut"
-            itemView.encaisse_price_content.text = "$priceNet"
+            itemView.encaisse_price_content.text = "$priceNet ${currentCurrency.symbol}"
 
             itemView.date.text = sale.dateString
 

@@ -9,9 +9,6 @@ import java.util.*
 
 class UtilsChartsTest {
 
-    private val completeDateString = "2021-03-13 03:08:28 UTC"
-    private val dateString = completeDateString.substring(0,10)
-    private val timeString = completeDateString.substring(11,19)
     private val listCurrencies = listOf(
         CustomCurrency("USD", 1.0, 1.0, "$"),
         CustomCurrency("CAD", 1.26, 0.80, "$"),
@@ -52,12 +49,166 @@ class UtilsChartsTest {
                 sourceFee = 0.61,
                 payout = "Payout",
                 amountDelivered = 6.06,
-                currency = "EUR",
+                currency = "USD",
                 sourceId = "Source"
             )
             listReturn.add(sale)
         }
         return listReturn
+    }
+
+    @Test
+     fun anyChartPackagePrice_isCorrect(){
+
+        val calendar = Calendar.getInstance()
+        calendar.set(2021,3,18)
+        val listDates = listOf(calendar.time, calendar.time, calendar.time, calendar.time,calendar.time)
+
+        val listSales = getListSales(listDates)
+        listSales[0].objectName="Package1"
+        listSales[1].objectName="Package1"
+        listSales[2].objectName="Package1"
+        listSales[3].objectName="Package2"
+        listSales[3].amountDelivered=7.0
+        listSales[4].objectName="Package4"
+
+        val resultExpectedNbTotal = 3
+        val resultExpectedForPackage1 = (listSales[0].amountDelivered *3).toString()
+        val resultExpectedForPackage2 = (listSales[3].amountDelivered).toString()
+        val resultExpectedForPackage4 = (listSales[4].amountDelivered).toString()
+
+        val result = UtilsCharts.anyChartPackagePrice(listSales, listCurrencies[0], listCurrencies)
+        Assert.assertEquals(resultExpectedNbTotal, result.size)
+        Assert.assertEquals(resultExpectedForPackage1, result[0].getValue("value"))
+        Assert.assertEquals(resultExpectedForPackage2, result[1].getValue("value"))
+        Assert.assertEquals(resultExpectedForPackage4, result[2].getValue("value"))
+        Assert.assertEquals("Package1", result[0].getValue("x"))
+     }
+
+    @Test
+    fun anyChartPackageNB_isCorrect(){
+
+        val calendar = Calendar.getInstance()
+        calendar.set(2021,3,18)
+        val listDates = listOf(calendar.time, calendar.time, calendar.time, calendar.time,calendar.time)
+
+        val listSales = getListSales(listDates)
+        listSales[0].objectName="Package1"
+        listSales[1].objectName="Package1"
+        listSales[2].objectName="Package1"
+        listSales[3].objectName="Package2"
+        listSales[3].amountDelivered=7.0
+        listSales[4].objectName="Package4"
+
+        val resultExpectedNbTotal = 3
+        val resultExpectedForPackage1 = 3.toString()
+        val resultExpectedForPackage2 = 1.toString()
+        val resultExpectedForPackage4 = 1.toString()
+
+        val result = UtilsCharts.anyChartPackageNB(listSales)
+        Assert.assertEquals(resultExpectedNbTotal, result.size)
+        Assert.assertEquals(resultExpectedForPackage1, result[0].getValue("value"))
+        Assert.assertEquals(resultExpectedForPackage2, result[1].getValue("value"))
+        Assert.assertEquals(resultExpectedForPackage4, result[2].getValue("value"))
+        Assert.assertEquals("Package1", result[0].getValue("x"))
+    }
+
+    @Test
+    fun graphAnyChartMapChronopleth_isCorrect(){
+
+        val calendar = Calendar.getInstance()
+        calendar.set(2021,3,18)
+        val listDates = listOf(calendar.time, calendar.time, calendar.time, calendar.time,calendar.time)
+
+        val listSales = getListSales(listDates)
+        listSales[0].countryCode="FR"
+        listSales[1].countryCode="FR"
+        listSales[2].countryCode="FR"
+        listSales[3].countryCode="IT"
+        listSales[4].countryCode="US"
+
+        val resultExpectedForPackage1 = 3.toString()
+        val resultExpectedForPackage2 = 1.toString()
+        val resultExpectedForPackage4 = 1.toString()
+
+        val result = UtilsCharts.graphAnyChartMapChronopleth(listSales)
+        Assert.assertEquals(resultExpectedForPackage1, result.listEntry[0].getValue("value"))
+        Assert.assertEquals(resultExpectedForPackage2, result.listEntry[1].getValue("value"))
+        Assert.assertEquals(resultExpectedForPackage4, result.listEntry[2].getValue("value"))
+        Assert.assertEquals("FR", result.listCustomCountry[0].country)
+        Assert.assertEquals(3, result.listCustomCountry[0].nb)
+        Assert.assertEquals(3, result.max)
+        Assert.assertEquals(1, result.max2)
+    }
+
+    @Test
+    fun getRanges_200_50_isCorrect(){
+
+        val resultExpected = getArrayRanges(12,24,36,50)
+        val result = UtilsCharts.getRanges(200, 50)
+
+        Assert.assertEquals(resultExpected[0], result[0])
+        Assert.assertEquals(resultExpected[1], result[1])
+        Assert.assertEquals(resultExpected[2], result[2])
+        Assert.assertEquals(resultExpected[3], result[3])
+        Assert.assertEquals(resultExpected[4], result[4])
+
+    }
+
+    @Test
+    fun getRanges_200_180_isCorrect(){
+
+        val resultExpected = getArrayRanges(40,80,120,160)
+        val result = UtilsCharts.getRanges(200, 180)
+
+        Assert.assertEquals(resultExpected[0], result[0])
+        Assert.assertEquals(resultExpected[1], result[1])
+        Assert.assertEquals(resultExpected[2], result[2])
+        Assert.assertEquals(resultExpected[3], result[3])
+        Assert.assertEquals(resultExpected[4], result[4])
+
+    }
+
+    @Test
+    fun getRanges_30_30_isCorrect(){
+
+        val resultExpected = getArrayRanges(6,12,18,24)
+        val result = UtilsCharts.getRanges(30, 30)
+
+        Assert.assertEquals(resultExpected[0], result[0])
+        Assert.assertEquals(resultExpected[1], result[1])
+        Assert.assertEquals(resultExpected[2], result[2])
+        Assert.assertEquals(resultExpected[3], result[3])
+        Assert.assertEquals(resultExpected[4], result[4])
+
+    }
+
+    @Test
+    fun getRanges_9_0_isCorrect(){
+
+        val resultExpected = arrayOf("{less: 1}", "{greater: 1}")
+        val result = UtilsCharts.getRanges(9, 0)
+        Assert.assertEquals(resultExpected[0], result[0])
+        Assert.assertEquals(resultExpected[1], result[1])
+    }
+
+    @Test
+    fun getRanges_30_0_isCorrect(){
+
+        val resultExpected = arrayOf("{less: 1}", "{greater: 1}")
+        val result = UtilsCharts.getRanges(30, 0)
+        Assert.assertEquals(resultExpected[0], result[0])
+        Assert.assertEquals(resultExpected[1], result[1])
+    }
+
+    private fun getArrayRanges(nb1 : Int, nb2 : Int, nb3 : Int, nb4 : Int) : Array<String>{
+        return arrayOf(
+            "{less: 1}",
+            "{from: 1, to: $nb1}",
+            "{from: $nb1, to: $nb2}",
+            "{from: $nb2, to: $nb3}",
+            "{from: $nb3, to: $nb4}"
+        )
     }
 
     //Just to test the fun, but it is private
@@ -179,11 +330,10 @@ class UtilsChartsTest {
         Assert.assertEquals(resultExpectedForOtherHours, result[19].y)
     }*/
 
-    //Just to test the fun, but it is private
-    @Test
+    //Just to test the fun
+   /* @Test
     fun getDataForGraphByDay_isCorrect(){
 
-        //TODO : A revoir !!!! 
         val calendar = Calendar.getInstance()
         val listDates = mutableListOf<Date>()
         calendar.set(2021,3,18)
@@ -200,19 +350,19 @@ class UtilsChartsTest {
 
         val listSales = getListSales(listDates)
 
-        val resultExpectedNbTotal = 8 //8 days between 18th and 25th of April
+        val resultExpectedNbTotal = 10 //10 days between 18th and 27th of April
         val resultExpectedFor20 = 3f
         val resultExpectedFor18 = 1f
         val resultExpectedFor26 = 1f
         val resultExpectedForOtherDays = 0f
 
-        val result = UtilsCharts.getDataForGraphByDay(listSales)
+        val result = UtilsCharts.getDataForGraphByDay(listSales, "dd/MM")
         Assert.assertEquals(resultExpectedNbTotal, result.size)
         Assert.assertEquals(resultExpectedFor20, result[2].y)
         Assert.assertEquals(resultExpectedFor18, result[0].y)
         Assert.assertEquals(resultExpectedFor26, result[7].y)
         Assert.assertEquals(resultExpectedForOtherDays, result[3].y)
         Assert.assertEquals(resultExpectedForOtherDays, result[5].y)
-    }
+    }*/
 
 }

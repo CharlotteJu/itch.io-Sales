@@ -5,10 +5,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.charlotte.judon.gifstats.R
-import com.charlotte.judon.gifstats.model.Country
+import com.charlotte.judon.gifstats.model.CustomCountry
 import kotlinx.android.synthetic.main.item_country.view.*
 
-class CountryAdapter(private var listCountry : List<Country>) : RecyclerView.Adapter<CountryAdapter.CountryViewHolder>(){
+class CountryAdapter(private var listCustomCountry : List<CustomCountry>) : RecyclerView.Adapter<CountryAdapter.CountryViewHolder>(){
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CountryViewHolder {
@@ -18,24 +18,24 @@ class CountryAdapter(private var listCountry : List<Country>) : RecyclerView.Ada
     }
 
     override fun onBindViewHolder(holder: CountryViewHolder, position: Int) {
-        val country = this.listCountry[position]
+        val country = this.listCustomCountry[position]
         holder.configureDesign(country)
     }
 
     override fun getItemCount(): Int {
-        return listCountry.size
+        return listCustomCountry.size
     }
 
-    fun notifyDataChanged(listCountry: List<Country>) {
-        this.listCountry = listCountry
+    fun notifyDataChanged(listCustomCountry: List<CustomCountry>) {
+        this.listCustomCountry = listCustomCountry
         this.notifyDataSetChanged()
     }
 
     class CountryViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
 
-        fun configureDesign(country : Country) {
-            itemView.country.text = country.country
-            itemView.number.text = country.nb.toString()
+        fun configureDesign(customCountry : CustomCountry) {
+            itemView.country.text = customCountry.country
+            itemView.number.text = customCountry.nb.toString()
         }
     }
 }

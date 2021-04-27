@@ -2,12 +2,13 @@
 <resources>
     <string-array name="spinner_filter">
         <item>TOUT</item>
-        <item>7 DERNIERS JOURS</item>
-        <item>30 DERNIERS JOURS</item>
+        <item>CES 7 DERNIERS JOURS</item>
+        <item>CES 30 DERNIERS JOURS</item>
     </string-array>
 
     <string name="no_sales_period">Il n\'y a pas de ventes pour cette période.</string>
     <string name="csv_integrate">CSV intégré !</string>
+    <string name="everything_deleted">Tout est supprimé !</string>
     <string name="csv_problem">CSV non lu, merci de choisir un fichier téléchargé depuis Itch</string>
     <string name="period">PERIODE :</string>
     <string name="all">TOUS</string>

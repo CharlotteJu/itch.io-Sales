@@ -10,12 +10,14 @@ import com.charlotte.judon.gifstats.model.MonthSale
 import com.charlotte.judon.gifstats.model.Sale
 import kotlinx.android.synthetic.main.item_month_sale.view.*
 
-class SaleMonthAdapter (private var listSales : List<MonthSale>, private var onClickMonthItem: OnClickMonthItem, private val context : Context) : RecyclerView.Adapter<SaleMonthAdapter.SaleMonthViewHolder>() {
+class SaleMonthAdapter (private var listSales : List<MonthSale>, private var onClickMonthItem: OnClickMonthItem,
+                        private val context : Context, private val symbolCurrency : String)
+    : RecyclerView.Adapter<SaleMonthAdapter.SaleMonthViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SaleMonthViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val view = layoutInflater.inflate(R.layout.item_month_sale, parent, false)
-        return SaleMonthViewHolder(view, onClickMonthItem, context)
+        return SaleMonthViewHolder(view, onClickMonthItem, context, symbolCurrency)
     }
 
     override fun onBindViewHolder(holder: SaleMonthViewHolder, position: Int) {
@@ -33,14 +35,15 @@ class SaleMonthAdapter (private var listSales : List<MonthSale>, private var onC
         this.notifyDataSetChanged()
     }
 
-    class SaleMonthViewHolder(itemView: View, private var onClickMonthItem: OnClickMonthItem, private val context: Context) :
-        RecyclerView.ViewHolder(itemView) {
+    class SaleMonthViewHolder(itemView: View, private var onClickMonthItem: OnClickMonthItem,
+                              private val context: Context, private val symbolCurrency : String)
+        : RecyclerView.ViewHolder(itemView) {
 
         fun configureDesign(monthSale: MonthSale) {
 
-            itemView.month_txt.text = getStringMonth(monthSale.month) + " " + monthSale.year
+            itemView.month_txt.text = "${getStringMonth(monthSale.month)} ${monthSale.year}"
             itemView.nb_vente_txt.text = monthSale.nbVente.toString()
-            itemView.total_txt.text = monthSale.totalPrice.toString()
+            itemView.total_txt.text = "${monthSale.totalPrice} $symbolCurrency"
 
             if (monthSale.isInProgress) {
                 itemView.logo_time_ic.setImageResource(R.drawable.ic_baseline_date_range_purple_24)

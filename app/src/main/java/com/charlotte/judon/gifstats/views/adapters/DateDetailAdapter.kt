@@ -54,7 +54,7 @@ class DateDetailAdapter(private var listDateDetail : List<DateDetail>, private v
                 itemView.marker_text.visibility = View.VISIBLE
 
                 val barDataSet = BarDataSet(dateDetail.listEntry, "")
-                barDataSet.color = Color.parseColor("#F80039")
+                barDataSet.color = Color.parseColor("#FA5C5C")
                 barDataSet.highLightColor = Color.parseColor("#4B2E5A")
                 barDataSet.setDrawValues(false)
                 itemView.graphTemplate.data = BarData(barDataSet)

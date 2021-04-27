@@ -4,16 +4,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/colorDark"
+    android:background="@color/colorWhite"
     tools:context=".views.fragments.HomeFragment">
 
     <ImageView
         android:id="@+id/itchio_logo"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_itchio_logo_white"
+        android:src="@drawable/ic_itchio_logo_red"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginTop="48dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
@@ -25,7 +26,7 @@
         android:paddingHorizontal="8dp"
         android:text="@string/refresh_csv"
         android:background="@drawable/backgroung_btn"
-        android:textColor="@android:color/white"
+        android:textColor="@color/colorWhite"
         app:layout_constraintTop_toBottomOf="@id/itchio_logo"
         app:layout_constraintBottom_toTopOf="@id/telechargement_btn"
         app:layout_constraintStart_toStartOf="parent"
@@ -38,20 +39,9 @@
         android:paddingHorizontal="8dp"
         android:text="@string/download_from_itch"
         android:background="@drawable/backgroung_btn"
-        android:textColor="@android:color/white"
-        app:layout_constraintTop_toBottomOf="@id/rafraichissement_btn"
-        app:layout_constraintBottom_toTopOf="@id/itchio_logo_2"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
-    <ImageView
-        android:id="@+id/itchio_logo_2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_itchio_logo_textless_white"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
+        android:textColor="@color/colorWhite"
         android:layout_marginBottom="32dp"
+        app:layout_constraintTop_toBottomOf="@id/rafraichissement_btn"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>

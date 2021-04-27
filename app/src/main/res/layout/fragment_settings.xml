@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -8,177 +8,186 @@
     android:padding="16dp"
     tools:context=".views.fragments.SettingsFragment">
 
-    <TextView
-        android:id="@+id/title_currency"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/currency"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="18sp"
-        android:textAlignment="center"
-        android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        android:padding="16dp">
 
-    <RadioGroup
-        android:id="@+id/radio_group_currency"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/title_currency"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <RadioButton
-            android:id="@+id/btn_usd"
+        <TextView
+            android:id="@+id/title_currency"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:shadowColor="@color/colorPrimaryDark"
-            android:textColor="@color/colorPrimaryDark"
-            android:buttonTint="@color/colorPrimaryDark"
-            android:text="@string/usd_symbol"/>
+            android:text="@string/currency"
+            android:textColor="@color/colorAccent"
+            android:textSize="18sp"
+            android:textAlignment="center"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/radio_group_currency"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
-        <RadioButton
-            android:id="@+id/btn_cad"
+        <RadioGroup
+            android:id="@+id/radio_group_currency"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:shadowColor="@color/colorPrimaryDark"
-            android:textColor="@color/colorPrimaryDark"
-            android:buttonTint="@color/colorPrimaryDark"
-            android:text="@string/cad_symbol"/>
+            android:orientation="vertical"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@id/title_currency"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
-        <RadioButton
-            android:id="@+id/btn_gbp"
+            <RadioButton
+                android:id="@+id/btn_usd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:shadowColor="@color/colorPrimaryDark"
+                android:textColor="@color/colorPrimaryDark"
+                android:buttonTint="@color/colorPrimaryDark"
+                android:text="@string/usd_symbol"/>
+
+            <RadioButton
+                android:id="@+id/btn_cad"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:shadowColor="@color/colorPrimaryDark"
+                android:textColor="@color/colorPrimaryDark"
+                android:buttonTint="@color/colorPrimaryDark"
+                android:text="@string/cad_symbol"/>
+
+            <RadioButton
+                android:id="@+id/btn_gbp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:shadowColor="@color/colorPrimaryDark"
+                android:textColor="@color/colorPrimaryDark"
+                android:buttonTint="@color/colorPrimaryDark"
+                android:text="@string/gbp_symbol"/>
+
+            <RadioButton
+                android:id="@+id/btn_eur"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:shadowColor="@color/colorPrimaryDark"
+                android:textColor="@color/colorPrimaryDark"
+                android:buttonTint="@color/colorPrimaryDark"
+                android:text="@string/eur_symbol"/>
+
+            <RadioButton
+                android:id="@+id/btn_jpy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:shadowColor="@color/colorPrimaryDark"
+                android:textColor="@color/colorPrimaryDark"
+                android:buttonTint="@color/colorPrimaryDark"
+                android:text="@string/jpy_symbol"/>
+
+            <RadioButton
+                android:id="@+id/btn_aud"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:shadowColor="@color/colorPrimaryDark"
+                android:textColor="@color/colorPrimaryDark"
+                android:buttonTint="@color/colorPrimaryDark"
+                android:text="$ - AUD"/>
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/title_date_format"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:shadowColor="@color/colorPrimaryDark"
-            android:textColor="@color/colorPrimaryDark"
-            android:buttonTint="@color/colorPrimaryDark"
-            android:text="@string/gbp_symbol"/>
+            android:text="@string/date_format"
+            android:textColor="@color/colorAccent"
+            android:textSize="18sp"
+            android:textAlignment="center"
+            android:textStyle="bold"
+            android:layout_marginTop="32dp"
+            app:layout_constraintTop_toBottomOf="@id/radio_group_currency"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
-        <RadioButton
-            android:id="@+id/btn_eur"
+        <RadioGroup
+            android:id="@+id/radio_group_date_format"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:shadowColor="@color/colorPrimaryDark"
-            android:textColor="@color/colorPrimaryDark"
-            android:buttonTint="@color/colorPrimaryDark"
-            android:text="@string/eur_symbol"/>
+            android:orientation="vertical"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@id/title_date_format"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/hint_btn_us">
 
-        <RadioButton
-            android:id="@+id/btn_jpy"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:shadowColor="@color/colorPrimaryDark"
-            android:textColor="@color/colorPrimaryDark"
-            android:buttonTint="@color/colorPrimaryDark"
-            android:text="@string/jpy_symbol"/>
+            <RadioButton
+                android:id="@+id/btn_date_us"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:shadowColor="@color/colorPrimaryDark"
+                android:textColor="@color/colorPrimaryDark"
+                android:buttonTint="@color/colorPrimaryDark"
+                android:text="@string/month_day" />
 
-        <RadioButton
-            android:id="@+id/btn_aud"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:shadowColor="@color/colorPrimaryDark"
-            android:textColor="@color/colorPrimaryDark"
-            android:buttonTint="@color/colorPrimaryDark"
-            android:text="$ - AUD"/>
-    </RadioGroup>
+            <RadioButton
+                android:id="@+id/btn_date_fr"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:shadowColor="@color/colorPrimaryDark"
+                android:textColor="@color/colorPrimaryDark"
+                android:buttonTint="@color/colorPrimaryDark"
+                android:text="@string/day_month"/>
 
-    <TextView
-        android:id="@+id/title_date_format"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/date_format"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="18sp"
-        android:textAlignment="center"
-        android:textStyle="bold"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/radio_group_currency"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        </RadioGroup>
 
-    <RadioGroup
-        android:id="@+id/radio_group_date_format"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="16dp"
-
-        app:layout_constraintTop_toBottomOf="@id/title_date_format"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/hint_btn_us">
-
-        <RadioButton
-            android:id="@+id/btn_date_us"
+        <TextView
+            android:id="@+id/hint_btn_us"
             android:layout_width="wrap_content"
             android:layout_height="48dp"
-            android:shadowColor="@color/colorPrimaryDark"
-            android:textColor="@color/colorPrimaryDark"
-            android:buttonTint="@color/colorPrimaryDark"
-            android:text="@string/month_day" />
+            android:text="@string/hint_month_day"
+            android:gravity="center"
+            android:textColor="@color/colorAccent"
+            android:textStyle="italic"
+            app:layout_constraintBottom_toTopOf="@id/hint_btn_fr"
+            app:layout_constraintTop_toTopOf="@id/radio_group_date_format"
+            app:layout_constraintStart_toEndOf="@id/radio_group_date_format"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
-        <RadioButton
-            android:id="@+id/btn_date_fr"
+        <TextView
+            android:id="@+id/hint_btn_fr"
             android:layout_width="wrap_content"
             android:layout_height="48dp"
-            android:shadowColor="@color/colorPrimaryDark"
-            android:textColor="@color/colorPrimaryDark"
-            android:buttonTint="@color/colorPrimaryDark"
-            android:text="@string/day_month"/>
+            android:text="@string/hint_day_month"
+            android:gravity="center"
+            android:textColor="@color/colorAccent"
+            android:textStyle="italic"
+            app:layout_constraintTop_toBottomOf="@id/hint_btn_us"
+            app:layout_constraintBottom_toBottomOf="@id/radio_group_date_format"
+            app:layout_constraintStart_toEndOf="@id/radio_group_date_format"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
-    </RadioGroup>
+        <Button
+            android:id="@+id/button_instructions"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/instructions"
+            android:textColor="@color/colorWhite"
+            android:background="@drawable/backgroung_btn"
+            android:layout_marginTop="32dp"
+            app:layout_constraintBottom_toTopOf="@id/button_delete"
+            app:layout_constraintTop_toBottomOf="@id/radio_group_date_format"
+            app:layout_constraintStart_toStartOf="@id/button_delete"
+            app:layout_constraintEnd_toEndOf="@id/button_delete"/>
 
-    <TextView
-        android:id="@+id/hint_btn_us"
-        android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:text="@string/hint_month_day"
-        android:gravity="center"
-        android:textColor="@color/colorAccent"
-        android:textStyle="italic"
-        app:layout_constraintBottom_toTopOf="@id/hint_btn_fr"
-        app:layout_constraintTop_toTopOf="@id/radio_group_date_format"
-        app:layout_constraintStart_toEndOf="@id/radio_group_date_format"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        <Button
+            android:id="@+id/button_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/delete_all"
+            android:textColor="@color/colorWhite"
+            android:background="@drawable/backgroung_btn"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="32dp"
+            app:layout_constraintTop_toBottomOf="@id/button_instructions"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
-    <TextView
-        android:id="@+id/hint_btn_fr"
-        android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:text="@string/hint_day_month"
-        android:gravity="center"
-        android:textColor="@color/colorAccent"
-        android:textStyle="italic"
-        app:layout_constraintTop_toBottomOf="@id/hint_btn_us"
-        app:layout_constraintBottom_toBottomOf="@id/radio_group_date_format"
-        app:layout_constraintStart_toEndOf="@id/radio_group_date_format"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
-    <Button
-        android:id="@+id/button_instructions"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/instructions"
-        android:textColor="@color/colorWhite"
-        android:background="@drawable/backgroung_btn"
-        app:layout_constraintBottom_toTopOf="@id/button_delete"
-        app:layout_constraintTop_toBottomOf="@id/radio_group_date_format"
-        app:layout_constraintStart_toStartOf="@id/button_delete"
-        app:layout_constraintEnd_toEndOf="@id/button_delete"/>
-
-    <Button
-        android:id="@+id/button_delete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/delete_all"
-        android:textColor="@color/colorWhite"
-        android:background="@drawable/backgroung_btn"
-        android:layout_marginBottom="32dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

@@ -17,7 +17,7 @@ import com.anychart.graphics.vector.SolidFill
 import com.anychart.scales.OrdinalColor
 import com.charlotte.judon.gifstats.R
 import com.charlotte.judon.gifstats.model.ChronopletReturn
-import com.charlotte.judon.gifstats.model.Country
+import com.charlotte.judon.gifstats.model.CustomCountry
 import com.charlotte.judon.gifstats.model.Sale
 import com.charlotte.judon.gifstats.utils.UtilsGeneral
 import com.charlotte.judon.gifstats.utils.UtilsCharts
@@ -114,12 +114,12 @@ class MapFragment : Fragment() {
             val nbMax2 = chronopletReturn.max2
             val rangesScript = UtilsCharts.getRanges(nbMax, nbMax2)
             ordinalColor.ranges(rangesScript)
-            adapter.notifyDataChanged(chronopletReturn.listCountry)
+            adapter.notifyDataChanged(chronopletReturn.listCustomCountry)
         }
     }
 
-    private fun configureRcv(listCountry : List<Country>){
-        adapter = CountryAdapter(listCountry)
+    private fun configureRcv(listCustomCountry : List<CustomCountry>){
+        adapter = CountryAdapter(listCustomCountry)
         mView.rcv_country.adapter = adapter
         mView.rcv_country.layoutManager = LinearLayoutManager(requireContext())
     }
@@ -162,7 +162,7 @@ class MapFragment : Fragment() {
         val listWorldChrono = chronopletReturn.listEntry
         val nbMax = chronopletReturn.max
         val nbMax2 = chronopletReturn.max2
-        configureRcv(chronopletReturn.listCountry)
+        configureRcv(chronopletReturn.listCustomCountry)
         serieChronoplet  = map.choropleth(listWorldChrono)
 
         ordinalColor = OrdinalColor.instantiate()

@@ -40,21 +40,16 @@ class ListMonthFragment : Fragment(),
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
     {
         mView = inflater.inflate(R.layout.fragment_list_month, container, false)
-        //getSharedPreferences()
         configurePrices()
         return mView
     }
 
     private fun configureRcv()
     {
-        adapter = SaleMonthAdapter(saleMonthList, this, requireContext())
+        adapter = SaleMonthAdapter(saleMonthList, this, requireContext(), currentCurrency.symbol)
         mView.rcv_month.adapter = adapter
         mView.rcv_month.layoutManager = LinearLayoutManager(requireContext())
 

@@ -170,7 +170,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             Toast.makeText(applicationContext, stringCsv, Toast.LENGTH_LONG).show()
         } finally {
             try {
-                fileReader!!.close()
+                fileReader?.close()
             } catch (e: IOException) {
                 println("Closing fileReader Error!")
                 e.printStackTrace()
