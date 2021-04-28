@@ -1,9 +1,6 @@
 package com.charlotte.judon.gifstats.utils
 
 import com.charlotte.judon.gifstats.model.CustomCurrency
-import com.google.gson.Gson
-import com.google.gson.JsonObject
-import junit.framework.TestCase
 import org.json.JSONObject
 import org.junit.Assert
 import org.junit.Test

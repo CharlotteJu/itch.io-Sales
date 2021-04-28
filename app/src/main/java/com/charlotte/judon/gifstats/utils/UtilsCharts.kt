@@ -2,7 +2,6 @@ package com.charlotte.judon.gifstats.utils
 
 import android.content.Context
 import android.graphics.Color
-import android.util.Log
 import com.anychart.chart.common.dataentry.DataEntry
 import com.anychart.chart.common.dataentry.ValueDataEntry
 import com.charlotte.judon.gifstats.R
@@ -168,7 +167,8 @@ class UtilsCharts {
                     listDay[6] -> nbSunday++
                 }
             }
-            val listBarEntry = arrayListOf(
+
+            return arrayListOf(
                 BarEntry(0f, nbMonday.toFloat()),
                 BarEntry(1f, nbTuesday.toFloat()),
                 BarEntry(2f, nbWednesday.toFloat()),
@@ -177,8 +177,6 @@ class UtilsCharts {
                 BarEntry(5f, nbSaturday.toFloat()),
                 BarEntry(6f, nbSunday.toFloat())
             )
-
-            return listBarEntry
 
         }
 
@@ -244,7 +242,7 @@ class UtilsCharts {
                 listDay[5] -> name = listDayFromResources[5]
                 listDay[6] -> name = listDayFromResources[6]
             }
-            return DateDetail(name, listEntry, null, listSorted.size)
+            return DateDetail(name, listEntry, listSorted.size)
         }
 
         ///////////////////////////////////////// ANYCHART /////////////////////////////////////////
@@ -303,7 +301,7 @@ class UtilsCharts {
         }
 
 
-        fun graphAnyChartMapChronopleth(list: List<Sale>): ChronopletReturn {
+        fun graphAnyChartMapChronopleth(list: List<Sale>): ChroropletReturn {
             val listSorted = UtilsGeneral.sortByCountry(list)
             val listStringCountries = getAllCountryCode()
             val listEntry = mutableListOf<DataEntry>()
@@ -356,7 +354,7 @@ class UtilsCharts {
                 }
             }
 
-            return ChronopletReturn(listEntry, maxNb, maxNb2, listCustomCountry)
+            return ChroropletReturn(listEntry, maxNb, maxNb2, listCustomCountry)
         }
 
         private fun getAllCountryCode() : MutableList<String> {
@@ -425,8 +423,8 @@ class UtilsCharts {
 
     class CustomDataEntryChronopleth(val id : String, val value : Number) : DataEntry() {
         init {
-            setValue("id", id);
-            setValue("value", value);
+            setValue("id", id)
+            setValue("value", value)
         }
     }
 

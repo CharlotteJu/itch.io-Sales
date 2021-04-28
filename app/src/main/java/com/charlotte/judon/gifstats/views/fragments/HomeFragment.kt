@@ -30,17 +30,12 @@ class HomeFragment : Fragment() {
     }
 
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         mView = inflater.inflate(R.layout.fragment_home, container, false)
-        mView.rafraichissement_btn.setOnClickListener {
+        mView.refresh_csv_btn.setOnClickListener {
             pickFile()
         }
-        mView.telechargement_btn.setOnClickListener {
+        mView.download_btn.setOnClickListener {
             downloadCsvFromItch()
         }
 

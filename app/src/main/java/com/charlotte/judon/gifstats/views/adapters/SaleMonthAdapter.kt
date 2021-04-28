@@ -30,10 +30,6 @@ class SaleMonthAdapter (private var listSales : List<MonthSale>, private var onC
         return this.listSales.size
     }
 
-    fun notify(listSales: List<MonthSale>) {
-        this.listSales = listSales
-        this.notifyDataSetChanged()
-    }
 
     class SaleMonthViewHolder(itemView: View, private var onClickMonthItem: OnClickMonthItem,
                               private val context: Context, private val symbolCurrency : String)
@@ -42,7 +38,7 @@ class SaleMonthAdapter (private var listSales : List<MonthSale>, private var onC
         fun configureDesign(monthSale: MonthSale) {
 
             itemView.month_txt.text = "${getStringMonth(monthSale.month)} ${monthSale.year}"
-            itemView.nb_vente_txt.text = monthSale.nbVente.toString()
+            itemView.nb_sale_txt.text = monthSale.nbSales.toString()
             itemView.total_txt.text = "${monthSale.totalPrice} $symbolCurrency"
 
             if (monthSale.isInProgress) {

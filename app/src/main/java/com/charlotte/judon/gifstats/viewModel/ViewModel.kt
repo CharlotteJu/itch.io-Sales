@@ -1,17 +1,11 @@
 package com.charlotte.judon.gifstats.viewModel
 
-import android.app.DownloadManager
 import android.content.Context
 import android.widget.Toast
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.charlotte.judon.gifstats.R
-import com.charlotte.judon.gifstats.model.CustomCurrency
-
 import com.charlotte.judon.gifstats.model.Sale
-import io.reactivex.Observable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -42,12 +36,6 @@ class ViewModel(private val saleRepository: SaleRepository) : ViewModel() {
     private fun createSale(sale: Sale) {
         viewModelScope.launch {
             saleRepository.createSale(sale)
-        }
-    }
-
-    fun updateSale(sale: Sale){
-        viewModelScope.launch {
-            saleRepository.updateSale(sale)
         }
     }
 

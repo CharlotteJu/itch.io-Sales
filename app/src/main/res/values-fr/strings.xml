@@ -10,6 +10,7 @@
     <string name="csv_integrate">CSV intégré !</string>
     <string name="everything_deleted">Tout est supprimé !</string>
     <string name="csv_problem">CSV non lu, merci de choisir un fichier téléchargé depuis Itch</string>
+    <string name="no_official_app">App non-officielle</string>
     <string name="period">PERIODE :</string>
     <string name="all">TOUS</string>
     <string name="_3_bests">3 MEILLEURS</string>
@@ -27,15 +28,11 @@
     <string name="month">MOIS</string>
     <string name="nb_sales">NB VENTES</string>
     <string name="total_net">TOTAL NET</string>
-    <string name="open_on_internet">Ouvrir sur Internet</string>
-    <string name="gross_point">BRUT :</string>
-    <string name="net_point">NET :</string>
     <string name="country">PAYS</string>
     <string name="gross">BRUT</string>
     <string name="net">NET</string>
     <string name="tips">TIP</string>
     <string name="currency">DEVISE :</string>
-    <string name="h">h :</string>
     <string name="sales">ventes</string>
     <string name="sale">vente</string>
     <string name="Sales">Ventes </string>
@@ -91,7 +88,6 @@
     <string name="days_of_week">JOURS DE LA SEMAINE</string>
     <string name="map_countries">PAYS</string>
     <string name="list_detail">LISTE DETAILLEE</string>
-    <string name="suivi_global">SUIVI GLOBAL</string>
     <string name="settings">PARAMETRES</string>
 
 

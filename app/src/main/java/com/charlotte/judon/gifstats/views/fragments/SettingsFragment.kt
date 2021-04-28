@@ -2,13 +2,11 @@ package com.charlotte.judon.gifstats.views.fragments
 
 import android.app.AlertDialog
 import android.content.Context
-import android.content.DialogInterface
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.fragment.app.Fragment
 import com.charlotte.judon.gifstats.R
 import com.charlotte.judon.gifstats.model.CustomCurrency
 import com.charlotte.judon.gifstats.model.Sale
@@ -42,10 +40,6 @@ class SettingsFragment : Fragment() {
                     this.dateFormat = dateFormat
                 }
         }
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
     }
 
     override fun onCreateView(

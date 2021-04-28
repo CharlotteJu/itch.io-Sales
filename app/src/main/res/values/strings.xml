@@ -13,6 +13,7 @@
     <string name="csv_integrate">CSV integrate !</string>
     <string name="everything_deleted">Everything is deleted !</string>
     <string name="csv_problem">CSV not reading, please choose a file downloaded from Itch</string>
+    <string name="no_official_app">No official app</string>
     <string name="period">PERIOD :</string>
     <string name="all">ALL</string>
     <string name="_3_bests">3 BESTS</string>
@@ -30,15 +31,11 @@
     <string name="month">MONTH</string>
     <string name="nb_sales">NB SALES</string>
     <string name="total_net">TOTAL NET</string>
-    <string name="open_on_internet">Open on Internet</string>
-    <string name="gross_point">GROSS :</string>
-    <string name="net_point">NET :</string>
     <string name="country">COUNTRY</string>
     <string name="gross">GROSS</string>
     <string name="net">NET</string>
     <string name="tips">TIP</string>
     <string name="currency">CURRENCY :</string>
-    <string name="h">h :</string>
     <string name="sales">sales</string>
     <string name="sale">sale</string>
     <string name="Sales">Sales </string>
@@ -102,7 +99,6 @@
     <string name="days_of_week">DAYS OF WEEK</string>
     <string name="map_countries">COUNTRIES</string>
     <string name="list_detail">DETAILED LIST</string>
-    <string name="suivi_global">SUIVI GLOBAL</string>
     <string name="settings">SETTINGS</string>
 
 

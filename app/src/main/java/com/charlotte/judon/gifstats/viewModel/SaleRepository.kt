@@ -9,7 +9,5 @@ class SaleRepository (private val saleDao: SaleDao) {
 
     suspend fun createSale(sale: Sale) = this.saleDao.createSale(sale)
 
-    suspend fun updateSale(sale: Sale) = this.saleDao.updateSale(sale)
-
     suspend fun deleteSale(sale: Sale) = this.saleDao.deleteSale(sale)
 }

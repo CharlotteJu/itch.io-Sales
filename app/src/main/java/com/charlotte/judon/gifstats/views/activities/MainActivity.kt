@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         viewModelFactory = Injection.configViewModelFactory(this)
         viewModel = ViewModelProvider(this, viewModelFactory).get(ViewModel::class.java)
 
-        this.viewModel.getAllSales().observe(this, androidx.lifecycle.Observer {
+        this.viewModel.getAllSales().observe(this, {
             roomListSales = it as ArrayList<Sale>
             displayFragment(HomeFragment.newInstance(roomListSales))
         })
@@ -93,12 +93,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun configureNavigationView()
     {
         mDrawerLayout = findViewById(R.id.main_activity_drawer_layout)
-        val actionBarToogle = ActionBarDrawerToggle(this, mDrawerLayout, mToolbar,
+        val actionBarToggle = ActionBarDrawerToggle(this, mDrawerLayout, mToolbar,
             R.string.navigation_drawer_open,
             R.string.navigation_drawer_close
         )
-        mDrawerLayout.addDrawerListener(actionBarToogle)
-        actionBarToogle.syncState()
+        mDrawerLayout.addDrawerListener(actionBarToggle)
+        actionBarToggle.syncState()
         mNavigationView = findViewById(R.id.main_activity_navigation_view)
         mNavigationView.setNavigationItemSelectedListener(this)
     }

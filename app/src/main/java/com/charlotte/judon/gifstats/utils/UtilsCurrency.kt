@@ -1,14 +1,11 @@
 package com.charlotte.judon.gifstats.utils
 
-import android.content.Context
 import android.content.SharedPreferences
-import android.icu.util.Currency
 import com.charlotte.judon.gifstats.model.CustomCurrency
 import com.google.gson.Gson
 import org.json.JSONObject
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
-import java.util.*
 
 
 class UtilsCurrency {

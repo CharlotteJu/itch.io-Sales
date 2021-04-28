@@ -16,7 +16,7 @@ import com.anychart.enums.*
 import com.anychart.graphics.vector.SolidFill
 import com.anychart.scales.OrdinalColor
 import com.charlotte.judon.gifstats.R
-import com.charlotte.judon.gifstats.model.ChronopletReturn
+import com.charlotte.judon.gifstats.model.ChroropletReturn
 import com.charlotte.judon.gifstats.model.CustomCountry
 import com.charlotte.judon.gifstats.model.Sale
 import com.charlotte.judon.gifstats.utils.UtilsGeneral
@@ -29,7 +29,7 @@ class MapFragment : Fragment() {
     private lateinit var salesList : List<Sale>
     private lateinit var mView: View
     private lateinit var salesListFiltered : List<Sale>
-    private lateinit var serieChronoplet : Choropleth
+    private lateinit var serieChroroplet : Choropleth
     private lateinit var ordinalColor: OrdinalColor
     private lateinit var adapter : CountryAdapter
 
@@ -44,10 +44,6 @@ class MapFragment : Fragment() {
                 this.salesListFiltered = salesList
             }
         }
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -89,8 +85,8 @@ class MapFragment : Fragment() {
     private fun getFunSpinner(daysAgo : Int?) {
         if (daysAgo == null) {
             salesListFiltered = salesList
-            val chronopletReturn =  UtilsCharts.graphAnyChartMapChronopleth(salesListFiltered)
-            changeViews(chronopletReturn)
+            val chroropletReturn =  UtilsCharts.graphAnyChartMapChronopleth(salesListFiltered)
+            changeViews(chroropletReturn)
         } else {
             val dateStart = UtilsGeneral.getDateStartToFilter(daysAgo)
             salesListFiltered = UtilsGeneral.filterList(salesList, dateStart)
@@ -99,8 +95,8 @@ class MapFragment : Fragment() {
         }
     }
 
-    private fun changeViews(chronopletReturn: ChronopletReturn){
-        val nbMax = chronopletReturn.max
+    private fun changeViews(chroropletReturn: ChroropletReturn){
+        val nbMax = chroropletReturn.max
         if(nbMax == 0) {
             mView.no_sales_map.visibility = View.VISIBLE
             mView.anyChartViewCountry.visibility = View.GONE
@@ -109,12 +105,12 @@ class MapFragment : Fragment() {
             mView.no_sales_map.visibility = View.GONE
             mView.anyChartViewCountry.visibility = View.VISIBLE
             mView.rcv_country.visibility = View.VISIBLE
-            val listWorldChrono = chronopletReturn.listEntry
-            serieChronoplet.data(listWorldChrono)
-            val nbMax2 = chronopletReturn.max2
+            val listWorldChrono = chroropletReturn.listEntry
+            serieChroroplet.data(listWorldChrono)
+            val nbMax2 = chroropletReturn.max2
             val rangesScript = UtilsCharts.getRanges(nbMax, nbMax2)
             ordinalColor.ranges(rangesScript)
-            adapter.notifyDataChanged(chronopletReturn.listCustomCountry)
+            adapter.notifyDataChanged(chroropletReturn.listCustomCountry)
         }
     }
 
@@ -163,7 +159,7 @@ class MapFragment : Fragment() {
         val nbMax = chronopletReturn.max
         val nbMax2 = chronopletReturn.max2
         configureRcv(chronopletReturn.listCustomCountry)
-        serieChronoplet  = map.choropleth(listWorldChrono)
+        serieChroroplet  = map.choropleth(listWorldChrono)
 
         ordinalColor = OrdinalColor.instantiate()
         ordinalColor.colors(arrayOf("#FFFFFF", "#86DDDD", "#59C9DD", "#4688CF", "#1740D5", "#02448A"))
@@ -171,18 +167,18 @@ class MapFragment : Fragment() {
         ordinalColor.ranges(rangesScript)
 
         map.colorRange("{orientation: 'top'}")
-        serieChronoplet.colorScale(ordinalColor)
+        serieChroroplet.colorScale(ordinalColor)
 
-        serieChronoplet.hovered()
+        serieChroroplet.hovered()
             .fill("#f48fb1")
             .stroke("#f99fb9")
-        serieChronoplet.selected()
+        serieChroroplet.selected()
             .fill("#c2185b")
             .stroke("#c2185b")
-        serieChronoplet.labels().enabled(true)
-        serieChronoplet.labels().fontSize(10)
-        serieChronoplet.labels().fontColor("#212121")
-        serieChronoplet.labels().format(" ");
+        serieChroroplet.labels().enabled(true)
+        serieChroroplet.labels().fontSize(10)
+        serieChroroplet.labels().fontColor("#212121")
+        serieChroroplet.labels().format(" ")
 
         mView.anyChartViewCountry.setZoomEnabled(true)
         val urlWorld = "https://cdn.anychart.com/releases/8.9.0/geodata/custom/world_source/world_source.js"

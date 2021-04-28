@@ -108,10 +108,11 @@
 
         <ImageView
             android:id="@+id/itch_image"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="600dp"
             android:foregroundGravity="center"
             android:src="@drawable/instructions_itch"
+            app:srcCompat="@drawable/instructions_itch"
             android:layout_marginTop="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -191,6 +192,7 @@
             android:layout_height="450dp"
             android:foregroundGravity="center"
             android:src="@drawable/instructions_import"
+            app:srcCompat="@drawable/instructions_import"
             android:layout_marginTop="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

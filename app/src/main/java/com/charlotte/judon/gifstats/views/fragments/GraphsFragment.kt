@@ -1,6 +1,5 @@
 package com.charlotte.judon.gifstats.views.fragments
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,7 +15,8 @@ import com.anychart.data.Set
 import com.charlotte.judon.gifstats.R
 import com.charlotte.judon.gifstats.model.CustomCurrency
 import com.charlotte.judon.gifstats.model.Sale
-import com.charlotte.judon.gifstats.utils.*
+import com.charlotte.judon.gifstats.utils.UtilsCharts
+import com.charlotte.judon.gifstats.utils.UtilsGeneral
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.Entry
@@ -55,10 +55,6 @@ class GraphsFragment : Fragment(), OnChartValueSelectedListener {
                     this.dateFormat = dateFormat
             }
         }
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {

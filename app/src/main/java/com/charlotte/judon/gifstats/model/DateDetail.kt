@@ -5,5 +5,4 @@ import com.github.mikephil.charting.data.BarEntry
 class DateDetail(
     var day : String,
     var listEntry : List<BarEntry>,
-    var listString : List<String> ?,
     var totalSale : Int)

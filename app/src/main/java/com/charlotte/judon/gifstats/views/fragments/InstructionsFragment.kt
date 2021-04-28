@@ -11,27 +11,14 @@ class InstructionsFragment : Fragment() {
 
     private lateinit var mView: View
 
-    companion object {
-        @JvmStatic
-        fun newInstance() =
-            InstructionsFragment().apply {
-                arguments = Bundle().apply {
-
-                }
-            }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         mView =  inflater.inflate(R.layout.fragment_instructions, container, false)
         return mView
     }
-
-
 }

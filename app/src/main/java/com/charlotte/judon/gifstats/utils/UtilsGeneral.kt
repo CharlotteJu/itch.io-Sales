@@ -236,7 +236,7 @@ class UtilsGeneral {
             return list.sortedWith(compareBy { it.objectName })
         }
     }
-    enum class CompareDates() {
+    enum class CompareDates {
         SAME,
         PLUS_ONE,
         PLUS_OTHER,

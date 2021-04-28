@@ -106,7 +106,6 @@
         android:text="@string/no_sales_period"
         android:textStyle="italic"
         android:visibility="visible"
-        android:layout_marginTop="32dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/radio_group_package"
@@ -153,12 +152,5 @@
         app:layout_constraintTop_toBottomOf="@id/radio_group_currency"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
-
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/white"
-        android:visibility="gone"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

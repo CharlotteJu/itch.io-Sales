@@ -40,7 +40,7 @@
             tools:text="MONTH" />
 
         <TextView
-            android:id="@+id/nb_vente_txt"
+            android:id="@+id/nb_sale_txt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/colorPrimary"
