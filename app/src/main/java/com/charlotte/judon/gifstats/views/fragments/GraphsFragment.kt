@@ -12,6 +12,7 @@ import com.anychart.AnyChart
 import com.anychart.chart.common.dataentry.DataEntry
 import com.anychart.charts.Cartesian
 import com.anychart.data.Set
+import com.charlotte.judon.gifstats.BuildConfig
 import com.charlotte.judon.gifstats.R
 import com.charlotte.judon.gifstats.model.CustomCurrency
 import com.charlotte.judon.gifstats.model.Sale
@@ -24,8 +25,18 @@ import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import kotlinx.android.synthetic.main.fragment_graphs.view.*
+import kotlinx.android.synthetic.main.fragment_graphs.view.spinner
 
-
+/**
+ * Fragment used to show MPChartAndroid (https://github.com/PhilJay/MPAndroidChart) on :
+ * - Number's [Sale] by hour of day
+ * - Number's [Sale] by day of week
+ * - Number's [Sale] by date
+ * Fragment used to show AnyChartAndroid (https://github.com/AnyChart/AnyChart-Android) on :
+ * - Number's [Sale] by package
+ * - Price's [Sale] by package
+ * @author Charlotte JUDON
+ */
 class GraphsFragment : Fragment(), OnChartValueSelectedListener {
     private lateinit var salesList : List<Sale>
     private lateinit var mView: View
@@ -127,9 +138,9 @@ class GraphsFragment : Fragment(), OnChartValueSelectedListener {
 
     private fun getListForPackage() : List<DataEntry> {
         return if (btnPackageChecked == R.id.btn_nb) {
-            UtilsCharts.anyChartPackageNB(this.salesListFiltered)
+            UtilsCharts.getAnyChartPackageNumber(this.salesListFiltered)
         } else {
-            UtilsCharts.anyChartPackagePrice(this.salesListFiltered, currentCurrency, listCurrencies)
+            UtilsCharts.getAnyChartPackagePrice(this.salesListFiltered, currentCurrency, listCurrencies)
         }
     }
 
@@ -139,7 +150,7 @@ class GraphsFragment : Fragment(), OnChartValueSelectedListener {
         mView.anyChartView.visibility = View.GONE
         mView.radio_group_package.visibility = View.GONE
         mView.MpBarView.invalidate()
-        val mpBarReturn = UtilsCharts.graphMPBarByHour(salesListFiltered)
+        val mpBarReturn = UtilsCharts.getMPChartByHour(salesListFiltered)
         if(mpBarReturn.barDataSet == null) {
             mView.MpBarView.visibility = View.GONE
             mView.no_sales_graph.visibility = View.VISIBLE
@@ -162,7 +173,7 @@ class GraphsFragment : Fragment(), OnChartValueSelectedListener {
         mView.anyChartView.visibility = View.GONE
         mView.radio_group_package.visibility = View.GONE
         mView.MpBarView.invalidate()
-        val mpBarReturn = UtilsCharts.graphMPBarByDayOfWeek(salesListFiltered)
+        val mpBarReturn = UtilsCharts.getMPChartByDayOfWeek(salesListFiltered)
         if(mpBarReturn.barDataSet == null) {
             mView.MpBarView.visibility = View.GONE
             mView.no_sales_graph.visibility = View.VISIBLE
@@ -184,7 +195,7 @@ class GraphsFragment : Fragment(), OnChartValueSelectedListener {
         mView.anyChartView.visibility = View.GONE
         mView.radio_group_package.visibility = View.GONE
         mView.MpBarView.invalidate()
-        val mpBarReturn = UtilsCharts.graphMPByDay(salesListFiltered, dateFormat)
+        val mpBarReturn = UtilsCharts.getMPChartByDay(salesListFiltered, dateFormat)
 
         if(mpBarReturn.barDataSet == null) {
             mView.MpBarView.visibility = View.GONE
@@ -232,13 +243,15 @@ class GraphsFragment : Fragment(), OnChartValueSelectedListener {
         mView.MpBarView.xAxis.valueFormatter = xFormatter
     }
 
+    /**
+     *
+     */
     private fun initPackageGraph() {
         APIlib.getInstance().setActiveAnyChartView(mView.anyChartView)
         chartVertical = AnyChart.vertical()
-
         chartVertical.legend().title().enabled(true)
         chartVertical.animation(true)
-        val packageList = UtilsCharts.anyChartPackageNB(salesListFiltered)
+        val packageList = UtilsCharts.getAnyChartPackageNumber(salesListFiltered)
         val column = chartVertical.bar(packageList)
         column.name(resources.getString(R.string.Sales))
         column.fill("function() {" +
@@ -249,17 +262,21 @@ class GraphsFragment : Fragment(), OnChartValueSelectedListener {
                 "        }")
 
         mView.anyChartView.setChart(chartVertical)
+        mView.anyChartView.setLicenceKey(BuildConfig.ANYCHART_LICENCE_KEY)
 
         mView.radio_group_package.setOnCheckedChangeListener { _, checkedId ->
             btnPackageChecked = checkedId
             when(checkedId) {
-                R.id.btn_nb -> chartVertical.data(UtilsCharts.anyChartPackageNB(this.salesListFiltered))
-                R.id.btn_price -> chartVertical.data(UtilsCharts.anyChartPackagePrice(this.salesListFiltered, currentCurrency, listCurrencies))
+                R.id.btn_nb -> chartVertical.data(UtilsCharts.getAnyChartPackageNumber(this.salesListFiltered))
+                R.id.btn_price -> chartVertical.data(UtilsCharts.getAnyChartPackagePrice(this.salesListFiltered, currentCurrency, listCurrencies))
             }
         }
         mView.btn_nb.isChecked = true
     }
 
+    /**
+     * Display the value of BarChart in TextView
+     */
     override fun onValueSelected(e: Entry?, h: Highlight?) {
         if (e != null) {
             val saleString = if (e.y > 1) {

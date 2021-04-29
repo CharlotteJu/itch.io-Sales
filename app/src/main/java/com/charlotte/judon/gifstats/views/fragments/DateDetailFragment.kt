@@ -18,7 +18,11 @@ import kotlinx.android.synthetic.main.fragment_date_detail.view.*
 import kotlinx.android.synthetic.main.fragment_date_detail.view.radio_group_currency
 import kotlinx.android.synthetic.main.fragment_date_detail.view.spinner
 
-
+/**
+ * Fragment used to show number's [Sale] by day of week with hours
+ * @link [MPChartAndroid : https://github.com/PhilJay/MPAndroidChart]
+ * @author Charlotte JUDON
+ */
 class DateDetailFragment : Fragment() {
 
     private lateinit var salesList: List<Sale>
@@ -38,10 +42,7 @@ class DateDetailFragment : Fragment() {
             }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         mView = inflater.inflate(R.layout.fragment_date_detail, container, false)
         getDateDetailList()
         configureRcv()
@@ -78,12 +79,7 @@ class DateDetailFragment : Fragment() {
         mView.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
 
                 when (position) {
                     0 -> {
@@ -115,7 +111,9 @@ class DateDetailFragment : Fragment() {
         updateViews()
     }
 
-
+    /**
+     * Show or Hide views according to [dateDetailList]
+     */
     private fun updateViews()  {
         var nbSales = 0
 
@@ -131,18 +129,24 @@ class DateDetailFragment : Fragment() {
         }
     }
 
+    /**
+     * Populate the [dateDetailList] for each day of week
+     */
     private fun getDateDetailList() {
         dateDetailList.clear()
-        dateDetailList.add(UtilsCharts.graphMPBarByDayWithHours(salesListFiltered, "Mon", requireContext()))
-        dateDetailList.add(UtilsCharts.graphMPBarByDayWithHours(salesListFiltered, "Tue", requireContext()))
-        dateDetailList.add(UtilsCharts.graphMPBarByDayWithHours(salesListFiltered, "Wed", requireContext()))
-        dateDetailList.add(UtilsCharts.graphMPBarByDayWithHours(salesListFiltered, "Thu", requireContext()))
-        dateDetailList.add(UtilsCharts.graphMPBarByDayWithHours(salesListFiltered, "Fri", requireContext()))
-        dateDetailList.add(UtilsCharts.graphMPBarByDayWithHours(salesListFiltered, "Sat", requireContext()))
-        dateDetailList.add(UtilsCharts.graphMPBarByDayWithHours(salesListFiltered, "Sun", requireContext()))
+        dateDetailList.add(UtilsCharts.getMPChartByDayWithHours(salesListFiltered, "Mon", requireContext()))
+        dateDetailList.add(UtilsCharts.getMPChartByDayWithHours(salesListFiltered, "Tue", requireContext()))
+        dateDetailList.add(UtilsCharts.getMPChartByDayWithHours(salesListFiltered, "Wed", requireContext()))
+        dateDetailList.add(UtilsCharts.getMPChartByDayWithHours(salesListFiltered, "Thu", requireContext()))
+        dateDetailList.add(UtilsCharts.getMPChartByDayWithHours(salesListFiltered, "Fri", requireContext()))
+        dateDetailList.add(UtilsCharts.getMPChartByDayWithHours(salesListFiltered, "Sat", requireContext()))
+        dateDetailList.add(UtilsCharts.getMPChartByDayWithHours(salesListFiltered, "Sun", requireContext()))
         getList3Best()
     }
 
+    /**
+     *
+     */
     private fun getList3Best() {
         val listTemp = dateDetailList.sortedWith(compareBy { it.totalSale }).reversed()
         listOf3Best.clear()

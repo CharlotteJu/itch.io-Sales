@@ -12,6 +12,10 @@ import com.charlotte.judon.gifstats.model.Sale
 import com.charlotte.judon.gifstats.views.adapters.SaleAdapter
 import kotlinx.android.synthetic.main.fragment_list_sales.view.*
 
+/**
+ * Fragment used to show [Sale]'s detailed information
+ * @author Charlotte JUDON
+ */
 class ListSalesFragment : Fragment() {
     private lateinit var salesList : List<Sale>
     private lateinit var adapter : SaleAdapter

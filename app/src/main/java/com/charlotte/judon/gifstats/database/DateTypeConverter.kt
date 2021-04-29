@@ -3,6 +3,10 @@ package com.charlotte.judon.gifstats.database
 import androidx.room.TypeConverter
 import java.util.*
 
+/**
+ * To convert [Date] in [Timestamp] in [RoomDatabase]
+ * @author Charlotte JUDON
+ */
 class DateTypeConverter {
 
     @TypeConverter

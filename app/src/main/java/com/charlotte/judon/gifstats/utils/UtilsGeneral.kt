@@ -13,10 +13,18 @@ import java.time.temporal.ChronoUnit
 import java.util.*
 import java.util.concurrent.TimeUnit
 
+/**
+ * Class with a [Companion] to give general information
+ * @author Charlotte JUDON
+ */
 class UtilsGeneral {
 
     companion object {
 
+        /**
+         * @return a [Date] converted from the CSV's String using [SimpleDateFormat]
+         * @param dateStringFromCSV : String extracted from the CSV
+         */
         @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
         fun convertStringToDate(dateStringFromCSV: String): Date {
             val dateString = dateStringFromCSV.substring(0, 10)
@@ -26,6 +34,17 @@ class UtilsGeneral {
             return simpleDateFormat.parse(completeDateString)
         }
 
+        /**
+         * @return a List of String : list[0] = date // list.[1] = hour
+         *           It's is converted to match with the User's time zone
+         * @param dateStringFromCSV : String of sale.dateString
+         * @param hourString : String of sale.hour
+         * @param format : String format based on "MM/dd/yyyy" for [views/fragments/GraphsFragment]
+         *                  or on User's Preferences for [views/fragments/ListSalesFragment]
+         * @explications : 1st Convert [dateStringFromCSV] and [hourString] on a Date with a [OffsetDateTime]
+         *                     to get the sale's hour according to User's time zone
+         *                 2nd Convert this date in String to facility the using
+         */
         fun convertStringToDateWithLocale(dateStringFromCSV: String,
             hourString: String, format: String): List<String> {
 
@@ -47,12 +66,25 @@ class UtilsGeneral {
             return list
         }
 
+        /**
+         * @return a Date calculated from [daysAgo]
+         * @param daysAgo : Int to know the number of days
+         * @explication : Take the today's date from with [daysAgo] is subtracted
+         * It is using to take the last 7 or 30 days
+         */
         fun getDateStartToFilter(daysAgo: Int): Date {
             val calendar = Calendar.getInstance()
             calendar.add(Calendar.DAY_OF_YEAR, -daysAgo)
             return calendar.time
         }
 
+        /**
+         * @return a List of [MonthSale] to populate a Recycler view in [views/fragments/ListMonthFragment]
+         * @param salesList : List of all [Sale]
+         * @param currentCurrency : [CustomCurrency] from the User's preferences
+         * @param listCurrencies : List of [CustomCurrency] to have all the rates changes
+         * @explications : The sales are filtered by their Date (month and year)
+         */
         fun castSaleListInSaleMonthList(salesList: List<Sale>, currentCurrency: CustomCurrency,
                                         listCurrencies: List<CustomCurrency>): List<MonthSale> {
             val listToReturn = arrayListOf<MonthSale>()
@@ -73,7 +105,7 @@ class UtilsGeneral {
                         listForOneMonth.add(sale)
                     } else {
                         val total =
-                            calculTotalNetSales(listForOneMonth, currentCurrency, listCurrencies)
+                            calculationTotalNetSales(listForOneMonth, currentCurrency, listCurrencies)
                         val bool = (refMonth == monthOfToday && refYear == yearOfToday)
                         listToReturn.add(
                             MonthSale(
@@ -92,7 +124,7 @@ class UtilsGeneral {
 
                     if (salesList.indexOf(sale) == salesList.size - 1) {
                         val total =
-                            calculTotalNetSales(listForOneMonth, currentCurrency, listCurrencies)
+                            calculationTotalNetSales(listForOneMonth, currentCurrency, listCurrencies)
                         val bool = (monthTemp == monthOfToday && yearTemp == yearOfToday)
                         listToReturn.add(
                             MonthSale(
@@ -111,8 +143,14 @@ class UtilsGeneral {
         }
 
 
-        fun calculTotalNetSales(list: List<Sale>, currentCurrency: CustomCurrency,
-            listCurrencies: List<CustomCurrency>): Double {
+        /**
+         * @return Double for the [Sale]'s net total price
+         * @param list : List of [Sale]
+         * @param currentCurrency : [CustomCurrency] from the User's preferences
+         * @param listCurrencies : List of [CustomCurrency] to have all the rates changes
+         */
+        fun calculationTotalNetSales(list: List<Sale>, currentCurrency: CustomCurrency,
+                                     listCurrencies: List<CustomCurrency>): Double {
             var total = 0.0
             val separator = DecimalFormatSymbols()
             separator.decimalSeparator = '.'
@@ -133,8 +171,14 @@ class UtilsGeneral {
             return decimal.toDouble()
         }
 
-        fun calculTotalBrutSales(list: List<Sale>, currentCurrency: CustomCurrency,
-                                 listCurrencies: List<CustomCurrency>): Double {
+        /**
+         * @return Double for the [Sale]'s gross total price
+         * @param list : List of [Sale]
+         * @param currentCurrency : [CustomCurrency] from the User's preferences
+         * @param listCurrencies : List of [CustomCurrency] to have all the rates changes
+         */
+        fun calculationTotalGrossSales(list: List<Sale>, currentCurrency: CustomCurrency,
+                                       listCurrencies: List<CustomCurrency>): Double {
             var total = 0.0
             val separator = DecimalFormatSymbols()
             separator.decimalSeparator = '.'
@@ -156,6 +200,11 @@ class UtilsGeneral {
             return decimal.toDouble()
         }
 
+        /**
+         * @return a Double calculated from [brut] / [net] to have % of charges
+         * @param brut : Double provided by [calculationTotalGrossSales]
+         * @param net : Double provided by [calculationTotalNetSales]
+         */
         fun calculChargesSales(brut: Double, net: Double): Double {
             val decimalFormat = DecimalFormat("####0.00")
             val separator = DecimalFormatSymbols()
@@ -167,6 +216,12 @@ class UtilsGeneral {
             return decimalFormat.format(total).toDouble()
         }
 
+        /**
+         * @return [CompareDates] : State to know if 2 dates are the same, +1 or more used by [UtilsCharts.getMPChartByDay]
+         * @param dateOfReference : [Date] of the last sale
+         * @param dateSale : [Date] of the next sale
+         * @link [CompareDates]
+         */
         fun calculateDiffBetweenTwoDates(dateOfReference : Date, dateSale : Date) : CompareDates {
             val calendarToCompare = Calendar.getInstance()
             calendarToCompare.time = dateOfReference
@@ -192,6 +247,12 @@ class UtilsGeneral {
             }
         }
 
+        /**
+         * @return Long : Number of days without 2 sales used by [UtilsCharts.getMPChartByDay] when [CompareDates.PLUS_OTHER]
+         * @param dateOfReference : [Date] of the last sale
+         * @param dateSale : [Date] of the next sale
+         * @link [CompareDates]
+         */
         fun calculateNumberOfDaysOfDifference(dateOfReference : Date, dateSale : Date) : Long {
             val difLong = dateSale.time - dateOfReference.time
             var difInt = TimeUnit.DAYS.convert(difLong, TimeUnit.MILLISECONDS)
@@ -207,6 +268,11 @@ class UtilsGeneral {
         }
 
 
+        /**
+         * @return a List of [Sale] from a specific [Date]
+         * @param list : List of [Sale]
+         * @param dateStart : Specific [Date]
+         */
         fun filterList(list: List<Sale>, dateStart: Date): List<Sale> {
             val listToReturn = arrayListOf<Sale>()
             for (sale in list) {
@@ -236,6 +302,9 @@ class UtilsGeneral {
             return list.sortedWith(compareBy { it.objectName })
         }
     }
+    /**
+     * Enum class used to compare Dates in [calculateDiffBetweenTwoDates]
+     */
     enum class CompareDates {
         SAME,
         PLUS_ONE,

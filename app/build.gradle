@@ -3,6 +3,8 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: "kotlin-kapt"
 
+def localProperties = new Properties()
+localProperties.load(new FileInputStream(rootProject.file("local.properties")))
 android {
     compileSdkVersion 30
     buildToolsVersion "29.0.3"
@@ -15,6 +17,9 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        //LICENCE ANYCHART KEY
+        resValue "string", "ANYCHART_LICENCE_KEY", localProperties["ANYCHART_LICENCE_KEY"] //(project.findProperty("ANYCHART_LICENCE_KEY") ?: "")
     }
 
     buildTypes {
@@ -23,6 +28,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
                    // -keep 'class com.github.aachartmodel.aainfographics.** { *; }'
                     'proguard-rules.pro'
+            buildConfigField 'String', "ANYCHART_LICENCE_KEY", localProperties["ANYCHART_LICENCE_KEY"] //(project.findProperty("ANYCHART_LICENCE_KEY") ?: "")
+            resValue "string", "ANYCHART_LICENCE_KEY", localProperties["ANYCHART_LICENCE_KEY"] //(project.findProperty("ANYCHART_LICENCE_KEY") ?: "")
+        }
+        debug {
+            buildConfigField 'String', "ANYCHART_LICENCE_KEY", localProperties["ANYCHART_LICENCE_KEY"] //(project.findProperty("ANYCHART_LICENCE_KEY") ?: "")
+            resValue "string", "ANYCHART_LICENCE_KEY", localProperties["ANYCHART_LICENCE_KEY"] //(project.findProperty("ANYCHART_LICENCE_KEY") ?: "")
         }
     }
 

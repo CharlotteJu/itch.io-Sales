@@ -10,6 +10,11 @@ import com.charlotte.judon.gifstats.utils.UtilsGeneral
 import com.charlotte.judon.gifstats.utils.UtilsCurrency
 import kotlinx.android.synthetic.main.item_sale.view.*
 
+/**
+ * Class used to populate a [RecyclerView] in [views/fragments/ListSales.kt]
+ * Based on [Sale]
+ * @author Charlotte JUDON
+ */
 class SaleAdapter (private var listSales : List<Sale>,
                    private val currentCurrency: CustomCurrency,
                    private val listCurrencies : List<CustomCurrency>,

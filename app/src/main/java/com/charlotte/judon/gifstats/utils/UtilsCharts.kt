@@ -12,12 +12,28 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 
+/**
+ * Class with a [Companion] to give data for Charts
+ * @link library MPChartAndroid : https://github.com/PhilJay/MPAndroidChart
+ * @link library AnyChartAndroid : https://github.com/AnyChart/AnyChart-Android
+ * @author Charlotte JUDON
+ */
+
 class UtilsCharts {
 
-    companion object {
-        ///////////////////////////////////////// MPBAR /////////////////////////////////////////
+    //TODO : Explain more JAVADOC in this class
 
-        fun graphMPByDay(salesList: List<Sale>, format : String)  : MpBarReturn
+    companion object {
+
+        ///////////////////////////////////////// MP CHART ANDROID /////////////////////////////////////////
+
+        /**
+         * @return [MpBarReturn] for each day to draw Chart in [views/fragments/GraphsFragment]
+         * @param salesList : List of all [Sale]
+         * @param format : String from the User's preferences
+         * @link : MPChartAndroid [https://github.com/PhilJay/MPAndroidChart]
+         */
+        fun getMPChartByDay(salesList: List<Sale>, format : String)  : MpBarReturn
         {
             val listSorted = UtilsGeneral.sortSalesByDate(salesList)
 
@@ -107,7 +123,11 @@ class UtilsCharts {
             return (MpBarReturn(barDataSet, listString))
         }
 
-        private fun getDataForGraphByHour(salesList: List<Sale>) : List<BarEntry>{
+        /**
+         * @return List [BarEntry] to populate Chart in [getMPChartByHour]
+         * @param salesList : List of [Sale]
+         */
+        private fun getDataForChartByHour(salesList: List<Sale>) : List<BarEntry>{
             val listEntry = arrayListOf<BarEntry>()
             val listHours = arrayListOf<HourList>()
 
@@ -133,11 +153,16 @@ class UtilsCharts {
             return listEntry
         }
 
-        fun graphMPBarByHour(listSales : List<Sale>) : MpBarReturn {
+        /**
+         * @return [MpBarReturn] for each hour of day to draw Chart in [views/fragments/GraphsFragment]
+         * @param listSales : List of all [Sale]
+         * @link : MPChartAndroid [https://github.com/PhilJay/MPAndroidChart]
+         */
+        fun getMPChartByHour(listSales : List<Sale>) : MpBarReturn {
             if(listSales.isEmpty()) {
                 return MpBarReturn(null)
             }
-            val listEntry = getDataForGraphByHour(listSales)
+            val listEntry = getDataForChartByHour(listSales)
             val barDataSet = BarDataSet(listEntry, " ")
             barDataSet.color = Color.parseColor("#FA5C5C")
             barDataSet.highLightColor = Color.parseColor("#4B2E5A")
@@ -145,7 +170,11 @@ class UtilsCharts {
             return MpBarReturn(barDataSet)
         }
 
-        private fun getDataForGraphByDayOfWeek(list: List<Sale>) : List<BarEntry> {
+        /**
+         * @return List [BarEntry] to populate Chart in [getMPChartByDayOfWeek]
+         * @param list : List of [Sale]
+         */
+        private fun getDataForChartByDayOfWeek(list: List<Sale>) : List<BarEntry> {
             var nbMonday = 0
             var nbTuesday = 0
             var nbWednesday = 0
@@ -167,7 +196,6 @@ class UtilsCharts {
                     listDay[6] -> nbSunday++
                 }
             }
-
             return arrayListOf(
                 BarEntry(0f, nbMonday.toFloat()),
                 BarEntry(1f, nbTuesday.toFloat()),
@@ -175,17 +203,20 @@ class UtilsCharts {
                 BarEntry(3f, nbThursday.toFloat()),
                 BarEntry(4f, nbFriday.toFloat()),
                 BarEntry(5f, nbSaturday.toFloat()),
-                BarEntry(6f, nbSunday.toFloat())
-            )
-
+                BarEntry(6f, nbSunday.toFloat()))
         }
 
-        fun graphMPBarByDayOfWeek(list: List<Sale>) : MpBarReturn {
+        /**
+         * @return [MpBarReturn] for each day of week without hours to draw Chart in [views/fragments/GraphsFragment]
+         * @param list : List of all [Sale]
+         * @link : MPChartAndroid [https://github.com/PhilJay/MPAndroidChart]
+         */
+        fun getMPChartByDayOfWeek(list: List<Sale>) : MpBarReturn {
             if (list.isEmpty()) {
                 return MpBarReturn(null)
             }
             val listDay = arrayListOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
-            val listBarEntry = getDataForGraphByDayOfWeek(list)
+            val listBarEntry = getDataForChartByDayOfWeek(list)
 
             val barDataSet = BarDataSet(listBarEntry, " ")
             barDataSet.color = Color.parseColor("#FA5C5C")
@@ -194,6 +225,11 @@ class UtilsCharts {
             return MpBarReturn(barDataSet, listDay)
         }
 
+        /**
+         * @return List of [Sale] for each day of week
+         * @param list : List of [Sale]
+         * @param day : String for the day
+         */
         private fun getListForOneDay(list: List<Sale>, day : String) : List<Sale> {
             val listToReturn = arrayListOf<Sale>()
             for (sale in list) {
@@ -204,7 +240,11 @@ class UtilsCharts {
             return listToReturn
         }
 
-        private fun getDataForGraphByDaysWithHours(listSorted: List<Sale>) : List<BarEntry> {
+        /**
+         * @return List [BarEntry] to populate Chart in [getMPChartByDayWithHours]
+         * @param listSorted : List of [Sale]
+         */
+        private fun getDataForChartByDaysWithHours(listSorted: List<Sale>) : List<BarEntry> {
             val listEntry = arrayListOf<BarEntry>()
             val listHours = arrayListOf<HourList>()
 
@@ -227,9 +267,16 @@ class UtilsCharts {
             return listEntry
         }
 
-        fun graphMPBarByDayWithHours(list: List<Sale>, day : String, context : Context)  : DateDetail {
+        /**
+         * @return [DateDetail] for each day of week with hours to draw Chart in [views/fragments/DateDetailFragment]
+         * @param list : List of all [Sale]
+         * @param day : String with the day's reference
+         * @param context : Context to get resources
+         * @link : MPChartAndroid [https://github.com/PhilJay/MPAndroidChart]
+         */
+        fun getMPChartByDayWithHours(list: List<Sale>, day : String, context : Context)  : DateDetail {
             val listSorted = UtilsGeneral.sortSalesByHour(getListForOneDay(list, day))
-            val listEntry = getDataForGraphByDaysWithHours(listSorted)
+            val listEntry = getDataForChartByDaysWithHours(listSorted)
             val listDay = arrayListOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
             val listDayFromResources = context.resources.getStringArray(R.array.list_days)
             var name = ""
@@ -245,9 +292,14 @@ class UtilsCharts {
             return DateDetail(name, listEntry, listSorted.size)
         }
 
-        ///////////////////////////////////////// ANYCHART /////////////////////////////////////////
+        ///////////////////////////////////////// ANY CHART ANDROID /////////////////////////////////////////
 
-        fun anyChartPackagePrice(list: List<Sale>, currentCurrency : CustomCurrency, listCurrencies : List<CustomCurrency>): MutableList<DataEntry> {
+        /**
+         * @return List of [DataEntry] with all the Package to draw Chart by total price in [views/fragments/GraphsFragment]
+         * @param list : List of [Sale]
+         * @link : AnyChartAndroid [AnyChart : https://github.com/AnyChart/AnyChart-Android]
+         */
+        fun getAnyChartPackagePrice(list: List<Sale>, currentCurrency : CustomCurrency, listCurrencies : List<CustomCurrency>): MutableList<DataEntry> {
             val listSorted = UtilsGeneral.sortSalesByPackage(list)
             val listPrice = mutableListOf<DataEntry>()
 
@@ -274,8 +326,12 @@ class UtilsCharts {
             return listPrice
         }
 
-
-        fun anyChartPackageNB(list: List<Sale>): MutableList<DataEntry> {
+        /**
+         * @return List of [DataEntry] with all the Package to draw Chart by total number in [views/fragments/GraphsFragment]
+         * @param list : List of [Sale]
+         * @link : AnyChartAndroid [AnyChart : https://github.com/AnyChart/AnyChart-Android]
+         */
+        fun getAnyChartPackageNumber(list: List<Sale>): MutableList<DataEntry> {
             val listSorted = UtilsGeneral.sortSalesByPackage(list)
             val listEntry = mutableListOf<DataEntry>()
             var nbPerPackage = 0
@@ -300,8 +356,11 @@ class UtilsCharts {
             }
         }
 
-
-        fun graphAnyChartMapChronopleth(list: List<Sale>): ChroropletReturn {
+        /**
+         * @return [ChroropletReturn] with all the Country Code to draw Chart in [views/fragments/MapFragment]
+         * @link : AnyChartAndroid [AnyChart : https://github.com/AnyChart/AnyChart-Android]
+         */
+        fun getAnyChartMapChroropleth(list: List<Sale>): ChroropletReturn {
             val listSorted = UtilsGeneral.sortByCountry(list)
             val listStringCountries = getAllCountryCode()
             val listEntry = mutableListOf<DataEntry>()
@@ -357,6 +416,10 @@ class UtilsCharts {
             return ChroropletReturn(listEntry, maxNb, maxNb2, listCustomCountry)
         }
 
+        /**
+         * @return List of String with all the Country Code to populate [getAnyChartMapChroropleth]
+         * @link : AnyChartAndroid [AnyChart : https://github.com/AnyChart/AnyChart-Android]
+         */
         private fun getAllCountryCode() : MutableList<String> {
             return mutableListOf(
                 "AF","AO","AL","AE","AR","AM",
@@ -392,6 +455,14 @@ class UtilsCharts {
             )
         }
 
+        /**
+         * @return Array of String with the parameters for AnyChartAndroid MAP CHROROPLETH [AnyChart : https://github.com/AnyChart/AnyChart-Android]
+         * @param nbMax : Int provided by a [ChroropletReturn]
+         * @param nbMax2 : Int provided by a [ChroropletReturn]
+         * @explications : If [nbMax] and [nbMax2] are too far away, the legend is calculated from [nbMax2]
+         *                 Else, the legend is calculated from [nbMax]
+         *  I did my proper method, because, a lot of time, the USA are often far ahead and reading Chart is less easy
+         */
         fun getRanges(nbMax : Int, nbMax2 : Int) : Array<String> {
             var nb1 = 0
             var nb2 = 0
@@ -430,7 +501,7 @@ class UtilsCharts {
 
 }
 
-        //Just for test the logic
+        //Just to test the logic
         /*
         fun getDataForGraphByDay(listSorted: List<Sale>, format: String) : List<BarEntry> {
             val listEntry = arrayListOf<BarEntry>()

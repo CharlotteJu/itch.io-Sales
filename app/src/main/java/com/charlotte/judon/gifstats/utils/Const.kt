@@ -1,5 +1,9 @@
 package com.charlotte.judon.gifstats.utils
 
+/**
+ * File with all application's constants
+ * @author Charlotte JUDON
+ */
 const val READ_EXTERNAL_STORAGE_PERMISSION_CODE = 101
 const val PICK_FILE_CODE = 102
 const val BACKSTACK = "BACKSTACK"
@@ -16,3 +20,5 @@ const val CURRENCY_GBP = "gbp"
 const val CURRENCY_EUR = "eur"
 const val CURRENCY_JPY = "jpy"
 const val CURRENCY_AUD = "aud"
+
+const val URL_ITCH = "https://itch.io/export-purchases"

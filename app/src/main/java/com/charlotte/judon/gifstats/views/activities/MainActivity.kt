@@ -35,7 +35,10 @@ import java.io.IOException
 import java.io.InputStreamReader
 import kotlin.collections.ArrayList
 
-
+/**
+ * Only one app's Activity, hosts all fragments and reads CSV information
+ * @author Charlotte JUDON
+ */
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var csv : Uri
@@ -49,7 +52,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private var listCurrencies : List<CustomCurrency> = mutableListOf()
     private lateinit var currentCurrency : CustomCurrency
     private lateinit var currentDateFormat : String
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,16 +72,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             roomListSales = it as ArrayList<Sale>
             displayFragment(HomeFragment.newInstance(roomListSales))
         })
-        Fuel.get("https://www.floatrates.com/daily/usd.json").responseJson { _, _, result ->
-            result.success {
-                listCurrencies =  UtilsCurrency.castJsonInListCurrencies(it.obj())
-                editSharedPreferencesForCurrencies()
-                getSharedPreferences()
-            }
-            result.failure {
-                getSharedPreferences()
-            }
-        }
+        getRateFromJson()
         configureToolbar()
         configureNavigationView()
 
@@ -109,6 +102,28 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             .addToBackStack(BACKSTACK).commit()
     }
 
+    /**
+     * Get the Exchange Rate from API call [https://www.floatrates.com/daily/usd.json]
+     */
+    private fun getRateFromJson(){
+        Fuel.get("https://www.floatrates.com/daily/usd.json").responseJson { _, _, result ->
+            result.success {
+                listCurrencies =  UtilsCurrency.castJsonInListCurrencies(it.obj())
+                editSharedPreferencesForCurrencies()
+                getSharedPreferences()
+            }
+            result.failure {
+                getSharedPreferences()
+            }
+        }
+    }
+
+    /**
+     * Reading the CSV File provided by Itch.io [https://itch.io] with a [BufferedReader]
+     * Date converted by [UtilsGeneral.convertStringToDate]
+     * @explications : line is split by a "," when the CSV is downloaded to the phone
+     *                  but it's split by a ";" when the CSV is downloaded to a computer then transferred to the phone
+     */
     private fun readCSV()
     {
         var fileReader : BufferedReader? = null
@@ -178,6 +193,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
+    /**
+     * Edit the SharedPreferences after the API call
+     * @link [getRateFromJson]
+     */
     private fun editSharedPreferencesForCurrencies(){
         val sharedPreferences = getSharedPreferences(SHARED_PREFERENCES_CURRENCY, MODE_PRIVATE)
         val edit = sharedPreferences.edit()
@@ -242,6 +261,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return true
     }
 
+    /**
+     * Get the SharedPreferences recorded for [listCurrencies], [currentCurrency] and [currentDateFormat]
+     */
      fun getSharedPreferences(){
          val sharedPreferences = getSharedPreferences(SHARED_PREFERENCES_CURRENCY, Context.MODE_PRIVATE)
          listCurrencies = UtilsCurrency.getListCurrenciesFromSharedPreferences(sharedPreferences)

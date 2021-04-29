@@ -15,6 +15,12 @@ import com.charlotte.judon.gifstats.viewModel.ViewModel
 import com.charlotte.judon.gifstats.views.activities.MainActivity
 import kotlinx.android.synthetic.main.fragment_settings.view.*
 
+/**
+ * Fragment used to change preferences about Currency and Date Format in Shared Preferences
+ * and delete all the Database
+ * @link [InstructionsFragment]
+ * @author Charlotte JUDON
+ */
 class SettingsFragment : Fragment() {
 
     private lateinit var viewModel : ViewModel
@@ -80,12 +86,18 @@ class SettingsFragment : Fragment() {
         return mView
     }
 
+    /**
+     * Change Shared Preferences for the Current Currency
+     */
     private fun editCurrencySP(){
         val sharedCurrency = requireContext().getSharedPreferences(SHARED_PREFERENCES_CURRENCY, Context.MODE_PRIVATE)
         sharedCurrency.edit().putString(KEY_CURRENT_CURRENCY, currency).apply()
         (activity as MainActivity).getSharedPreferences()
     }
 
+    /**
+     * Change Shared Preferences for the Date Format
+     */
     private fun editDateFormatSP(){
         val sharedDateFormat = requireContext().getSharedPreferences(SHARED_PREFERENCES_DATE_FORMAT, Context.MODE_PRIVATE)
         sharedDateFormat.edit().putString(KEY_CURRENT_DATE_FORMAT, dateFormat).apply()
@@ -107,9 +119,11 @@ class SettingsFragment : Fragment() {
             US_DATE_FORMAT -> mView.btn_date_us.isChecked = true
             FR_DATE_FORMAT -> mView.btn_date_fr.isChecked = true
         }
-
     }
 
+    /**
+     * Get an Alert Dialog to confirm the Database's Clear
+     */
     private fun getAlertDialog(){
         val builder = AlertDialog.Builder(requireContext(), R.style.AlertDialogCustom)
         builder.setMessage(R.string.dialog_message)

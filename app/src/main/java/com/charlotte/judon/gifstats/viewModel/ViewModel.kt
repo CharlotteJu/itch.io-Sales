@@ -11,6 +11,10 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+/**
+ * Class creating by [ViewModelFactory] used by [views/activities/MainActivity.kt] to affect app's Database
+ * @author Charlotte JUDON
+ */
 class ViewModel(private val saleRepository: SaleRepository) : ViewModel() {
 
     fun getAllSales() = this.saleRepository.getAllSales()

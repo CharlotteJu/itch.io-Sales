@@ -4,6 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.charlotte.judon.gifstats.model.Sale
 
+/**
+ * [Dao] Sale's interface for [RoomDatabase]
+ * @author Charlotte JUDON
+ */
+
 @Dao
 interface SaleDao {
 

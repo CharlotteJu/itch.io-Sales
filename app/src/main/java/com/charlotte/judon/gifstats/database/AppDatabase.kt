@@ -7,6 +7,10 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.charlotte.judon.gifstats.model.Sale
 
+/**
+ * Abstract class to get an instance of [RoomDatabase] application
+ * @author Charlotte JUDON
+ */
 @Database (entities = [Sale::class], version = 1, exportSchema = false)
 @TypeConverters(DateTypeConverter::class)
 abstract class AppDatabase : RoomDatabase() {

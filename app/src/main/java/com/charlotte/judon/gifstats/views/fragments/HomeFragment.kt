@@ -11,17 +11,21 @@ import com.charlotte.judon.gifstats.R
 import com.charlotte.judon.gifstats.model.Sale
 import com.charlotte.judon.gifstats.utils.BACKSTACK
 import com.charlotte.judon.gifstats.utils.PICK_FILE_CODE
+import com.charlotte.judon.gifstats.utils.URL_ITCH
 import kotlinx.android.synthetic.main.fragment_home.view.*
 import kotlin.collections.ArrayList
 
-
+/**
+ * Home Fragment used to download and refresh CSV File provide by [Itch.io : https://itch.io]
+ * @link [InstructionsFragment]
+ * @author Charlotte JUDON
+ */
 class HomeFragment : Fragment() {
 
     private var roomListSales = ArrayList<Sale>()
     private lateinit var mView: View
 
     companion object {
-        const val URL_ITCH = "https://itch.io/export-purchases"
         @JvmStatic
         fun newInstance(listSales : ArrayList<Sale>) =
             HomeFragment().apply {
@@ -45,7 +49,9 @@ class HomeFragment : Fragment() {
         return mView
     }
 
-
+    /**
+     * Lunch File Explorer
+     */
     private fun pickFile() {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.type = "*/*"
@@ -54,6 +60,9 @@ class HomeFragment : Fragment() {
         )
     }
 
+    /**
+     * Lunch Internet Explorer to go to Itch.io website (https://itch.io/export-purchases)
+     */
     private fun downloadCsvFromItch() {
         val intent = Intent(Intent.ACTION_VIEW)
         intent.data = Uri.parse(URL_ITCH)

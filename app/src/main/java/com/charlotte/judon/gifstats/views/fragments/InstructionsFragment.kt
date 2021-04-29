@@ -7,6 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import com.charlotte.judon.gifstats.R
 
+/**
+ * Fragment used to show how use the app with [Itch.io : https://itch.io]
+ * @author Charlotte JUDON
+ */
 class InstructionsFragment : Fragment() {
 
     private lateinit var mView: View

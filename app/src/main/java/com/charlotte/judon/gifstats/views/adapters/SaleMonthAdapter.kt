@@ -10,6 +10,11 @@ import com.charlotte.judon.gifstats.model.MonthSale
 import com.charlotte.judon.gifstats.model.Sale
 import kotlinx.android.synthetic.main.item_month_sale.view.*
 
+/**
+ * Class used to populate a [RecyclerView] in [views/fragments/ListMonth.kt]
+ * Based on [MonthSale]
+ * @author Charlotte JUDON
+ */
 class SaleMonthAdapter (private var listSales : List<MonthSale>, private var onClickMonthItem: OnClickMonthItem,
                         private val context : Context, private val symbolCurrency : String)
     : RecyclerView.Adapter<SaleMonthAdapter.SaleMonthViewHolder>() {
@@ -71,8 +76,6 @@ class SaleMonthAdapter (private var listSales : List<MonthSale>, private var onC
             }
         }
     }
-
-
 
     interface OnClickMonthItem{
         fun onClickMonthItem(saleList : List<Sale>)

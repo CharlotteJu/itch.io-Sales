@@ -7,11 +7,18 @@ import org.json.JSONObject
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 
-
+/**
+ * Class with a [Companion] to cast and transform [CustomCurrency]
+ * @author Charlotte JUDON
+ */
 class UtilsCurrency {
 
     companion object {
 
+        /**
+         * @return the List of all [CustomCurrency] after cast by [castStringInCurrency] in String for the [SharedPreferences]
+         * @param sharedPreferences : get the SharedPreferences referred by [SHARED_PREFERENCES_CURRENCY]
+         */
         fun getListCurrenciesFromSharedPreferences(sharedPreferences: SharedPreferences) : List<CustomCurrency> {
             return listOf(
                 castStringInCurrency(sharedPreferences.getString(CURRENCY_USD, null)!!),
@@ -23,6 +30,34 @@ class UtilsCurrency {
             )
         }
 
+        /**
+         * @return a String casted compared to the [CustomCurrency] using [Gson]
+         * @param currency : [CustomCurrency] to cast
+         */
+        fun castCurrencyInString(currency: CustomCurrency) : String {
+            val gson = Gson()
+            return gson.toJson(currency)
+        }
+
+        /**
+         * @return a [CustomCurrency] casted compared to the String recorded in the [SharedPreferences] using [Gson]
+         * @param string : String to cast
+         * @explications : If none currency was recorded, return USD
+         */
+        fun castStringInCurrency(string: String?) : CustomCurrency{
+            return if(string != null) {
+                val gson = Gson()
+                gson.fromJson(string, CustomCurrency::class.java)
+            } else {
+                CustomCurrency("USD", 1.0, 1.0, "$")
+            }
+
+        }
+
+        /**
+         * @return a List of [CustomCurrency] after cast by [castJsonInCurrency]
+         * @param json : [JSONObject] returned by [https://www.floatrates.com/daily/usd.json]
+         */
         fun castJsonInListCurrencies(json: JSONObject) : List<CustomCurrency> {
             val usdCurrency = CustomCurrency("USD", 1.0, 1.0, "$")
             return listOf(
@@ -35,6 +70,12 @@ class UtilsCurrency {
             )
         }
 
+        /**
+         * @return a [CustomCurrency] after reading of [json]
+         * @param json : [JSONObject] returned by [https://www.floatrates.com/daily/usd.json]
+         * @param name : String const for each of the 6 currencies used
+         * @param symbol : String symbol for each of the 6 currencies used
+         */
         private fun castJsonInCurrency(json: JSONObject, name: String, symbol : String) : CustomCurrency {
             val custom = json.getJSONObject(name)
             return CustomCurrency(
@@ -42,21 +83,15 @@ class UtilsCurrency {
             )
         }
 
-        fun castCurrencyInString(currency: CustomCurrency) : String{
-            val gson = Gson()
-            return gson.toJson(currency)
-        }
-
-        fun castStringInCurrency(string: String?) : CustomCurrency{
-            return if(string != null) {
-                val gson = Gson()
-                gson.fromJson(string, CustomCurrency::class.java)
-            } else {
-                CustomCurrency("USD", 1.0, 1.0, "$")
-            }
-
-        }
-
+        /**
+         * @return a Double price after check of the currentCurrency and the sale's currency
+         * @param csvCurrency : String of sale's currency
+         * @param goalCurrency : [CustomCurrency] for the currentCurrency
+         * @param price : Double used for the calculation
+         * @param listCurrency : List of [CustomCurrency] to get all the rate and inverseRate
+         * @explications : 1st convert the price in USD
+         *                 2nd convert the new price in the goal [CustomCurrency]
+         */
         fun convertPriceBetweenTwoCurrencies(csvCurrency: String, goalCurrency: CustomCurrency,
                                              price: Double, listCurrency: List<CustomCurrency>) : Double {
             var priceInUSD = price
@@ -80,6 +115,11 @@ class UtilsCurrency {
             return decimalFormat.format(priceInUSD * goalCurrency.rate).toDouble()
         }
 
+        /**
+         * @return a Double calculated by the inverseRate of a [CustomCurrency]
+         * @param price : Double provided by the [model/Sale.amount] or [model/Sale.amountDelivery]
+         * @param currencyFactor : Double provided by the [model/CustomCurrency.inverseRate]
+         */
         private fun convertPriceInUSD(price: Double, currencyFactor: Double) : Double {
             val decimalFormat = DecimalFormat("####0.00")
             val separator = DecimalFormatSymbols()

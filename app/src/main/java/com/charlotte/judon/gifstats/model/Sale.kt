@@ -4,6 +4,11 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.util.*
 
+/**
+ * Data class to get a complete [Sale]
+ * Used when CSV is reading
+ * Used by the Database
+ */
 @Entity(tableName = "sale")
 data class Sale constructor(
     @PrimaryKey @ColumnInfo(name = "id") var id : Long,

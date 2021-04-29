@@ -74,7 +74,7 @@ class UtilsGeneralTest  {
 
     @Test
     fun convertStringToDateWithLocale_US_isCorrect() {
-        //TODO : Voir pour changer la locale du test
+        //Test on emulator with a different TimeZone
         //Time for France
         val resultExpected = arrayListOf("03/13/2021", "04:08")
         val result = UtilsGeneral.convertStringToDateWithLocale(dateString, timeString, "MM/dd/yyyy")
@@ -97,7 +97,7 @@ class UtilsGeneralTest  {
         val listDates = arrayListOf(calendar.time, calendar.time, calendar.time)
         val listSales = getListSales(listDates)
         val resultExpected = listSales[0].amountDelivered *3 * listCurrencies[3].inverseRate
-        val result = UtilsGeneral.calculTotalNetSales(listSales, listCurrencies[0], listCurrencies)
+        val result = UtilsGeneral.calculationTotalNetSales(listSales, listCurrencies[0], listCurrencies)
         assertEquals(resultExpected, result, 0.1)
     }
 
@@ -110,7 +110,7 @@ class UtilsGeneralTest  {
             sale.currency = "USD"
         }
         val resultExpected = listSales[0].amountDelivered *3
-        val result = UtilsGeneral.calculTotalNetSales(listSales, listCurrencies[0], listCurrencies)
+        val result = UtilsGeneral.calculationTotalNetSales(listSales, listCurrencies[0], listCurrencies)
         assertEquals(resultExpected, result, 0.1)
     }
 
@@ -120,7 +120,7 @@ class UtilsGeneralTest  {
         val listDates = arrayListOf(calendar.time, calendar.time, calendar.time)
         val listSales = getListSales(listDates)
         val resultExpected = listSales[0].amount *3 * listCurrencies[3].inverseRate
-        val result = UtilsGeneral.calculTotalBrutSales(listSales, listCurrencies[0], listCurrencies)
+        val result = UtilsGeneral.calculationTotalGrossSales(listSales, listCurrencies[0], listCurrencies)
         assertEquals(resultExpected, result, 0.1)
     }
 
@@ -133,7 +133,7 @@ class UtilsGeneralTest  {
             sale.currency = "USD"
         }
         val resultExpected = listSales[0].amount *3
-        val result = UtilsGeneral.calculTotalBrutSales(listSales, listCurrencies[0], listCurrencies)
+        val result = UtilsGeneral.calculationTotalGrossSales(listSales, listCurrencies[0], listCurrencies)
         assertEquals(resultExpected, result, 0.1)
     }
 

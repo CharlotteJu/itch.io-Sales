@@ -3,6 +3,11 @@ package com.charlotte.judon.gifstats.viewModel
 import android.content.Context
 import com.charlotte.judon.gifstats.database.AppDatabase
 
+/**
+ * Class to give [ViewModelFactory] args
+ * @link [AppDatabase]
+ * @author Charlotte JUDON
+ */
 class Injection {
 
     companion object {

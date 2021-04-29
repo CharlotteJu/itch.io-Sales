@@ -8,6 +8,11 @@ import com.charlotte.judon.gifstats.R
 import com.charlotte.judon.gifstats.model.CustomCountry
 import kotlinx.android.synthetic.main.item_country.view.*
 
+/**
+ * Class used to populate a [RecyclerView] in [views/fragments/MapFragment.kt]
+ * Based on [CustomCountry]
+ * @author Charlotte JUDON
+ */
 class CountryAdapter(private var listCustomCountry : List<CustomCountry>) : RecyclerView.Adapter<CountryAdapter.CountryViewHolder>(){
 
 

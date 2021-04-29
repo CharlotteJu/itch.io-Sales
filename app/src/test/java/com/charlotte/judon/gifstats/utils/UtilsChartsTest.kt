@@ -77,7 +77,7 @@ class UtilsChartsTest {
         val resultExpectedForPackage2 = (listSales[3].amountDelivered).toString()
         val resultExpectedForPackage4 = (listSales[4].amountDelivered).toString()
 
-        val result = UtilsCharts.anyChartPackagePrice(listSales, listCurrencies[0], listCurrencies)
+        val result = UtilsCharts.getAnyChartPackagePrice(listSales, listCurrencies[0], listCurrencies)
         Assert.assertEquals(resultExpectedNbTotal, result.size)
         Assert.assertEquals(resultExpectedForPackage1, result[0].getValue("value"))
         Assert.assertEquals(resultExpectedForPackage2, result[1].getValue("value"))
@@ -105,7 +105,7 @@ class UtilsChartsTest {
         val resultExpectedForPackage2 = 1.toString()
         val resultExpectedForPackage4 = 1.toString()
 
-        val result = UtilsCharts.anyChartPackageNB(listSales)
+        val result = UtilsCharts.getAnyChartPackageNumber(listSales)
         Assert.assertEquals(resultExpectedNbTotal, result.size)
         Assert.assertEquals(resultExpectedForPackage1, result[0].getValue("value"))
         Assert.assertEquals(resultExpectedForPackage2, result[1].getValue("value"))
@@ -131,7 +131,7 @@ class UtilsChartsTest {
         val resultExpectedForPackage2 = 1.toString()
         val resultExpectedForPackage4 = 1.toString()
 
-        val result = UtilsCharts.graphAnyChartMapChronopleth(listSales)
+        val result = UtilsCharts.getAnyChartMapChroropleth(listSales)
         Assert.assertEquals(resultExpectedForPackage1, result.listEntry[0].getValue("value"))
         Assert.assertEquals(resultExpectedForPackage2, result.listEntry[1].getValue("value"))
         Assert.assertEquals(resultExpectedForPackage4, result.listEntry[2].getValue("value"))

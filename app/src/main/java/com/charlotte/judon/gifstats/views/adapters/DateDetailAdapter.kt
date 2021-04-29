@@ -16,6 +16,11 @@ import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import kotlinx.android.synthetic.main.item_date_detail.view.*
 
+/**
+ * Class used to populate a [RecyclerView] in [views/fragments/DateDetail.kt]
+ * Based on [DateDetail]
+ * @author Charlotte JUDON
+ */
 class DateDetailAdapter(private var listDateDetail : List<DateDetail>, private val context: Context)
     : RecyclerView.Adapter<DateDetailAdapter.DateDetailViewHolder>() {
 
@@ -45,8 +50,6 @@ class DateDetailAdapter(private var listDateDetail : List<DateDetail>, private v
         fun configureDesign(dateDetail: DateDetail) {
             itemView.item_graph_title.text = dateDetail.day
             itemView.item_graph_total.text = dateDetail.totalSale.toString()
-
-
 
             if(dateDetail.totalSale > 0 ){
                 itemView.graphTemplate.visibility = View.VISIBLE
@@ -78,6 +81,9 @@ class DateDetailAdapter(private var listDateDetail : List<DateDetail>, private v
 
         }
 
+        /**
+         * Display the value of BarChart in TextView
+         */
         override fun onValueSelected(e: Entry?, h: Highlight?) {
            if (e != null) {
                val saleString = if (e.y > 1) {

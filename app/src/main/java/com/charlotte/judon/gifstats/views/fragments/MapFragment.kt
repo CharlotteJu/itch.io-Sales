@@ -15,6 +15,7 @@ import com.anychart.core.ui.ColorRange
 import com.anychart.enums.*
 import com.anychart.graphics.vector.SolidFill
 import com.anychart.scales.OrdinalColor
+import com.charlotte.judon.gifstats.BuildConfig
 import com.charlotte.judon.gifstats.R
 import com.charlotte.judon.gifstats.model.ChroropletReturn
 import com.charlotte.judon.gifstats.model.CustomCountry
@@ -24,7 +25,12 @@ import com.charlotte.judon.gifstats.utils.UtilsCharts
 import com.charlotte.judon.gifstats.views.adapters.CountryAdapter
 import kotlinx.android.synthetic.main.fragment_map.view.*
 
-
+/**
+ * Fragment used to show number's [Sale] by country
+ * @link [CustomCountry]
+ * @link [AnyChartAndroid : https://github.com/AnyChart/AnyChart-Android]
+ * @author Charlotte JUDON
+ */
 class MapFragment : Fragment() {
     private lateinit var salesList : List<Sale>
     private lateinit var mView: View
@@ -50,7 +56,7 @@ class MapFragment : Fragment() {
         mView = inflater.inflate(R.layout.fragment_map, container, false)
 
         configureSpinner()
-        initChronopleth()
+        initChroropleth()
 
         return mView
     }
@@ -61,23 +67,13 @@ class MapFragment : Fragment() {
         mView.spinner.adapter = adapter
 
         mView.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                TODO("Not yet implemented")
-            }
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 when (position) {
                     0 -> getFunSpinner(null)
                     1 -> getFunSpinner(7)
                     2 -> getFunSpinner(30)
                 }
-
             }
         }
     }
@@ -85,16 +81,19 @@ class MapFragment : Fragment() {
     private fun getFunSpinner(daysAgo : Int?) {
         if (daysAgo == null) {
             salesListFiltered = salesList
-            val chroropletReturn =  UtilsCharts.graphAnyChartMapChronopleth(salesListFiltered)
+            val chroropletReturn =  UtilsCharts.getAnyChartMapChroropleth(salesListFiltered)
             changeViews(chroropletReturn)
         } else {
             val dateStart = UtilsGeneral.getDateStartToFilter(daysAgo)
             salesListFiltered = UtilsGeneral.filterList(salesList, dateStart)
-            val chronopletReturn =  UtilsCharts.graphAnyChartMapChronopleth(salesListFiltered)
+            val chronopletReturn =  UtilsCharts.getAnyChartMapChroropleth(salesListFiltered)
             changeViews(chronopletReturn)
         }
     }
 
+    /**
+     * Show or Hide views according to [salesListFiltered]
+     */
     private fun changeViews(chroropletReturn: ChroropletReturn){
         val nbMax = chroropletReturn.max
         if(nbMax == 0) {
@@ -120,9 +119,11 @@ class MapFragment : Fragment() {
         mView.rcv_country.layoutManager = LinearLayoutManager(requireContext())
     }
 
-
-
-    private fun initChronopleth() {
+    /**
+     * Init the AnyChartAndroid View
+     * Example in [https://github.com/AnyChart/AnyChart-Android/blob/master/sample/src/main/java/com/anychart/sample/charts/ChoroplethMapActivity.java]
+     */
+    private fun initChroropleth() {
 
         APIlib.getInstance().setActiveAnyChartView(mView.anyChartViewCountry)
 
@@ -154,7 +155,7 @@ class MapFragment : Fragment() {
 
         map.interactivity().selectionMode(SelectionMode.NONE)
         map.padding(0, 0, 0, 0)
-        val chronopletReturn =  UtilsCharts.graphAnyChartMapChronopleth(salesListFiltered)
+        val chronopletReturn =  UtilsCharts.getAnyChartMapChroropleth(salesListFiltered)
         val listWorldChrono = chronopletReturn.listEntry
         val nbMax = chronopletReturn.max
         val nbMax2 = chronopletReturn.max2
@@ -186,6 +187,7 @@ class MapFragment : Fragment() {
         mView.anyChartViewCountry.addScript(urlWorld)
         mView.anyChartViewCountry.addScript(urlProJS)
         mView.anyChartViewCountry.setChart(map)
+        mView.anyChartViewCountry.setLicenceKey(BuildConfig.ANYCHART_LICENCE_KEY)
     }
 
 }

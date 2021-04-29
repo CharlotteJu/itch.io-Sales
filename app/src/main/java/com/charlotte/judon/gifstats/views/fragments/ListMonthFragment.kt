@@ -14,6 +14,11 @@ import com.charlotte.judon.gifstats.utils.*
 import com.charlotte.judon.gifstats.views.adapters.SaleMonthAdapter
 import kotlinx.android.synthetic.main.fragment_list_month.view.*
 
+/**
+ * Fragment used to show total [Sale]'s information by month
+ * @link [MonthSale]
+ * @author Charlotte JUDON
+ */
 class ListMonthFragment : Fragment(),
     SaleMonthAdapter.OnClickMonthItem {
     private lateinit var salesList : List<Sale>
@@ -55,16 +60,18 @@ class ListMonthFragment : Fragment(),
 
     }
 
-
+    /**
+     * Change text in Views total Price
+     */
     private fun configurePrices() {
         saleMonthList = UtilsGeneral.castSaleListInSaleMonthList(salesList, currentCurrency, listCurrencies)
 
         if(saleMonthList.isNotEmpty()) {
             changeViews(true)
-            val totalBrut = UtilsGeneral.calculTotalBrutSales(salesList, currentCurrency, listCurrencies)
+            val totalBrut = UtilsGeneral.calculationTotalGrossSales(salesList, currentCurrency, listCurrencies)
             mView.total_brut_txt.text = "$totalBrut ${currentCurrency.symbol}"
 
-            val totalNet = UtilsGeneral.calculTotalNetSales(salesList, currentCurrency, listCurrencies)
+            val totalNet = UtilsGeneral.calculationTotalNetSales(salesList, currentCurrency, listCurrencies)
             mView.total_net_txt.text = "$totalNet ${currentCurrency.symbol}"
 
             val charges = UtilsGeneral.calculChargesSales(totalBrut, totalNet)
