@@ -5,14 +5,14 @@
 
     <string-array name="spinner_filter">
         <item>ALL</item>
-        <item>THESE 7 LAST DAYS</item>
-        <item>THESE 30 LAST DAYS</item>
+        <item>THESE LAST 7 DAYS</item>
+        <item>THESE LAST 30 DAYS</item>
     </string-array>
 
     <string name="no_sales_period">There is no sales in this period.</string>
-    <string name="csv_integrate">CSV integrate !</string>
+    <string name="csv_integrate">Itch.io data added !</string>
     <string name="everything_deleted">Everything is deleted !</string>
-    <string name="csv_problem">CSV not reading, please choose a file downloaded from Itch</string>
+    <string name="csv_problem">CSV not read, please choose a file downloaded from itch.io</string>
     <string name="no_official_app">No official app</string>
     <string name="period">PERIOD :</string>
     <string name="all">ALL</string>
@@ -23,11 +23,11 @@
     <string name="package_radio">PACKAGE</string>
     <string name="sales_title">SALES</string>
     <string name="price">PRICE</string>
-    <string name="refresh_csv">Refresh CSV</string>
-    <string name="download_from_itch">Download from Itch</string>
+    <string name="refresh_csv">Refresh the file (.csv)</string>
+    <string name="download_from_itch">Download from itch.io</string>
     <string name="gross_total">Total gross</string>
     <string name="charges">Charges calculated</string>
-    <string name="net_total">Net total</string>
+    <string name="net_total">Total net</string>
     <string name="month">MONTH</string>
     <string name="nb_sales">NB SALES</string>
     <string name="total_net">TOTAL NET</string>
@@ -40,8 +40,9 @@
     <string name="sale">sale</string>
     <string name="Sales">Sales </string>
     <string name="instructions">INSTRUCTIONS </string>
-    <string name="delete_all">DELETE ALL SALES</string>
-    <string name="dialog_message">Do you really want delete all the sales ? </string>
+    <string name="warning_currency">As the exchange rate of each currency is calculated directly, the prices displayed on the app may vary slightly.</string>
+    <string name="delete_all">REINITIALISE APP</string>
+    <string name="dialog_message">Do you really want to reinitialise the app ? </string>
     <string name="dialog_yes"> YES </string>
     <string name="dialog_no"> NO </string>
     <string name="date_format">DATE FORMAT :</string>
@@ -55,16 +56,16 @@
     <string name="hint_month_day" translatable="false">02/15</string>
     <string name="hint_day_month" translatable="false">15/02</string>
 
-    <string name="instructions_title_general"><u>How use the application ? </u></string>
-    <string name="instructions_title_download"><u>Download the csv : </u></string>
-    <string name="instructions_download_txt_1">Click on the button <u>"Download from Itch"</u> from the home page.</string>
-    <string name="instructions_download_txt_2">That will open your browser, if you are not connected, you will need to log in your Itch count.</string>
-    <string name="instructions_download_txt_3">Once in the Payment\'s tab, click on "Export everything as CSV".</string>
-    <string name="instructions_download_txt_4">The downloading will take place on your phone.</string>
+    <string name="instructions_title_general"><u>How use the app ? </u></string>
+    <string name="instructions_title_download"><u>Download the file (.csv) : </u></string>
+    <string name="instructions_download_txt_1">Click on the button <u>"Download from itch.io"</u> from the home page.</string>
+    <string name="instructions_download_txt_2">It will open your web browser, if you are not connected, you will need to log in your itch.io account.</string>
+    <string name="instructions_download_txt_3">Once in the <u>"Payment"</u> tab, click on <u>"Export everything as CSV"</u>.</string>
+    <string name="instructions_download_txt_4">The csv file will be downloaded on your phone.</string>
     <string name="instructions_title_import"><u>Import the file : </u></string>
-    <string name="instructions_import_txt_1">Click on the button <u>"Refresh CSV"</u> from the home page.</string>
-    <string name="instructions_import_txt_2">That will open your file explorer, for a better readability, click on Documents.</string>
-    <string name="instructions_import_txt_3">Select the csv file downloaded from Itch.</string>
+    <string name="instructions_import_txt_1">Click on the button <u>"Refresh the file (.csv)"</u> from the home page.</string>
+    <string name="instructions_import_txt_2">It will open your file explorer. For a better readability, click on <u>"Documents"</u>.</string>
+    <string name="instructions_import_txt_3">Select the csv file downloaded from itch.io.</string>
 
 
 
@@ -95,10 +96,10 @@
 
     <!-- MENU -->
     <string name="home">HOME</string>
-    <string name="global_graphs">GLOBAL GRAPHS</string>
-    <string name="days_of_week">DAYS OF WEEK</string>
-    <string name="map_countries">COUNTRIES</string>
-    <string name="list_detail">DETAILED LIST</string>
+    <string name="global_graphs">GLOBAL VIEW</string>
+    <string name="days_of_week">WEEK VIEW</string>
+    <string name="map_countries">WORLDWIDE VIEW</string>
+    <string name="history">HISTORY</string>
     <string name="settings">SETTINGS</string>
 
 

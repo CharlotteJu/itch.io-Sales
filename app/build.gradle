@@ -32,6 +32,7 @@ android {
             resValue "string", "ANYCHART_LICENCE_KEY", localProperties["ANYCHART_LICENCE_KEY"] //(project.findProperty("ANYCHART_LICENCE_KEY") ?: "")
         }
         debug {
+            minifyEnabled true
             buildConfigField 'String', "ANYCHART_LICENCE_KEY", localProperties["ANYCHART_LICENCE_KEY"] //(project.findProperty("ANYCHART_LICENCE_KEY") ?: "")
             resValue "string", "ANYCHART_LICENCE_KEY", localProperties["ANYCHART_LICENCE_KEY"] //(project.findProperty("ANYCHART_LICENCE_KEY") ?: "")
         }

@@ -65,6 +65,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         )
 
         checkReadPermission()
+        getSharedPreferences()
         viewModelFactory = Injection.configViewModelFactory(this)
         viewModel = ViewModelProvider(this, viewModelFactory).get(ViewModel::class.java)
 
@@ -267,7 +268,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
      fun getSharedPreferences(){
          val sharedPreferences = getSharedPreferences(SHARED_PREFERENCES_CURRENCY, Context.MODE_PRIVATE)
          listCurrencies = UtilsCurrency.getListCurrenciesFromSharedPreferences(sharedPreferences)
-         currentCurrency = UtilsCurrency.castStringInCurrency(sharedPreferences.getString(KEY_CURRENT_CURRENCY, null))
+        if(sharedPreferences.contains(KEY_CURRENT_CURRENCY)) {
+            currentCurrency = UtilsCurrency.castStringInCurrency(sharedPreferences.getString(KEY_CURRENT_CURRENCY, null))
+        } else {
+            currentCurrency = CustomCurrency(CURRENCY_USD.toUpperCase(), 1.0, 1.0, "$")
+        }
+
 
          val sharedDateFormat = getSharedPreferences(SHARED_PREFERENCES_DATE_FORMAT, Context.MODE_PRIVATE)
          currentDateFormat = sharedDateFormat.getString(KEY_CURRENT_DATE_FORMAT, US_DATE_FORMAT)!!

@@ -2,14 +2,14 @@
 <resources>
     <string-array name="spinner_filter">
         <item>TOUT</item>
-        <item>CES 7 DERNIERS JOURS</item>
-        <item>CES 30 DERNIERS JOURS</item>
+        <item>LES 7 DERNIERS JOURS</item>
+        <item>LES 30 DERNIERS JOURS</item>
     </string-array>
 
     <string name="no_sales_period">Il n\'y a pas de ventes pour cette période.</string>
-    <string name="csv_integrate">CSV intégré !</string>
+    <string name="csv_integrate">Données itch.io intégrées !</string>
     <string name="everything_deleted">Tout est supprimé !</string>
-    <string name="csv_problem">CSV non lu, merci de choisir un fichier téléchargé depuis Itch</string>
+    <string name="csv_problem">CSV non lu, merci de choisir un fichier téléchargé depuis itch.io</string>
     <string name="no_official_app">App non-officielle</string>
     <string name="period">PERIODE :</string>
     <string name="all">TOUS</string>
@@ -20,8 +20,8 @@
     <string name="package_radio">PACKAGE</string>
     <string name="sales_title">VENTES</string>
     <string name="price">PRIX</string>
-    <string name="refresh_csv">Rafraichir CSV</string>
-    <string name="download_from_itch">Télécharger depuis Itch</string>
+    <string name="refresh_csv">Rafraichir le fichier (.csv)</string>
+    <string name="download_from_itch">Télécharger depuis itch.io</string>
     <string name="gross_total">Brut total</string>
     <string name="charges">Charges calculées</string>
     <string name="net_total">Net total</string>
@@ -37,8 +37,9 @@
     <string name="sale">vente</string>
     <string name="Sales">Ventes </string>
     <string name="instructions">NOTICE </string>
-    <string name="delete_all">SUPPRIMER LES VENTES</string>
-    <string name="dialog_message">Voulez-vous vraiment supprimer toutes les ventes ? </string>
+    <string name="warning_currency">Le taux de change de chaque monnaie étant calculé en direct, les prix affichés sur l\'application sont succeptibles de varier légèrement.</string>
+    <string name="delete_all">REINITIALISER L\'APP</string>
+    <string name="dialog_message">Voulez-vous vraiment réinitialiser l\'application ? </string>
     <string name="dialog_yes"> OUI </string>
     <string name="dialog_no"> NON </string>
     <string name="date_format">FORMAT DE DATE :</string>
@@ -46,15 +47,15 @@
     <string name="day_month">Jour/Mois</string>
 
     <string name="instructions_title_general"><u>Comment utiliser l\'application ? </u></string>
-    <string name="instructions_title_download"><u>Télécharger le csv : </u></string>
-    <string name="instructions_download_txt_1">Cliquez sur le bouton <u>"Télécharger depuis Itch"</u> depuis la page d\'accueil.</string>
-    <string name="instructions_download_txt_2">Ca ouvrira votre navigateur, si vous n\'êtes pas connecté, il faudra vous logger à votre compte Itch.</string>
-    <string name="instructions_download_txt_3">Une fois dans l\'onglet Payments, cliquez sur "Export everything as CSV".</string>
-    <string name="instructions_download_txt_4">Le téléchargement s\'effectuera sur votre téléphone.</string>
+    <string name="instructions_title_download"><u>Télécharger le fichier (.csv) : </u></string>
+    <string name="instructions_download_txt_1">Cliquez sur le bouton <u>"Télécharger depuis itch.io"</u> depuis la page d\'accueil.</string>
+    <string name="instructions_download_txt_2">Votre navigateur internet s\'ouvrira, si vous n\'êtes pas connecté, il faudra vous logger à votre compte itch.io.</string>
+    <string name="instructions_download_txt_3">Une fois dans l\'onglet <u>"Payments"</u>, cliquez sur <u>"Export everything as CSV"</u>.</string>
+    <string name="instructions_download_txt_4">Le téléchargement du fichier csv s\'effectuera sur votre téléphone.</string>
     <string name="instructions_title_import"><u>Importer le fichier : </u></string>
-    <string name="instructions_import_txt_1">Cliquez sur le bouton <u>"Rafraichir le csv"</u> depuis la page d\accueil.</string>
-    <string name="instructions_import_txt_2">Ca ouvrira votre explorateur de fichier, pour une meilleure lisibilité, cliquez sur Documents.</string>
-    <string name="instructions_import_txt_3">Sélectionnez le fichier csv téléchargé depuis Itch.</string>
+    <string name="instructions_import_txt_1">Cliquez sur le bouton <u>"Rafraichir le fichier (.csv)"</u> depuis la page d\'accueil.</string>
+    <string name="instructions_import_txt_2">Votre explorateur de fichiers s\'ouvrira. Pour une meilleure lisibilité, cliquez sur <u>"Documents"</u>.</string>
+    <string name="instructions_import_txt_3">Sélectionnez le fichier csv téléchargé depuis itch.io.</string>
 
 
     <string-array name="list_month">
@@ -84,10 +85,10 @@
 
     <!-- MENU -->
     <string name="home">ACCUEIL</string>
-    <string name="global_graphs">GRAPHS GLOBAUX</string>
-    <string name="days_of_week">JOURS DE LA SEMAINE</string>
-    <string name="map_countries">PAYS</string>
-    <string name="list_detail">LISTE DETAILLEE</string>
+    <string name="global_graphs">VUE GLOBALE</string>
+    <string name="days_of_week">VUE HEBDO</string>
+    <string name="map_countries">VUE MONDIALE</string>
+    <string name="history">HISTORIQUE</string>
     <string name="settings">PARAMETRES</string>
 
 

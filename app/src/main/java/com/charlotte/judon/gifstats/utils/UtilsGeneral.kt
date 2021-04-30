@@ -1,6 +1,9 @@
 package com.charlotte.judon.gifstats.utils
 
+import androidx.fragment.app.Fragment
+import com.charlotte.judon.gifstats.R
 import com.charlotte.judon.gifstats.model.*
+import com.charlotte.judon.gifstats.views.fragments.HomeFragment
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.text.DecimalFormat
@@ -20,6 +23,17 @@ import java.util.concurrent.TimeUnit
 class UtilsGeneral {
 
     companion object {
+
+        /**
+         * Go to HomeFragment if late init var are not initialized
+         */
+        fun goBackToHomeFragment(fragment: Fragment) {
+            fragment.parentFragmentManager.apply {
+                val homeFragment = HomeFragment()
+                val ft = this.beginTransaction()
+                ft.replace(R.id.container, homeFragment).addToBackStack(BACKSTACK).commit()
+            }
+        }
 
         /**
          * @return a [Date] converted from the CSV's String using [SimpleDateFormat]

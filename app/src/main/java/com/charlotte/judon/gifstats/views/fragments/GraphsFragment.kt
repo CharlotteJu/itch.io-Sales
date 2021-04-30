@@ -71,6 +71,14 @@ class GraphsFragment : Fragment(), OnChartValueSelectedListener {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         mView = inflater.inflate(R.layout.fragment_graphs, container, false)
 
+        if(!this::currentCurrency.isInitialized) UtilsGeneral.goBackToHomeFragment(this)
+        else init()
+
+        return mView
+    }
+
+    private fun init(){
+
         configureGraphView()
         configureSpinner()
         initPackageGraph()
@@ -87,7 +95,6 @@ class GraphsFragment : Fragment(), OnChartValueSelectedListener {
 
         }
         mView.btn_hour.isChecked = true
-        return mView
     }
 
     private fun configureSpinner() {

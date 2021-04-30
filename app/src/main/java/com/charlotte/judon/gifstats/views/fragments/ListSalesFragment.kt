@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.charlotte.judon.gifstats.R
 import com.charlotte.judon.gifstats.model.CustomCurrency
 import com.charlotte.judon.gifstats.model.Sale
+import com.charlotte.judon.gifstats.utils.UtilsGeneral
 import com.charlotte.judon.gifstats.views.adapters.SaleAdapter
 import kotlinx.android.synthetic.main.fragment_list_sales.view.*
 
@@ -41,7 +42,8 @@ class ListSalesFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View
     {
         mView = inflater.inflate(R.layout.fragment_list_sales, container, false)
-        configureRcv()
+        if(!this::currentCurrency.isInitialized) UtilsGeneral.goBackToHomeFragment(this)
+        else configureRcv()
         return mView
     }
 

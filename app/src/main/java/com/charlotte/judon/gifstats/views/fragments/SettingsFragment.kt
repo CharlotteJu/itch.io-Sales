@@ -53,6 +53,14 @@ class SettingsFragment : Fragment() {
         savedInstanceState: Bundle?): View {
         mView = inflater.inflate(R.layout.fragment_settings, container, false)
 
+        if(!this::currentCurrency.isInitialized) UtilsGeneral.goBackToHomeFragment(this)
+        else init()
+
+        return mView
+    }
+
+
+    private fun init() {
         populateBtnWithSP()
 
         mView.radio_group_currency.setOnCheckedChangeListener { _, checkedId ->
@@ -82,8 +90,6 @@ class SettingsFragment : Fragment() {
         mView.button_delete.setOnClickListener {
             getAlertDialog()
         }
-
-        return mView
     }
 
     /**
@@ -105,19 +111,21 @@ class SettingsFragment : Fragment() {
     }
 
     private fun populateBtnWithSP() {
-        when(currentCurrency.code) {
-            CURRENCY_USD.toUpperCase() -> mView.btn_usd.isChecked = true
-            CURRENCY_CAD.toUpperCase() -> mView.btn_cad.isChecked = true
-            CURRENCY_GBP.toUpperCase()-> mView.btn_gbp.isChecked = true
-            CURRENCY_EUR.toUpperCase() -> mView.btn_eur.isChecked = true
-            CURRENCY_JPY.toUpperCase() -> mView.btn_jpy.isChecked = true
-            CURRENCY_AUD.toUpperCase() -> mView.btn_aud.isChecked = true
-            else -> mView.btn_usd.isChecked = true
-        }
+        if(this::currentCurrency.isInitialized && this::dateFormat.isInitialized) {
+            when(currentCurrency.code) {
+                CURRENCY_USD.toUpperCase() -> mView.btn_usd.isChecked = true
+                CURRENCY_CAD.toUpperCase() -> mView.btn_cad.isChecked = true
+                CURRENCY_GBP.toUpperCase()-> mView.btn_gbp.isChecked = true
+                CURRENCY_EUR.toUpperCase() -> mView.btn_eur.isChecked = true
+                CURRENCY_JPY.toUpperCase() -> mView.btn_jpy.isChecked = true
+                CURRENCY_AUD.toUpperCase() -> mView.btn_aud.isChecked = true
+                else -> mView.btn_usd.isChecked = true
+            }
 
-        when(dateFormat) {
-            US_DATE_FORMAT -> mView.btn_date_us.isChecked = true
-            FR_DATE_FORMAT -> mView.btn_date_fr.isChecked = true
+            when(dateFormat) {
+                US_DATE_FORMAT -> mView.btn_date_us.isChecked = true
+                FR_DATE_FORMAT -> mView.btn_date_fr.isChecked = true
+            }
         }
     }
 

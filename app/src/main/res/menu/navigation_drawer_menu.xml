@@ -25,7 +25,7 @@
         android:id="@+id/action_list"
         android:enabled="true"
         android:icon="@drawable/ic_baseline_list_24"
-        android:title="@string/list_detail"/>
+        android:title="@string/history"/>
 
     <item
         android:id="@+id/action_settings"

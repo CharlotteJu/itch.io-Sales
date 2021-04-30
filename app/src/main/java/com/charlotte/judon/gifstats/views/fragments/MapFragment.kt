@@ -55,10 +55,15 @@ class MapFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         mView = inflater.inflate(R.layout.fragment_map, container, false)
 
-        configureSpinner()
-        initChroropleth()
+        if(!this::salesList.isInitialized) UtilsGeneral.goBackToHomeFragment(this)
+        else init()
 
         return mView
+    }
+
+    private fun init(){
+        configureSpinner()
+        initChroropleth()
     }
 
     private fun configureSpinner() {

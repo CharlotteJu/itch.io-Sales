@@ -44,6 +44,14 @@ class DateDetailFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         mView = inflater.inflate(R.layout.fragment_date_detail, container, false)
+
+        if(!this::salesList.isInitialized) UtilsGeneral.goBackToHomeFragment(this)
+        else init()
+
+        return mView
+    }
+
+    private fun init(){
         getDateDetailList()
         configureRcv()
         configureSpinner()
@@ -61,8 +69,6 @@ class DateDetailFragment : Fragment() {
             }
         }
         mView.btn_all.isChecked = true
-
-        return mView
     }
 
     private fun configureRcv(){

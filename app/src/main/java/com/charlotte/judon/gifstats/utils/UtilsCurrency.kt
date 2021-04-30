@@ -20,14 +20,19 @@ class UtilsCurrency {
          * @param sharedPreferences : get the SharedPreferences referred by [SHARED_PREFERENCES_CURRENCY]
          */
         fun getListCurrenciesFromSharedPreferences(sharedPreferences: SharedPreferences) : List<CustomCurrency> {
-            return listOf(
-                castStringInCurrency(sharedPreferences.getString(CURRENCY_USD, null)!!),
-                castStringInCurrency(sharedPreferences.getString(CURRENCY_CAD, null)!!),
-                castStringInCurrency(sharedPreferences.getString(CURRENCY_GBP, null)!!),
-                castStringInCurrency(sharedPreferences.getString(CURRENCY_EUR, null)!!),
-                castStringInCurrency(sharedPreferences.getString(CURRENCY_JPY, null)!!),
-                castStringInCurrency(sharedPreferences.getString(CURRENCY_AUD, null)!!),
-            )
+            return if(sharedPreferences.getString(CURRENCY_CAD, null) != null) {
+                listOf(
+                    castStringInCurrency(sharedPreferences.getString(CURRENCY_USD, null)!!),
+                    castStringInCurrency(sharedPreferences.getString(CURRENCY_CAD, null)!!),
+                    castStringInCurrency(sharedPreferences.getString(CURRENCY_GBP, null)!!),
+                    castStringInCurrency(sharedPreferences.getString(CURRENCY_EUR, null)!!),
+                    castStringInCurrency(sharedPreferences.getString(CURRENCY_JPY, null)!!),
+                    castStringInCurrency(sharedPreferences.getString(CURRENCY_AUD, null)!!),
+                )
+            } else {
+                getListCurrencyIfNeverInternet()
+            }
+
         }
 
         /**
@@ -59,7 +64,7 @@ class UtilsCurrency {
          * @param json : [JSONObject] returned by [https://www.floatrates.com/daily/usd.json]
          */
         fun castJsonInListCurrencies(json: JSONObject) : List<CustomCurrency> {
-            val usdCurrency = CustomCurrency("USD", 1.0, 1.0, "$")
+            val usdCurrency = CustomCurrency(CURRENCY_USD.toUpperCase(), 1.0, 1.0, "$")
             return listOf(
                 usdCurrency,
                 castJsonInCurrency(json, CURRENCY_CAD, "$"),
@@ -67,6 +72,20 @@ class UtilsCurrency {
                 castJsonInCurrency(json, CURRENCY_EUR, "€"),
                 castJsonInCurrency(json, CURRENCY_JPY, "¥"),
                 castJsonInCurrency(json, CURRENCY_AUD, "$"),
+            )
+        }
+
+        /**
+         * @return a List of [CustomCurrency] when no internet connection
+         */
+        private fun getListCurrencyIfNeverInternet() : List<CustomCurrency> {
+            return listOf(
+                CustomCurrency(CURRENCY_USD.toUpperCase(), 1.0, 1.0, "$"),
+                CustomCurrency(CURRENCY_CAD.toUpperCase(), 1.23, 0.81, "$"),
+                CustomCurrency(CURRENCY_GBP.toUpperCase(), 0.72, 1.39, "£"),
+                CustomCurrency(CURRENCY_EUR.toUpperCase(), 0.83, 1.21, "€"),
+                CustomCurrency(CURRENCY_JPY.toUpperCase(), 108.92, 0.01, "¥"),
+                CustomCurrency(CURRENCY_AUD.toUpperCase(), 1.28, 0.78, "$"),
             )
         }
 
