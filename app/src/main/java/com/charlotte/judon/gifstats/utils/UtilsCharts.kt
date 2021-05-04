@@ -21,7 +21,6 @@ import java.util.concurrent.TimeUnit
 
 class UtilsCharts {
 
-    //TODO : Explain more JAVADOC in this class
 
     companion object {
 
@@ -32,6 +31,11 @@ class UtilsCharts {
          * @param salesList : List of all [Sale]
          * @param format : String from the User's preferences
          * @link : MPChartAndroid [https://github.com/PhilJay/MPAndroidChart]
+         * @explications : 1 - Calculate the difference between last Sale's date and current
+         *                 2 - If [SAME], just add 1 at [nbPerDay]
+         *                 3 - If [PLUS_ONE], add the last day in the list and reset
+         *                 4 - If [PLUS_OTHER], add the last day AND, for each day without sale, add it with 0 sale
+         *                 ++ - Add date's String in an other list to fill chart's legend
          */
         fun getMPChartByDay(salesList: List<Sale>, format : String)  : MpBarReturn
         {
@@ -126,6 +130,10 @@ class UtilsCharts {
         /**
          * @return List [BarEntry] to populate Chart in [getMPChartByHour]
          * @param salesList : List of [Sale]
+         * @explications : 1 - Populate a list with all the day's hours (0-23)
+         *                 2 - Convert sale's hour with the good time Zone
+         *                 3 - For each sale, add 1 in first list with the good hour
+         *                 4 - After browsing all sales, convert [listHours] in [listEntry]
          */
         private fun getDataForChartByHour(salesList: List<Sale>) : List<BarEntry>{
             val listEntry = arrayListOf<BarEntry>()
@@ -173,6 +181,9 @@ class UtilsCharts {
         /**
          * @return List [BarEntry] to populate Chart in [getMPChartByDayOfWeek]
          * @param list : List of [Sale]
+         * @explications : 1 - Get a VAR int for each day of the week (0 at the beginning)
+         *                 2 - For each sale, add 1 at the good sale's day
+         *                 3 - After browsing all sales, convert VARs in [listEntry]
          */
         private fun getDataForChartByDayOfWeek(list: List<Sale>) : List<BarEntry> {
             var nbMonday = 0
@@ -229,6 +240,7 @@ class UtilsCharts {
          * @return List of [Sale] for each day of week
          * @param list : List of [Sale]
          * @param day : String for the day
+         * @explications : For each sale, look at if the date is the good day of wee (ex : Monday)
          */
         private fun getListForOneDay(list: List<Sale>, day : String) : List<Sale> {
             val listToReturn = arrayListOf<Sale>()
@@ -243,6 +255,7 @@ class UtilsCharts {
         /**
          * @return List [BarEntry] to populate Chart in [getMPChartByDayWithHours]
          * @param listSorted : List of [Sale]
+         * @explications : Same logic than [getDataForChartByHour] but with list from [getListForOneDay]
          */
         private fun getDataForChartByDaysWithHours(listSorted: List<Sale>) : List<BarEntry> {
             val listEntry = arrayListOf<BarEntry>()
@@ -298,6 +311,9 @@ class UtilsCharts {
          * @return List of [DataEntry] with all the Package to draw Chart by total price in [views/fragments/GraphsFragment]
          * @param list : List of [Sale]
          * @link : AnyChartAndroid [AnyChart : https://github.com/AnyChart/AnyChart-Android]
+         * @explications : 1 - Check package name
+         *                 2 - If the the same than last sale, add sale's amountDelivered at [totalPrice]
+         *                 3 - Else, add the package at [listPrice] with [totalPrice] and reset it
          */
         fun getAnyChartPackagePrice(list: List<Sale>, currentCurrency : CustomCurrency, listCurrencies : List<CustomCurrency>): MutableList<DataEntry> {
             val listSorted = UtilsGeneral.sortSalesByPackage(list)
@@ -330,6 +346,9 @@ class UtilsCharts {
          * @return List of [DataEntry] with all the Package to draw Chart by total number in [views/fragments/GraphsFragment]
          * @param list : List of [Sale]
          * @link : AnyChartAndroid [AnyChart : https://github.com/AnyChart/AnyChart-Android]
+         * @explications : 1 - Check package name
+         *                 2 - If the the same than last sale, add 1 at [nbPerPackage]
+         *                 3 - Else, add the package at [listEntry] with [nbPerPackage] and reset it
          */
         fun getAnyChartPackageNumber(list: List<Sale>): MutableList<DataEntry> {
             val listSorted = UtilsGeneral.sortSalesByPackage(list)
@@ -359,13 +378,19 @@ class UtilsCharts {
         /**
          * @return [ChroropletReturn] with all the Country Code to draw Chart in [views/fragments/MapFragment]
          * @link : AnyChartAndroid [AnyChart : https://github.com/AnyChart/AnyChart-Android]
+         * @explications : 1 - Check country code
+         *                 2 - If the the same than last sale, add 1 at [nbPerCountry]
+         *                 3 - Else, add the countryCode at [listEntry] AND [listCustomCountry] with [nbPerCountry] and reset it
+         *                 4 - After browsing all sales, add others countries from [getAllCountryCode] with 0
+         *                 ++ - If [nbPerCountry] is greater than [nbMax] or [nbMax2], change them
+         *                 ++ - Use 2 list because [listEntry] is used by chart and [listCustomCountry] is used by rcv
          */
         fun getAnyChartMapChroropleth(list: List<Sale>): ChroropletReturn {
             val listSorted = UtilsGeneral.sortByCountry(list)
             val listStringCountries = getAllCountryCode()
             val listEntry = mutableListOf<DataEntry>()
             val listCustomCountry = mutableListOf<CustomCountry>()
-            var nbPerPackage = 0
+            var nbPerCountry = 0
             var maxNb = 0
             var maxNb2 = 0
             var country = ""
@@ -375,18 +400,18 @@ class UtilsCharts {
             for (sale in listSorted) {
                 if (sale.countryCode != country) {
                     if(listStringCountries.contains(country)) listStringCountries.remove(country)
-                    listCustomCountry.add(CustomCountry(country, nbPerPackage))
-                    listEntry.add(CustomDataEntryChronopleth(country, nbPerPackage))
-                    nbPerPackage = 1
+                    listCustomCountry.add(CustomCountry(country, nbPerCountry))
+                    listEntry.add(CustomDataEntryChronopleth(country, nbPerCountry))
+                    nbPerCountry = 1
                     country = sale.countryCode
 
                 } else {
-                    nbPerPackage++
+                    nbPerCountry++
                 }
                 if (listSorted.indexOf(sale) == listSorted.size - 1) {
                     if(listStringCountries.contains(country)) listStringCountries.remove(country)
-                    listCustomCountry.add(CustomCountry(country, nbPerPackage))
-                    listEntry.add(CustomDataEntryChronopleth(country, nbPerPackage))
+                    listCustomCountry.add(CustomCountry(country, nbPerCountry))
+                    listEntry.add(CustomDataEntryChronopleth(country, nbPerCountry))
                 }
             }
 
