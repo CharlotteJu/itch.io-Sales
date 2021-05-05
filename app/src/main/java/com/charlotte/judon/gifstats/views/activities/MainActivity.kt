@@ -7,12 +7,10 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
@@ -35,6 +33,7 @@ import java.io.IOException
 import java.io.InputStreamReader
 import kotlin.collections.ArrayList
 
+
 /**
  * Only one app's Activity, hosts all fragments and reads CSV information
  * @author Charlotte JUDON
@@ -56,13 +55,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        val window = this.window
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-        window.statusBarColor = ContextCompat.getColor(this,
-            R.color.colorPrimaryDark
-        )
 
         checkReadPermission()
         getSharedPreferences()
@@ -266,16 +258,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
      * Get the SharedPreferences recorded for [listCurrencies], [currentCurrency] and [currentDateFormat]
      */
      fun getSharedPreferences(){
-         val sharedPreferences = getSharedPreferences(SHARED_PREFERENCES_CURRENCY, Context.MODE_PRIVATE)
-         listCurrencies = UtilsCurrency.getListCurrenciesFromSharedPreferences(sharedPreferences)
-        if(sharedPreferences.contains(KEY_CURRENT_CURRENCY)) {
+        val sharedPreferences = getSharedPreferences(SHARED_PREFERENCES_CURRENCY, Context.MODE_PRIVATE)
+        listCurrencies = UtilsCurrency.getListCurrenciesFromSharedPreferences(sharedPreferences)
+        if(sharedPreferences.contains(KEY_CURRENT_CURRENCY) && sharedPreferences.getString(KEY_CURRENT_CURRENCY, null)!!.startsWith("{\"a\":")) {
             currentCurrency = UtilsCurrency.castStringInCurrency(sharedPreferences.getString(KEY_CURRENT_CURRENCY, null))
         } else {
             currentCurrency = CustomCurrency(CURRENCY_USD.toUpperCase(), 1.0, 1.0, "$")
         }
 
-
-         val sharedDateFormat = getSharedPreferences(SHARED_PREFERENCES_DATE_FORMAT, Context.MODE_PRIVATE)
-         currentDateFormat = sharedDateFormat.getString(KEY_CURRENT_DATE_FORMAT, US_DATE_FORMAT)!!
+        val sharedDateFormat = getSharedPreferences(SHARED_PREFERENCES_DATE_FORMAT, Context.MODE_PRIVATE)
+        currentDateFormat = sharedDateFormat.getString(KEY_CURRENT_DATE_FORMAT, US_DATE_FORMAT)!!
     }
 }

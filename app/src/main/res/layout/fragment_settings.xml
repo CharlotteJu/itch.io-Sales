@@ -41,7 +41,7 @@
             <RadioButton
                 android:id="@+id/btn_usd"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:shadowColor="@color/colorPrimaryDark"
                 android:textColor="@color/colorPrimaryDark"
                 android:buttonTint="@color/colorPrimaryDark"
@@ -50,7 +50,7 @@
             <RadioButton
                 android:id="@+id/btn_cad"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:shadowColor="@color/colorPrimaryDark"
                 android:textColor="@color/colorPrimaryDark"
                 android:buttonTint="@color/colorPrimaryDark"
@@ -59,7 +59,7 @@
             <RadioButton
                 android:id="@+id/btn_gbp"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:shadowColor="@color/colorPrimaryDark"
                 android:textColor="@color/colorPrimaryDark"
                 android:buttonTint="@color/colorPrimaryDark"
@@ -68,7 +68,7 @@
             <RadioButton
                 android:id="@+id/btn_eur"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:shadowColor="@color/colorPrimaryDark"
                 android:textColor="@color/colorPrimaryDark"
                 android:buttonTint="@color/colorPrimaryDark"
@@ -77,7 +77,7 @@
             <RadioButton
                 android:id="@+id/btn_jpy"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:shadowColor="@color/colorPrimaryDark"
                 android:textColor="@color/colorPrimaryDark"
                 android:buttonTint="@color/colorPrimaryDark"
@@ -86,7 +86,7 @@
             <RadioButton
                 android:id="@+id/btn_aud"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:shadowColor="@color/colorPrimaryDark"
                 android:textColor="@color/colorPrimaryDark"
                 android:buttonTint="@color/colorPrimaryDark"

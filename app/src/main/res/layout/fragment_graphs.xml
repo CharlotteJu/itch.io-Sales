@@ -24,7 +24,7 @@
     <Spinner
         android:id="@+id/spinner"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:textAlignment="center"
         android:textDirection="rtl"
         android:gravity="center"
@@ -46,7 +46,7 @@
         <RadioButton
             android:id="@+id/btn_hour"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:shadowColor="@color/colorAccent"
             android:textColor="@color/colorAccent"
             android:buttonTint="@color/colorAccent"
@@ -55,7 +55,7 @@
         <RadioButton
             android:id="@+id/btn_day_of_week"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:shadowColor="@color/colorAccent"
             android:textColor="@color/colorAccent"
             android:buttonTint="@color/colorAccent"
@@ -64,7 +64,7 @@
         <RadioButton
             android:id="@+id/btn_date"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:shadowColor="@color/colorAccent"
             android:textColor="@color/colorAccent"
             android:buttonTint="@color/colorAccent"
@@ -73,7 +73,7 @@
         <RadioButton
             android:id="@+id/btn_package"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:shadowColor="@color/colorAccent"
             android:textColor="@color/colorAccent"
             android:buttonTint="@color/colorAccent"
@@ -124,7 +124,7 @@
         <RadioButton
             android:id="@+id/btn_nb"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:shadowColor="@color/colorAccent"
             android:textColor="@color/colorAccent"
             android:buttonTint="@color/colorAccent"
@@ -133,7 +133,7 @@
         <RadioButton
             android:id="@+id/btn_price"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:layout_marginStart="16dp"
             android:shadowColor="@color/colorAccent"
             android:textColor="@color/colorAccent"

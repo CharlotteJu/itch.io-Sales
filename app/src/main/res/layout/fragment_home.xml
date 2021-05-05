@@ -47,13 +47,14 @@
 
     <ImageButton
         android:id="@+id/instructions_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:src="@drawable/ic_baseline_help_24"
         android:layout_margin="32dp"
         android:background="@android:color/transparent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:contentDescription="@null" />
 
     <TextView
         android:id="@+id/no_official_txt"

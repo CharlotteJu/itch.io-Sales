@@ -26,7 +26,7 @@
         <Spinner
             android:id="@+id/spinner"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:textAlignment="center"
             android:textDirection="rtl"
             android:gravity="center"
@@ -46,23 +46,23 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
-        <RadioButton
-            android:id="@+id/btn_all"
-            android:textColor="@color/colorAccent"
-            android:shadowColor="@color/colorAccent"
-            android:buttonTint="@color/colorAccent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/all"/>
+            <RadioButton
+                android:id="@+id/btn_all"
+                android:textColor="@color/colorAccent"
+                android:shadowColor="@color/colorAccent"
+                android:buttonTint="@color/colorAccent"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:text="@string/all"/>
 
-        <RadioButton
-            android:id="@+id/btn_3_best"
-            android:textColor="@color/colorAccent"
-            android:shadowColor="@color/colorAccent"
-            android:buttonTint="@color/colorAccent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/_3_bests"/>
+            <RadioButton
+                android:id="@+id/btn_3_best"
+                android:textColor="@color/colorAccent"
+                android:shadowColor="@color/colorAccent"
+                android:buttonTint="@color/colorAccent"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:text="@string/_3_bests"/>
 
         </RadioGroup>
 
