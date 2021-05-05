@@ -62,4 +62,6 @@ App available in English and French.
   * [Fuel]
           - https://github.com/kittinunf/fuel
   
-
+  
+  
+  ## [Available on App Store](https://play.google.com/store/apps/details?id=com.charlotte.judon.gifstats)
