@@ -121,6 +121,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     {
         var fileReader : BufferedReader? = null
 
+        var count = 0
+        var saleTemoin : Sale? = null
+
         try {
             var line : String?
             val fis = contentResolver.openInputStream(csv)
@@ -131,16 +134,29 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             line = fileReader.readLine()
 
             while (line != null){
+                count ++
                 var tokens = line.split(",")
 
                 if(tokens.size == 1) {
                     tokens = line.split(";")
                 }
 
+                //Pour caster le fait que le nom contienne une virgule
+                while (tokens.size != 27) {
+                    val tokens2 = tokens.toMutableList()
+                    var string = tokens2.get(6);
+                    string += tokens2.get(7);
+                    tokens2.set(6, string)
+                    tokens2.removeAt(7)
+                    tokens = tokens2.toList()
+                }
+
                 val date = UtilsGeneral.convertStringToDate(tokens[4])
 
                 val dateString = tokens[4].substring(0, 10)
                 val timeString = tokens[4].substring(11, 19)
+
+
 
                 val sale = Sale(
                         tokens[0].toLong(),
@@ -166,6 +182,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         tokens[18],
                         tokens[19])
 
+                saleTemoin = sale;
+
                 csvListSales.add(sale)
                 line = fileReader.readLine()
             }
@@ -173,6 +191,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
         catch (e: Exception) {
             println("Reading CSV Error!")
+            println("DEBUGG_APP : ${e.message}" )
+            println("DEBUGG_APP : $count" )
+            println("DEBUGG_APP : ${saleTemoin?.email}" )
+            println("DEBUGG_APP : ${e}" )
+            println("DEBUGG_APP : ${e.stackTrace}" )
             e.printStackTrace()
             val stringCsv = applicationContext.resources.getString(R.string.csv_problem)
             Toast.makeText(applicationContext, stringCsv, Toast.LENGTH_LONG).show()
